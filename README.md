@@ -136,6 +136,52 @@ Current Skill:
 
 This directory is the source of truth for the Skill content. Different agent runtimes may require installing, copying, or symlinking the Skill into their own global or project-specific skill directory.
 
+### How to use `mywiki-query`
+
+There are three practical ways to use the repo-local Skill.
+
+| Situation | How to use it |
+| --- | --- |
+| Working inside this repository | Ask the agent to read `skills/mywiki-query/SKILL.md` before querying or updating the wiki |
+| Working from another local project | Tell the agent to use `/Users/chenweilong/Documents/mywiki/skills/mywiki-query/SKILL.md` as the workflow |
+| Want automatic Skill discovery | Copy or symlink `skills/mywiki-query/` into the target agent runtime's Skill directory |
+
+Example prompts:
+
+```text
+使用 /Users/chenweilong/Documents/mywiki/skills/mywiki-query/SKILL.md，基于我的 mywiki 回答：Skill 和 Plugin 怎么区分？
+```
+
+```text
+使用 mywiki-query，帮我导入 raw/sources/example.pdf。
+```
+
+```text
+使用 mywiki-query，跑一次 wiki lint，检查孤儿页、缺来源和重复概念。
+```
+
+For Codex on this machine, one possible global install location is:
+
+```text
+/Users/chenweilong/.codex/skills/mywiki-query/
+```
+
+You can copy it:
+
+```bash
+mkdir -p /Users/chenweilong/.codex/skills
+cp -R /Users/chenweilong/Documents/mywiki/skills/mywiki-query /Users/chenweilong/.codex/skills/
+```
+
+Or symlink it so future edits in this repository are reflected immediately:
+
+```bash
+mkdir -p /Users/chenweilong/.codex/skills
+ln -sfn /Users/chenweilong/Documents/mywiki/skills/mywiki-query /Users/chenweilong/.codex/skills/mywiki-query
+```
+
+If using another agent runtime, use that runtime's own Skill/plugin directory instead. The repo-local copy remains the canonical source.
+
 ## Notes
 
 - This is a Markdown/Obsidian wiki, not a web application.
