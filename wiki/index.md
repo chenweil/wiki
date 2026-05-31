@@ -21,6 +21,7 @@ Source summaries live in `wiki/sources/`.
 | SKILL.md 结构与触发机制 | [[obsidian-claude-code-skill-trigger]] | Ingested |
 | Sub-Agents 到 Multi-Agent 工程指南 | [[obsidian-claude-code-multi-agent-guide]] | Ingested |
 | Plugins 插件打包与分发 | [[obsidian-claude-code-plugin-packaging]] | Ingested |
+| Agent Skill 规范、构建与设计模式 | [[obsidian-agent-skill-spec-build-patterns]] | Ingested |
 
 ## Knowledge Areas
 
@@ -39,6 +40,7 @@ Source summaries live in `wiki/sources/`.
 | --- | --- |
 | [[claude-code]] | Terminal-native agentic coding workflow |
 | [[skill]] | Progressive knowledge loading and callable SOPs |
+| [[skill-development]] | Skill specification, construction loops, and design patterns |
 | [[plugin]] | Packaging and distribution of Claude Code capabilities |
 | [[agent-architecture]] | Single Agent, Skills, Sub-Agents, Handoffs, Router |
 

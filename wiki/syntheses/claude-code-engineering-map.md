@@ -8,6 +8,7 @@ sources:
   - [[obsidian-claude-code-skill-trigger]]
   - [[obsidian-claude-code-multi-agent-guide]]
   - [[obsidian-claude-code-plugin-packaging]]
+  - [[obsidian-agent-skill-spec-build-patterns]]
 ---
 
 # Claude Code Engineering Map
@@ -22,6 +23,7 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 | --- | --- | --- | --- |
 | Project memory | `CLAUDE.md` / `AGENTS.md` | 这个项目怎么干活 | 一开始就需要 |
 | Knowledge loading | Skills | 这类任务应该怎么做 | 口头规则重复出现时 |
+| Skill engineering | Skill spec / Skill-Creator / Writing-Skills | 如何把工作流做成可复用能力 | 重复流程稳定且值得长期复用时 |
 | Deterministic checks | Hooks | 哪些事必须强制执行 | 模型偶尔忘记会造成损失时 |
 | External access | MCP | 需要连接哪些外部系统 | 需要数据库、API、设计稿、监控时 |
 | Packaging | Plugins | 如何把一组能力分享出去 | 团队或跨项目复用时 |
@@ -39,6 +41,8 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 4. 等重复动作稳定，再设计本地 Skill。
 5. 等多个知识库都需要同样能力，再考虑 Plugin。
 
+新导入的 Skill 规范资料补充了一个更严格的判断：创建 Skill 之前，先区分它是 Tool Wrapper、Generator、Reviewer、Inversion 还是 Pipeline。对本 wiki 来说，ingest 更像 Pipeline + Reviewer，而 query 回写更像 Inversion + Generator。
+
 ## Practical Roadmap For This Wiki
 
 | Phase | Action | Exit criteria |
@@ -49,8 +53,16 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 | 4 | 做 `llm-wiki-ingest` Skill | 不再需要每次口述导入规则 |
 | 5 | 添加 lint 流程 | 能找孤立页、缺来源、重复概念 |
 
+## Candidate Local Skills
+
+| Skill | Pattern | Trigger |
+| --- | --- | --- |
+| `llm-wiki-ingest` | Pipeline + Reviewer | 用户要求导入 Markdown、PDF、Obsidian 笔记或 raw source |
+| `llm-wiki-query` | Inversion + Generator | 用户基于 wiki 提问，且答案值得沉淀 |
+| `llm-wiki-lint` | Reviewer | 用户要求检查 wiki 健康度或导入质量 |
+
 ## Open Questions
 
 - 这个 wiki 是否更偏“AI 工程学习库”，还是会覆盖生活、读书、健康、项目管理等全域个人知识？
 - 如果覆盖全域知识，是否需要按主题设立多个 `overview` 或 map of content？
-
+- `llm-wiki-ingest` 是否已经值得做成 Skill，还是继续手工运行 2-3 轮。

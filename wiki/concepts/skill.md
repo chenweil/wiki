@@ -7,6 +7,7 @@ sources:
   - [[obsidian-claude-code-skill-trigger]]
   - [[claude-code-from-beginner-to-master-v2]]
   - [[obsidian-claude-code-plugin-packaging]]
+  - [[obsidian-agent-skill-spec-build-patterns]]
 ---
 
 # Skill
@@ -29,6 +30,21 @@ Skill 是一种可被语义触发、按需加载的能力包。它把领域知�
 - 主文件要短，细节分层加载。
 - 输出格式、检查点、失败条件要明确。
 - 如果会部署、发消息、删改外部系统，应禁用自动触发或加权限控制。
+- `description` 不应总结完整执行流程，否则 Agent 可能只根据 description 执行而跳过 Skill 正文。
+- 当多个测试用例都让 Agent 临时写同类脚本时，应把这个脚本沉淀到 `scripts/`。
+- Skill 主文件更像导航页，详细规则应拆到 `references/`，模板和静态资源应放到 `assets/`。
+
+## Development Patterns
+
+| Pattern | Use |
+| --- | --- |
+| Tool Wrapper | 封装技术栈规范或工具说明 |
+| Generator | 用模板和风格指南生成一致输出 |
+| Reviewer | 用检查清单做审查、评分和反馈 |
+| Inversion | 先采访用户，再生成方案或执行 |
+| Pipeline | 严格多步骤流程，每步有检查点 |
+
+See: [[skill-development]]
 
 ## Working Implication For This Wiki
 
@@ -43,4 +59,4 @@ Skill 是一种可被语义触发、按需加载的能力包。它把领域知�
 - Related: [[claude-code]]
 - Related: [[plugin]]
 - Related: [[agent-architecture]]
-
+- Related: [[skill-development]]

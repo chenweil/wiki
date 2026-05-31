@@ -7,6 +7,7 @@ sources:
   - [[obsidian-claude-code-multi-agent-guide]]
   - [[obsidian-claude-code-skill-trigger]]
   - [[claude-code-from-beginner-to-master-v2]]
+  - [[obsidian-agent-skill-spec-build-patterns]]
 ---
 
 # Agent Architecture
@@ -43,9 +44,11 @@ Agent 架构的核心不是让系统看起来更复杂，而是用合适的结�
 4. 按主题分批 ingest。
 5. 暂不引入多 Agent、数据库或 MCP。
 
+Skill-Creator 这类元工作流说明了另一种边界：当 Skill 本身成为长期资产时，可以使用 Grader、Comparator、Analyzer 这类专业 Agent 做评估；但在当前 wiki 阶段，这套流程对 `llm-wiki-ingest` 仍然偏重。更合适的是先用轻量 Pipeline + Reviewer 跑稳定。
+
 ## Connections
 
 - Related: [[skill]]
+- Related: [[skill-development]]
 - Related: [[plugin]]
 - Related: [[claude-code-engineering-map]]
-
