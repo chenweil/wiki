@@ -9,6 +9,9 @@ sources:
   - [[obsidian-claude-code-multi-agent-guide]]
   - [[obsidian-claude-code-plugin-packaging]]
   - [[obsidian-agent-skill-spec-build-patterns]]
+  - [[21-hours-claude-code-mastery]]
+  - [[claude-code-engineering-live]]
+  - [[hermes-agent-mastery]]
 ---
 
 # Claude Code Engineering Map
@@ -16,6 +19,25 @@ sources:
 ## Summary
 
 Claude Code 工程化可以理解为一套从个人效率到团队能力分发的递进体系：先让 Agent 能稳定理解项目，再让它按需加载知识，然后用确定性自动化兜底，最后把稳定能力打包分发。
+
+## Core Positioning
+
+> Claude Code 不只是工具，而是一个可编程、可扩展、可组合的 AI Agent 框架/平台。
+
+**认知转变**：从被动使用（问什么答什么）到主动驾驭（配置 Agent 自主工作）。
+
+## Three Paradigms: Claude Code vs OpenClaw vs Hermes
+
+| 维度 | Claude Code | OpenClaw | Hermes Agent |
+|------|-------------|----------|--------------|
+| 核心理念 | 交互式编码 | 配置即行为 | 自主后台 + 自改进 |
+| 你的角色 | 坐在终端前指挥 | 写配置文件定义行为 | 部署后偶尔检查 |
+| 记忆机制 | CLAUDE.md + auto-memory | SOUL.md（扁平） | 三层自改进记忆 |
+| Skill 维护 | 手动安装 | ClawHub 44000+ | Agent 自创 + 自改进 |
+| 运行模式 | 按需启动 | 按需启动 | 24/7 后台运行 |
+| 部署成本 | 订阅制 | 免费 + API 费 | $5 VPS 起 |
+
+**组合使用**：Claude Code 处理”白天团队”任务（交互编码），Hermes 处理”夜班团队”任务（后台值守），OpenClaw 提供透明可控的配置语言。
 
 ## Layered Model
 
@@ -28,6 +50,35 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 | External access | MCP | 需要连接哪些外部系统 | 需要数据库、API、设计稿、监控时 |
 | Packaging | Plugins | 如何把一组能力分享出去 | 团队或跨项目复用时 |
 | Architecture scaling | Sub-Agents / Handoffs / Router | 谁来做、何时切换、如何并行 | 遇到上下文或职责边界后 |
+
+## Four Core Components Comparison
+
+| 组件 | 触发方式 | 决策权 | 确定性 | 典型用例 |
+|------|----------|--------|--------|----------|
+| Commands | 用户 /command | 人 | 100% | 统一 commit 格式 |
+| Skills | 语义推理 | 模型 | 概率性 | 代码安全审查 |
+| SubAgents | 用户或 Claude | 架构 | 可控 | 跑 500 行测试 |
+| Hooks | 系统事件 | 系统 | 100% | 保存自动格式化 |
+
+## Self-Improving Agent: Hermes Model
+
+Hermes 提出了一个”学习循环”模型，让 Agent 自己给自己造缰绳：
+
+### 五环节学习循环
+
+1. **策划记忆**：对话结束，主动决定哪些信息值得记住
+2. **自主创建 Skill**：复杂任务完成后，提炼解决方案为 Skill
+3. **Skill 自改进**：根据反馈自动修改 Skill 文件
+4. **FTS5 跨会话召回**：按需检索历史记忆，不是全量加载
+5. **用户建模**：Honcho 辩证建模，推理用户偏好
+
+### 三层记忆系统
+
+| 记忆层 | 回答的问题 | 技术实现 |
+|--------|------------|----------|
+| 会话记忆 | 发生了什么？ | SQLite + FTS5 按需检索 |
+| 持久记忆 | 你是谁？ | SQLite，跨会话保持 |
+| Skill 记忆 | 怎么做事？ | ~/.hermes/skills/ 下的 markdown 文件 |
 
 ## Main Synthesis
 
@@ -42,6 +93,15 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 5. 等多个知识库都需要同样能力，再考虑 Plugin。
 
 新导入的 Skill 规范资料补充了一个更严格的判断：创建 Skill 之前，先区分它是 Tool Wrapper、Generator、Reviewer、Inversion 还是 Pipeline。对本 wiki 来说，ingest 更像 Pipeline + Reviewer，而 query 回写更像 Inversion + Generator。
+
+## Best Practices
+
+1. **先跑起来，再优化**：从零配置 → Commands → Skills → SubAgents，逐步演进
+2. **写好 CLAUDE.md**：最高杠杆投入，30 分钟写好项目规范
+3. **善用 SubAgents 隔离噪声**：高噪声任务用子代理，只把结论带回主对话
+4. **用 Hooks 做安全兜底**：系统强制比 AI 判断更可靠
+5. **组合使用而非单打独斗**：Commands + Skills + Hooks + MCP
+6. **从小处着手，逐步扩展**：先一个 Command 解决痛点
 
 ## Practical Roadmap For This Wiki
 
@@ -63,6 +123,7 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 
 ## Open Questions
 
-- 这个 wiki 是否更偏“AI 工程学习库”，还是会覆盖生活、读书、健康、项目管理等全域个人知识？
+- 这个 wiki 是否更偏”AI 工程学习库”，还是会覆盖生活、读书、健康、项目管理等全域个人知识？
 - 如果覆盖全域知识，是否需要按主题设立多个 `overview` 或 map of content？
 - `llm-wiki-ingest` 是否已经值得做成 Skill，还是继续手工运行 2-3 轮。
+- Hermes 的自改进机制在长期运行中会不会积累错误规则？

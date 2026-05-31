@@ -6,7 +6,7 @@ Append-only chronological record. Use entries like:
 ## [YYYY-MM-DD] ingest | Source title
 
 - Source: `path`
-- Output pages: [[page]]
+- Output pages: [[concept-page]], [[source-summary]]
 - Notes:
 ```
 
@@ -31,3 +31,43 @@ Append-only chronological record. Use entries like:
 - Output pages: [[obsidian-agent-skill-spec-build-patterns]], [[skill-development]]
 - Updated pages: [[skill]], [[agent-architecture]], [[claude-code-engineering-map]], [[index]]
 - Notes: Added Skill specification details, progressive loading rules, Skill-Creator / Writing-Skills development loops, and five Skill design patterns.
+
+## [2026-05-31] ingest | 21小时从入门到精通-Claude Code
+
+- Source: `raw/sources/21小时从入门到精通-Claude Code.pdf`
+- Output pages: [[21-hours-claude-code-mastery]]
+- Updated pages: [[claude-code]], [[agent-architecture]], [[index]]
+- Notes: Extracted PDF text to `raw/extracted/pdf/21-hours-claude-code-mastery.txt`. This source provides deep technical analysis of Claude Code 2.1.88 source code, covering 10 chapters from build system to design philosophy. Added architecture overview, task system details, and AgentTool implementation specifics.
+
+## [2026-05-31] ingest | Claude Code 工程化实战直播分享版
+
+- Source: `raw/sources/Claude+Code+工程化实战直播分享版.pdf`
+- Output pages: [[claude-code-engineering-live]]
+- Updated pages: [[index]]
+- Notes: Extracted PDF text to `raw/extracted/pdf/claude-code-engineering-live.txt`. This is a live sharing slides by 黄佳, providing a framework for cognitive shift from "tool user" to "Agent builder". Key concepts: four-layer architecture, four core components comparison, memory system, and best practices.
+
+## [2026-05-31] ingest | 使用 Claude Skills 自动化代码审查
+
+- Source: `raw/sources/使用Claude_Skills自动化代码审查完整指南.md.pdf`
+- Output pages: [[claude-skills-code-review]]
+- Updated pages: [[index]]
+- Notes: Extracted PDF text to `raw/extracted/pdf/claude-skills-code-review.txt`. Practical guide on using Claude Skills for automated code review, saving ~10 hours per week. Key insights: Skills vs static analysis tools, 5-minute setup, multi-language Skills, CI/CD integration.
+
+## [2026-05-31] ingest | Hermes Agent 从入门到精通
+
+- Source: `raw/sources/Hermes-Agent-从入门到精通-v260407.pdf`
+- Output pages: [[hermes-agent-mastery]]
+- Updated pages: [[index]]
+- Notes: Extracted PDF text to `raw/extracted/pdf/hermes-agent-mastery.txt`. Comprehensive guide to Hermes Agent v0.7.0 by 花叔. Key concepts: learning loop (5 stages), three-layer memory, Skill self-improvement, 40+ tools + MCP, multi-agent orchestration, comparison with Claude Code and OpenClaw.
+
+## [2026-05-31] update | Hermes Agent 相关概念页更新
+
+- Updated pages: [[agent-architecture]], [[claude-code-engineering-map]]
+- Notes: Added "Three Paradigms Comparison" (Claude Code vs OpenClaw vs Hermes), "Self-Improving Agent: Hermes Model" section with learning loop and three-layer memory. Updated synthesis page with Hermes content and new open question about self-improvement error accumulation.
+
+## [2026-05-31] ingest | Vibe Coding之道
+
+- Source: `raw/sources/Vibe Coding之道.md`
+- Output pages: [[vibe-coding-way]]
+- Updated pages: [[index]]
+- Notes: Ingested from Markdown source and supporting extracted notes. Key concepts: Vibe Coding definition, AI four forms, Agent three core abilities, ideal workflow (Explore → Select → Brainstorm → Review → Execute → Verify → Learn), AI-era new skills (questioning, judgment, meta-cognition), Context 复利.

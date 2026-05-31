@@ -1,0 +1,133 @@
+Claude Code 工程化实战
+
+从工具使用者到 Agent 构建者的进阶之路
+ 黄佳 https://github.com/huangjia2019
+ AI 研究员 技术作者
+
+主攻方向为大语言模型的开发和应用实践、Al in FinTech、Al in MedTech
+
+代表作：                            知识星球：
+• 《LangChain 实战课》               • 咖哥AI
+• 《RAG进阶训练营》                    公众号：
+• 《MCP和A2A协议实战》                 • 咖哥AI
+
+
+
+
+            黄佳《RAG实战课》《动手做AI Agent》《GPT图解》作者
+大纲
+
+● 第一部分：全景导览 + Memory 记忆系统
+● 第二部分：子代理 — 分而治之的艺术
+● 第三部分：Skills — 让 AI 具备领域能力
+● 第四部分：扩展机制 — Commands、Hooks、MCP
+● 第五部分：生产化 — Headless、Agent SDK、Plugins
+01   Claude Code 是什么？
+从使用者到驾驭者：认知转变
+
+  被动使用                      主动驾驭
+● 用户 → 输入问题 → Claude 回答   ● 用户 → 配置 Agent → 自主工作
+● 像用计算器：输入数字，得到结果         ● 像编程序：设计好，自动运行
+
+● 问什么答什么，用完即走             ● 建立系统，持续产出价值
+
+● 只能处理即时任务                ● 可以处理复杂、长期任务
+
+● 每次都要重复说明需求              ● 一次配置，永久生效
+"
+Claude Code 的真正身份是：
+一个可编程、可扩展、可组合的 AI Agent 框架。
+
+
+
+
+— 它不只是一个"工具"，而是一个"平台"
+02   四层架构
+Claude Code 四层架构
+
+
+
+
+            ↑ 从下往上：基础能力 → 扩展能力 → 外部连接 → 编程控制
+基础层：Memory 记忆系统
+
+CLAUDE.md = Claude 的"新员工手册"
+
+● 每次开始对话时自动加载，无需重复说明
+● 包含：项目技术栈、代码风格、重要规则、禁区
+ # Project: E-commerce Platform
+
+ ## Tech Stack
+ - Frontend: React + TypeScript
+ - Backend: Node.js + Express
+
+ ## Important Rules
+ - NEVER commit to main directly
+ - Always run tests before pushing
+
+
+● 三级记忆层级：~/.claude/CLAUDE.md → 项目/CLAUDE.md → .claude/rules/*.md
+扩展层：四大核心组件
+
+● Commands（斜杠命令）：用户手动触发 /command
+  ○ 适合：标准化操作、团队统一规范
+
+● Skills（技能）：Claude 自动判断并激活
+  ○ 适合：专业领域能力、语义识别场景
+
+● SubAgents（子代理）：隔离执行的任务处理器
+  ○ 适合：高噪声任务、需要特定权限的任务
+
+● Hooks（钩子）：事件触发的自动化检查
+  ○ 适合：安全检查、格式化、日志记录
+Skills
+Skills
+Sub-Agents
+四大核心组件对比
+
+  组件         触发方式         决策权   确定性      典型用例
+
+
+Commands    用户 /command    人    100%   统一 commit 格式
+
+
+  Skills      语义推理        模型    概率性     代码安全审查
+
+
+SubAgents   用户或Claude     架构    可控      跑500行测试
+
+
+ Hooks        系统事件        系统    100%   保存自动格式化
+03   最佳实践
+    使用 Claude Code 的最佳实践
+
+1   先跑起来，再优化                                    2   写好 CLAUDE.md
+    不要一开始就追求完美架构。先用最简单的方案解决问题，                      这是最高杠杆的投入。花30分钟写好项目规范，后续每次对
+    再逐步优化。从零配置到 Commands 到 Skills 到 SubAgents       话都会受益。让 Claude 真正理解你的项目。
+    。
+
+
+
+
+3   善用 SubAgents 隔离噪声                           4   用 Hooks 做安全兜底
+    跑测试、分析日志这类高噪声任务，用子代理处理。只把结                      对于必须执行的检查（安全、格式化、合规），用 Hooks 而
+    论带回主对话，保持上下文清爽。                                 不是靠 Claude 自觉。系统强制比 AI 判断更可靠。
+
+
+
+
+5   组合使用而非单打独斗                                  6   从小处着手，逐步扩展
+    真实问题往往需要多种技术组合。Commands + Skills +              先从一个 Command 开始，解决一个痛点。验证有效后，再
+    Hooks + MCP，组合的威力远大于单一技术。                       扩展到 Skills、SubAgents、Hooks。
+"
+这是一场极客与 AI 的共舞
+——你领舞，它跟随；你编排，它执行。
+
+
+
+
+— 让我们开始。
+Q&A
+
+感谢聆听 · 欢迎提问
+

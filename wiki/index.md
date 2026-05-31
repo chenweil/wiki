@@ -18,6 +18,12 @@ Source summaries live in `wiki/sources/`.
 | Obsidian note vault | `raw/obsidian/manifest.md` | Registered, not ingested |
 | Downloaded PDFs | `raw/sources/` | Registered, not ingested |
 | Claude Code 从入门到精通 v2.0.0 | [[claude-code-from-beginner-to-master-v2]] | Ingested |
+| 21小时从入门到精通-Claude Code | [[21-hours-claude-code-mastery]] | Ingested |
+| Claude Code 工程化实战直播分享版 | [[claude-code-engineering-live]] | Ingested |
+| 使用 Claude Skills 自动化代码审查 | [[claude-skills-code-review]] | Ingested |
+| Hermes Agent 从入门到精通 | [[hermes-agent-mastery]] | Ingested |
+| 开发前测试方法 | - | ❌ 内容不足（仅 2 行） |
+| Vibe Coding之道 | [[vibe-coding-way]] | Ingested |
 | SKILL.md 结构与触发机制 | [[obsidian-claude-code-skill-trigger]] | Ingested |
 | Sub-Agents 到 Multi-Agent 工程指南 | [[obsidian-claude-code-multi-agent-guide]] | Ingested |
 | Plugins 插件打包与分发 | [[obsidian-claude-code-plugin-packaging]] | Ingested |
@@ -55,5 +61,4 @@ Source summaries live in `wiki/sources/`.
 | Item | Source path | Next action |
 | --- | --- | --- |
 | Obsidian note vault | `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note` | Build a scoped ingest plan before importing |
-| Remaining Claude Code and agent PDFs | `raw/sources/` | Extract text, summarize one PDF at a time |
-| Remaining Claude Code course notes | External Obsidian vault | Continue with `CLAUDE.md`, Hooks, MCP, Commands, Agent SDK |
+| 开发前测试方法 | `raw/sources/胥克谦原创：开发前测试方法.pdf` | ❌ 内容不足，仅 2 行 |
