@@ -24,10 +24,12 @@ Source summaries live in `wiki/sources/`.
 | Hermes Agent 从入门到精通 | [[hermes-agent-mastery]] | Ingested |
 | 开发前测试方法 | - | ❌ 内容不足（仅 2 行） |
 | Vibe Coding之道 | [[vibe-coding-way]] | Ingested |
+| Agent Harness 综述 | [[agent-harness-survey]] | Ingested |
 | SKILL.md 结构与触发机制 | [[obsidian-claude-code-skill-trigger]] | Ingested |
 | Sub-Agents 到 Multi-Agent 工程指南 | [[obsidian-claude-code-multi-agent-guide]] | Ingested |
 | Plugins 插件打包与分发 | [[obsidian-claude-code-plugin-packaging]] | Ingested |
 | Agent Skill 规范、构建与设计模式 | [[obsidian-agent-skill-spec-build-patterns]] | Ingested |
+| 浅谈 AI 编程 | [[ai-programming-deep-dive]] | Ingested |
 
 ## Knowledge Areas
 

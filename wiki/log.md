@@ -71,3 +71,17 @@ Append-only chronological record. Use entries like:
 - Output pages: [[vibe-coding-way]]
 - Updated pages: [[index]]
 - Notes: Ingested from Markdown source and supporting extracted notes. Key concepts: Vibe Coding definition, AI four forms, Agent three core abilities, ideal workflow (Explore → Select → Brainstorm → Review → Execute → Verify → Learn), AI-era new skills (questioning, judgment, meta-cognition), Context 复利.
+
+## [2026-05-31] ingest | Agent Harness 综述
+
+- Source: `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/收集内容/刚刚，一篇最全 Agent Harness 综述来了！.md`
+- Output pages: [[agent-harness-survey]]
+- Updated pages: [[index]]
+- Notes: Datawhale 对 CMU/Yale/JHU 联合发表的 Agent Harness 综述论文的深度解读. Key concepts: ETCLOVG 七层框架 (Execution, Tooling, Context, Lifecycle, Observability, Verification, Governance), 三次工程迁移 (Prompt → Context → Harness Engineering), trace-native 评估, 跨层矛盾, Framework → Platform 演进.
+
+## [2026-05-31] ingest | 浅谈 AI 编程
+
+- Source: `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/收集内容/浅谈 AI 编程.md`
+- Output pages: [[ai-programming-deep-dive]]
+- Updated pages: [[index]]
+- Notes: 浮之静的深度长文，探讨 AI 编程的范式迁移。核心观点：当代码生成边际成本趋近于零时，软件工程的核心将从"写代码"转向"治理 AI 生产系统"。Key concepts: Goal vs Workflow, 原语地图, 非对称性（生成快、审查慢）, Harness 六层, AI 接管老代码库五阶段方法论, 未来架构文档十类标准。

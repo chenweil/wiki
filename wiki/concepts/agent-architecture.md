@@ -10,6 +10,7 @@ sources:
   - [[obsidian-agent-skill-spec-build-patterns]]
   - [[21-hours-claude-code-mastery]]
   - [[hermes-agent-mastery]]
+  - [[agent-harness-survey]]
 ---
 
 # Agent Architecture
@@ -17,6 +18,22 @@ sources:
 ## Summary
 
 Agent 架构的核心不是让系统看起来更复杂，而是用合适的结构解决上下文、职责、状态和并行问题。默认应从单 Agent 开始，只有当明确遇到瓶颈时才升级。
+
+## ETCLOVG 七层框架
+
+基于 Agent Harness 综述，生产级 Agent 需要七层工程支撑：
+
+| 层 | 名称 | 核心问题 |
+|----|------|----------|
+| E | Execution | Agent 在哪里跑？本地、容器、沙箱？ |
+| T | Tooling | 工具怎么描述、发现、调用？怎么防止乱选工具？ |
+| C | Context | 短期上下文、会话状态、长期记忆怎么管理？ |
+| L | Lifecycle | 单轮还是多轮？一个 Agent 还是分工协作？ |
+| O | Observability | 每次调用、报错、重试、成本怎么追踪？ |
+| V | Verification | 结果对不对？失败是哪一层的问题？ |
+| G | Governance | Agent 有什么权限？谁来审批？谁来审计？ |
+
+**关键洞见**：工具调用只是其中一层。真正的 Agent 产品，要有执行环境、上下文、编排、监控、验证和治理。
 
 ## Pattern Map
 
@@ -97,6 +114,14 @@ Hermes Agent 提出了一个"学习循环"模型，让 Agent 自己给自己造�
 | 记忆层 | 手动维护 knowledge base | 三层记忆 + Honcho 用户建模 |
 | 编排层 | 自己搭多 Agent pipeline | 子 Agent 委派 + cron 调度 |
 
+## 三次工程迁移
+
+| 阶段 | 解决的问题 | 工程对象 |
+|------|------------|----------|
+| Prompt Engineering | 怎么跟模型说话 | 提示词 |
+| Context Engineering | 模型该看见什么 | 上下文、记忆 |
+| Harness Engineering | 怎么让模型在真实世界可靠行动 | 执行环境、工具、权限、验证 |
+
 ## Decision Rules
 
 - 单一领域、工具少、上下文轻：保持单 Agent。
@@ -105,6 +130,7 @@ Hermes Agent 提出了一个"学习循环"模型，让 Agent 自己给自己造�
 - 流程有明确阶段和完成条件：考虑 Handoffs。
 - 查询天然可拆分到多个数据源：考虑 Router。
 - 需要 24/7 后台运行 + 自改进：考虑 Hermes 模式。
+- 需要生产级可靠性：必须考虑 ETCLOVG 七层。
 
 ## Working Implication For This Wiki
 
@@ -116,8 +142,6 @@ Hermes Agent 提出了一个"学习循环"模型，让 Agent 自己给自己造�
 4. 按主题分批 ingest。
 5. 暂不引入多 Agent、数据库或 MCP。
 
-Skill-Creator 这类元工作流说明了另一种边界：当 Skill 本身成为长期资产时，可以使用 Grader、Comparator、Analyzer 这类专业 Agent 做评估；但在当前 wiki 阶段，这套流程对 `llm-wiki-ingest` 仍然偏重。更合适的是先用轻量 Pipeline + Reviewer 跑稳定。
-
 ## Connections
 
 - Related: [[skill]]
@@ -125,3 +149,4 @@ Skill-Creator 这类元工作流说明了另一种边界：当 Skill 本身成�
 - Related: [[plugin]]
 - Related: [[claude-code-engineering-map]]
 - Related: [[hermes-agent-mastery]]
+- Related: [[agent-harness-survey]]
