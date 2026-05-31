@@ -15,7 +15,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | Source summaries | Started |
 | Concept pages | Started |
 | Synthesis pages | Started |
-| Ingest workflow | Manual, documented |
+| Ingest workflow | Repo-local Skill started |
 | Query-to-wiki workflow | Planned |
 | Lint workflow | Planned |
 | Repo-local Skill source | Started |
@@ -48,6 +48,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `AGENTS.md` | Rules future agents must follow |
 | `schema/workflows.md` | Ingest, query, and lint workflows |
 | `schema/citation-rules.md` | Source and citation conventions |
+| `skills/ingest/SKILL.md` | Repo-local Skill for `/ingest` source compilation |
 | `skills/mywiki-query/SKILL.md` | Repo-local Skill for querying and maintaining MyWiki from other agent contexts |
 
 ## Current Compiled Domain
@@ -78,11 +79,17 @@ Add new source files to one of these locations:
 After adding material, ask the LLM agent to ingest it. Example prompts:
 
 ```text
-帮我导入 raw/sources/example.pdf
+/ingest raw/sources/example.pdf
 ```
 
 ```text
-帮我导入 Obsidian 里: 收集内容/Agent Skill规范、构建与设计模式
+/ingest Obsidian: 收集内容/Agent Skill规范、构建与设计模式
+```
+
+Natural language is also fine:
+
+```text
+帮我导入 raw/sources/example.pdf
 ```
 
 The agent should then:
@@ -132,9 +139,24 @@ Current Skill:
 
 | Skill | Purpose |
 | --- | --- |
+| `skills/ingest/SKILL.md` | Turns one explicit source into wiki pages and updates index/log |
 | `skills/mywiki-query/SKILL.md` | Gives other agents a stable protocol for finding, querying, ingesting, linting, and updating this wiki |
 
 This directory is the source of truth for the Skill content. Different agent runtimes may require installing, copying, or symlinking the Skill into their own global or project-specific skill directory.
+
+### How to use `/ingest`
+
+Use `/ingest` for the common "导入资料" operation.
+
+```text
+/ingest raw/sources/example.pdf
+```
+
+```text
+/ingest Obsidian: 收集内容/Agent Skill规范、构建与设计模式
+```
+
+The first version is intentionally explicit: it ingests one source at a time. It does not scan all of `raw/` or move sources into an archive directory by default.
 
 ### How to use `mywiki-query`
 
@@ -188,4 +210,4 @@ If using another agent runtime, use that runtime's own Skill/plugin directory in
 - A local HTTP server is not needed for normal use.
 - Prefer opening this repository in Obsidian or editing it directly as Markdown.
 - The valuable layer is the maintained `wiki/`, not a raw dump of files.
-- The next maturity step is to run query-to-wiki and lint workflows, then decide whether to split `mywiki-query` into dedicated ingest/query/lint Skills.
+- The next maturity step is to run query-to-wiki and lint workflows, then decide whether to split `mywiki-query` into dedicated `query` and `lint` Skills.

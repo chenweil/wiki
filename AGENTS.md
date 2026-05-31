@@ -42,6 +42,7 @@ Current Skill:
 
 | Skill | Purpose |
 | --- | --- |
+| `skills/ingest/SKILL.md` | Compile one explicit source into wiki pages, then update index and log |
 | `skills/mywiki-query/SKILL.md` | Query, ingest, lint, and update MyWiki using the repository's index, log, schema, and raw sources |
 
 This directory is versioned source. It is not guaranteed that every agent runtime auto-discovers root-level `skills/`; install, copy, or symlink the Skill into the relevant agent's global/project skill location when needed.
