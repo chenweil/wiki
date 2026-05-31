@@ -72,6 +72,7 @@ Add new source files to one of these locations:
 | --- | --- |
 | PDF | `raw/sources/` |
 | Markdown article or note export | `raw/sources/` |
+| Course or collection folder | `raw/sources/<course-name>/` or an external Obsidian folder |
 | Web clip | `raw/sources/` |
 | Image or attachment | `raw/assets/` |
 | Unsure / temporary | `raw/inbox/` |
@@ -84,6 +85,12 @@ After adding material, ask the LLM agent to ingest it. Example prompts:
 
 ```text
 /ingest Obsidian: 收集内容/Agent Skill规范、构建与设计模式
+```
+
+For a course or folder:
+
+```text
+/ingest Obsidian: Claude Code工程化实战-共26讲/
 ```
 
 Natural language is also fine:
@@ -156,7 +163,13 @@ Use `/ingest` for the common "导入资料" operation.
 /ingest Obsidian: 收集内容/Agent Skill规范、构建与设计模式
 ```
 
-The first version is intentionally explicit: it ingests one source at a time. It does not scan all of `raw/` or move sources into an archive directory by default.
+For a course or folder:
+
+```text
+/ingest Obsidian: Claude Code工程化实战-共26讲/
+```
+
+The first version is intentionally explicit: it ingests a named file or named directory. It does not scan all of `raw/` or move sources into an archive directory by default. Directory ingest should start with an inventory and a batch plan; large folders should be processed in coherent batches rather than all at once.
 
 ### How to use `mywiki-query`
 
