@@ -22,6 +22,7 @@
 | Temporary inbox | `raw/inbox/` | New unprocessed material can be placed here |
 | Extracted PDF text | `raw/extracted/pdf/` | Regeneratable working copy |
 | Maintained wiki | `wiki/` | LLM may create and update pages |
+| Repo-local skills | `skills/` | Versioned Skill source files for agents |
 
 ## Architecture
 
@@ -32,6 +33,18 @@ This wiki follows the LLM Wiki pattern:
 3. Schema files define page formats, citation rules, and workflows.
 
 Do not copy large raw documents into `wiki/`. Instead, create concise source summaries and link back to the original source path.
+
+## Repo-local Skills
+
+The `skills/` directory stores Skill source files that help other agents query or maintain this wiki from outside the repository.
+
+Current Skill:
+
+| Skill | Purpose |
+| --- | --- |
+| `skills/mywiki-query/SKILL.md` | Query, ingest, lint, and update MyWiki using the repository's index, log, schema, and raw sources |
+
+This directory is versioned source. It is not guaranteed that every agent runtime auto-discovers root-level `skills/`; install, copy, or symlink the Skill into the relevant agent's global/project skill location when needed.
 
 ## Required operating flow
 
@@ -71,4 +84,3 @@ During lint or cleanup, check for:
 - Stale summaries contradicted by newer sources.
 - Duplicate pages with overlapping meanings.
 - PDF files that still lack extracted text or a source summary.
-

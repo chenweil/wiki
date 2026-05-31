@@ -18,7 +18,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | Ingest workflow | Manual, documented |
 | Query-to-wiki workflow | Planned |
 | Lint workflow | Planned |
-| Local Skill automation | Not yet |
+| Repo-local Skill source | Started |
 
 ## Structure
 
@@ -35,6 +35,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `wiki/concepts/` | Reusable concepts and durable knowledge pages | LLM-maintained |
 | `wiki/syntheses/` | Cross-source analyses and higher-level conclusions | LLM-maintained |
 | `schema/` | Workflow, citation, and page template rules | Human/LLM co-maintained |
+| `skills/` | Repo-local Skill source files for agents that need to query or maintain this wiki | Human/LLM co-maintained |
 | `AGENTS.md` | Operating contract for future agents | Human/LLM co-maintained |
 
 ## Key Entry Points
@@ -47,6 +48,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `AGENTS.md` | Rules future agents must follow |
 | `schema/workflows.md` | Ingest, query, and lint workflows |
 | `schema/citation-rules.md` | Source and citation conventions |
+| `skills/mywiki-query/SKILL.md` | Repo-local Skill for querying and maintaining MyWiki from other agent contexts |
 
 ## Current Compiled Domain
 
@@ -122,11 +124,22 @@ git push
 
 Do not commit `.DS_Store`, temporary files, or logs.
 
+## Repo-local Skills
+
+This repository keeps versioned Skill source files under `skills/`.
+
+Current Skill:
+
+| Skill | Purpose |
+| --- | --- |
+| `skills/mywiki-query/SKILL.md` | Gives other agents a stable protocol for finding, querying, ingesting, linting, and updating this wiki |
+
+This directory is the source of truth for the Skill content. Different agent runtimes may require installing, copying, or symlinking the Skill into their own global or project-specific skill directory.
+
 ## Notes
 
 - This is a Markdown/Obsidian wiki, not a web application.
 - A local HTTP server is not needed for normal use.
 - Prefer opening this repository in Obsidian or editing it directly as Markdown.
 - The valuable layer is the maintained `wiki/`, not a raw dump of files.
-- The next maturity step is to run query-to-wiki and lint workflows, then decide whether to create a local `llm-wiki-ingest` Skill.
-
+- The next maturity step is to run query-to-wiki and lint workflows, then decide whether to split `mywiki-query` into dedicated ingest/query/lint Skills.
