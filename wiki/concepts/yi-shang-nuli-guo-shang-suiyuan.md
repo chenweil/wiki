@@ -4,7 +4,8 @@ status: active
 created: 2026-06-06
 updated: 2026-06-18
 sources:
-  - [[ima-note-three-traditions]]
+  - kind: wiki-page
+    page: ima-note-three-traditions
 ---
 
 # 因上努力，果上随缘

@@ -2,10 +2,12 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - raw/sources/Hermes-Agent-从入门到精通-v260407.pdf
-  - raw/extracted/pdf/hermes-agent-mastery.txt
+  - kind: local-raw
+    path: "raw/sources/Hermes-Agent-从入门到精通-v260407.pdf"
+  - kind: local-raw
+    path: "raw/extracted/pdf/hermes-agent-mastery.txt"
 ---
 
 # Hermes Agent 从入门到精通

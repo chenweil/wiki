@@ -66,6 +66,7 @@ Choose source storage before committing binaries.
 | Markdown, text, small structured files | Commit under `raw/sources/` or `raw/inbox/` |
 | Small PDFs that are useful offline | Commit under `raw/sources/` |
 | Large PDFs, EPUBs, books, manuscripts, large DOCX/PPTX | Upload to Tencent IMA Knowledge Base |
+| Explicit source files outside this repository | Cite temporarily as `kind: external-raw`, then copy to `raw/` or upload to IMA when durable |
 | External Obsidian notes | Keep in the Obsidian vault and cite as `kind: obsidian` |
 | IMA notes | Cite as `kind: ima-note` |
 

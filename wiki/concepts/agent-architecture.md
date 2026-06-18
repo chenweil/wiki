@@ -2,15 +2,22 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - [[obsidian-claude-code-multi-agent-guide]]
-  - [[obsidian-claude-code-skill-trigger]]
-  - [[claude-code-from-beginner-to-master-v2]]
-  - [[obsidian-agent-skill-spec-build-patterns]]
-  - [[21-hours-claude-code-mastery]]
-  - [[hermes-agent-mastery]]
-  - [[agent-harness-survey]]
+  - kind: wiki-page
+    page: obsidian-claude-code-multi-agent-guide
+  - kind: wiki-page
+    page: obsidian-claude-code-skill-trigger
+  - kind: wiki-page
+    page: claude-code-from-beginner-to-master-v2
+  - kind: wiki-page
+    page: obsidian-agent-skill-spec-build-patterns
+  - kind: wiki-page
+    page: 21-hours-claude-code-mastery
+  - kind: wiki-page
+    page: hermes-agent-mastery
+  - kind: wiki-page
+    page: agent-harness-survey
 ---
 
 # Agent Architecture

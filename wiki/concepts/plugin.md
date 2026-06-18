@@ -2,10 +2,12 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - [[obsidian-claude-code-plugin-packaging]]
-  - [[claude-code-from-beginner-to-master-v2]]
+  - kind: wiki-page
+    page: obsidian-claude-code-plugin-packaging
+  - kind: wiki-page
+    page: claude-code-from-beginner-to-master-v2
 ---
 
 # Plugin

@@ -2,10 +2,12 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - raw/sources/21小时从入门到精通-Claude Code.pdf
-  - raw/extracted/pdf/21-hours-claude-code-mastery.txt
+  - kind: local-raw
+    path: "raw/sources/21小时从入门到精通-Claude Code.pdf"
+  - kind: local-raw
+    path: "raw/extracted/pdf/21-hours-claude-code-mastery.txt"
 ---
 
 # 21小时从入门到精通-Claude Code

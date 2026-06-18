@@ -2,10 +2,12 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - raw/sources/Claude+Code+工程化实战直播分享版.pdf
-  - raw/extracted/pdf/claude-code-engineering-live.txt
+  - kind: local-raw
+    path: "raw/sources/Claude+Code+工程化实战直播分享版.pdf"
+  - kind: local-raw
+    path: "raw/extracted/pdf/claude-code-engineering-live.txt"
 ---
 
 # Claude Code 工程化实战直播分享版

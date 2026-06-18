@@ -2,10 +2,12 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - raw/sources/Vibe Coding之道.md
-  - raw/extracted/pdf/vibe-coding-way.md
+  - kind: local-raw
+    path: "raw/sources/Vibe Coding之道.md"
+  - kind: local-raw
+    path: "raw/extracted/pdf/vibe-coding-way.md"
 ---
 
 # Vibe Coding 之道

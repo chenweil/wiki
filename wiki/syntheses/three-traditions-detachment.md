@@ -4,7 +4,8 @@ status: active
 created: 2026-06-06
 updated: 2026-06-18
 sources:
-  - [[ima-note-three-traditions]]
+  - kind: wiki-page
+    page: ima-note-three-traditions
 ---
 
 # 佛道儒三家的共通智慧：放下执着

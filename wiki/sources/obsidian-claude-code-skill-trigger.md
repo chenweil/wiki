@@ -2,9 +2,10 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - /Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/Claude Code工程化实战-共26讲/09｜触类旁通：SKILL.md结构与触发机制-Claude Code 工程化实战-极客时间.md
+  - kind: obsidian
+    path: "Claude Code工程化实战-共26讲/09｜触类旁通：SKILL.md结构与触发机制-Claude Code 工程化实战-极客时间.md"
 ---
 
 # Obsidian Source: SKILL.md 结构与触发机制

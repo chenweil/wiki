@@ -2,9 +2,10 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - /Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/收集内容/刚刚，一篇最全 Agent Harness 综述来了！.md
+  - kind: obsidian
+    path: "收集内容/刚刚，一篇最全 Agent Harness 综述来了！.md"
 ---
 
 # Agent Harness 综述

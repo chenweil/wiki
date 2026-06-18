@@ -2,12 +2,16 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - [[obsidian-claude-code-skill-trigger]]
-  - [[claude-code-from-beginner-to-master-v2]]
-  - [[obsidian-claude-code-plugin-packaging]]
-  - [[obsidian-agent-skill-spec-build-patterns]]
+  - kind: wiki-page
+    page: obsidian-claude-code-skill-trigger
+  - kind: wiki-page
+    page: claude-code-from-beginner-to-master-v2
+  - kind: wiki-page
+    page: obsidian-claude-code-plugin-packaging
+  - kind: wiki-page
+    page: obsidian-agent-skill-spec-build-patterns
 ---
 
 # Skill

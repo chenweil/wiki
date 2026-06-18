@@ -2,10 +2,12 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - raw/sources/使用Claude_Skills自动化代码审查完整指南.md.pdf
-  - raw/extracted/pdf/claude-skills-code-review.txt
+  - kind: local-raw
+    path: "raw/sources/使用Claude_Skills自动化代码审查完整指南.md.pdf"
+  - kind: local-raw
+    path: "raw/extracted/pdf/claude-skills-code-review.txt"
 ---
 
 # 使用 Claude Skills 自动化代码审查完整指南

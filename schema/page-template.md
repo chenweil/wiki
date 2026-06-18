@@ -9,7 +9,7 @@ status: draft | active | needs-review
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 sources:
-  - kind: local-raw | obsidian | ima-note | ima-media
+  - kind: local-raw | external-raw | obsidian | ima-note | ima-media | wiki-page
     # kind-specific fields below
 ---
 
@@ -36,6 +36,8 @@ Short explanation in Chinese.
 
 The `sources` frontmatter field is a **list of structured objects**, not plain strings. Each object has a `kind` discriminator and kind-specific fields.
 
+Operational pages such as `wiki/index.md`, `wiki/log.md`, and `wiki/overview.md` may cite project contract files like `AGENTS.md` or `schema/workflows.md` as plain paths. Knowledge pages should use the structured form below.
+
 ### `kind: local-raw`
 
 A file inside this repository, typically in `raw/sources/`, `raw/inbox/`, or `raw/extracted/`.
@@ -49,6 +51,19 @@ sources:
 ```
 
 Use this when the original file (or extracted text) lives inside the repo and is durable. Do not list transient files in `tmp/`.
+
+### `kind: external-raw`
+
+A source file outside this repository that has not yet been copied into `raw/` or uploaded to IMA.
+
+```yaml
+sources:
+  - kind: external-raw
+    path: /Users/chenweilong/Documents/go.pdf
+    note: should be copied to raw/sources or uploaded to IMA later
+```
+
+Use this as a transitional reference. Prefer `local-raw`, `obsidian`, or `ima-media` for durable ingests.
 
 ### `kind: obsidian`
 
@@ -89,6 +104,18 @@ sources:
     url: https://ima.qq.com/...   # optional
 ```
 
+### `kind: wiki-page`
+
+A generated wiki page used as an input to a concept or synthesis page. This is for internal knowledge dependencies, not raw evidence.
+
+```yaml
+sources:
+  - kind: wiki-page
+    page: claude-code-from-beginner-to-master-v2
+```
+
+Use the page slug without `[[...]]`. Keep human-facing `[[wikilinks]]` in prose, tables, and connection sections.
+
 ### Mixing kinds
 
 A page may list multiple sources of different kinds:
@@ -97,6 +124,8 @@ A page may list multiple sources of different kinds:
 sources:
   - kind: local-raw
     path: raw/sources/original-course.pdf
+  - kind: wiki-page
+    page: claude-code
   - kind: ima-note
     note_id: "12345"
   - kind: obsidian
@@ -106,4 +135,3 @@ sources:
 ### Migration note
 
 Older pages in `wiki/` still use the string form (e.g. `sources: ["IMA note_id: 7465939918418409"]`). When touching such a page, normalize its `sources` to the structured form.
-

@@ -4,7 +4,9 @@ status: needs-review
 created: 2026-06-06
 updated: 2026-06-18
 sources:
-  - /Users/chenweilong/Documents/go.pdf
+  - kind: external-raw
+    path: "/Users/chenweilong/Documents/go.pdf"
+    note: "should be copied to raw/sources or uploaded to IMA later"
 ---
 
 # Go 学习路线图 2026

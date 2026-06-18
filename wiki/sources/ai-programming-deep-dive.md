@@ -2,9 +2,10 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - /Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/收集内容/浅谈 AI 编程.md
+  - kind: obsidian
+    path: "收集内容/浅谈 AI 编程.md"
 ---
 
 # 浅谈 AI 编程

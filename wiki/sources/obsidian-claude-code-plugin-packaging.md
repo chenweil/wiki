@@ -2,9 +2,10 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - /Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/Claude Code工程化实战-共26讲/23｜化零为整：Plugins 插件打包与分发-Claude Code 工程化实战-极客时间.md
+  - kind: obsidian
+    path: "Claude Code工程化实战-共26讲/23｜化零为整：Plugins 插件打包与分发-Claude Code 工程化实战-极客时间.md"
 ---
 
 # Obsidian Source: Plugins 插件打包与分发

@@ -2,10 +2,12 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - [[obsidian-agent-skill-spec-build-patterns]]
-  - [[obsidian-claude-code-skill-trigger]]
+  - kind: wiki-page
+    page: obsidian-agent-skill-spec-build-patterns
+  - kind: wiki-page
+    page: obsidian-claude-code-skill-trigger
 ---
 
 # Skill Development

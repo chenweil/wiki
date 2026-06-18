@@ -115,3 +115,9 @@ Append-only chronological record. Use entries like:
 - Source: `schema/page-template.md`
 - Updated pages: [[index]], [[log]], [[overview]], [[ima-note-three-traditions]], [[three-traditions-detachment]], [[go-roadmap-2026]], [[fan-zhe-dao-zhi-dong]], [[chu-gou]], [[wo-zhi]], [[wu-wei]], [[zhi-ming]], [[yi-shang-nuli-guo-shang-suiyuan]]
 - Notes: Ran lightweight wiki lint for missing frontmatter, missing `sources`, index coverage, wikilink targets, planned workflow labels, and whitespace errors. Normalized all current wiki Markdown pages to include frontmatter and source metadata; changed README query/lint workflow status from Planned to Started.
+
+## [2026-06-18] maintenance | Structured source reference migration
+
+- Source: `schema/page-template.md`, `schema/citation-rules.md`
+- Updated pages: [[claude-code-from-beginner-to-master-v2]], [[21-hours-claude-code-mastery]], [[claude-code-engineering-live]], [[claude-skills-code-review]], [[hermes-agent-mastery]], [[vibe-coding-way]], [[agent-harness-survey]], [[ai-programming-deep-dive]], [[obsidian-claude-code-skill-trigger]], [[obsidian-claude-code-multi-agent-guide]], [[obsidian-claude-code-plugin-packaging]], [[obsidian-agent-skill-spec-build-patterns]], [[claude-code]], [[skill]], [[plugin]], [[agent-architecture]], [[skill-development]], [[go-roadmap-2026]], [[three-traditions-detachment]], [[fan-zhe-dao-zhi-dong]], [[chu-gou]], [[wo-zhi]], [[wu-wei]], [[zhi-ming]], [[yi-shang-nuli-guo-shang-suiyuan]], [[claude-code-engineering-map]]
+- Notes: Added `kind: external-raw` for explicit source files outside the repository and `kind: wiki-page` for internal wiki dependencies. Migrated knowledge-page frontmatter from plain paths and `[[wikilinks]]` to structured `sources` objects. Left `wiki/index.md`, `wiki/log.md`, and `wiki/overview.md` as operational-page exceptions for project contract references.

@@ -2,10 +2,12 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-05-31
+updated: 2026-06-18
 sources:
-  - [[claude-code-from-beginner-to-master-v2]]
-  - [[21-hours-claude-code-mastery]]
+  - kind: wiki-page
+    page: claude-code-from-beginner-to-master-v2
+  - kind: wiki-page
+    page: 21-hours-claude-code-mastery
 ---
 
 # Claude Code
