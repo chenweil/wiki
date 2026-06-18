@@ -4,6 +4,8 @@ MyWiki is a personal LLM-maintained Markdown wiki inspired by Karpathy's LLM Wik
 
 The goal is not to build another raw document archive. Raw materials live in `raw/`; the maintained knowledge layer lives in `wiki/`. An LLM agent reads source material, writes summaries, updates concept pages, cross-links related ideas, records changes, and keeps the wiki useful over time.
 
+For binary sources that are too large or otherwise unsuitable for committing to Git (books, large manuscripts, long PDFs), MyWiki uses Tencent IMA Knowledge Base as external storage. Files are uploaded via `skills/vendor/ima/wrapper/upload.cjs` and referenced from source summaries using `kind: ima-media`; only text artifacts live in the repo.
+
 ## Current Status
 
 This repository is in the seed-wiki stage. The file structure and first ingest loop are already in place, and the first compiled domain is Claude Code / Agent / Skill / Plugin engineering.
@@ -19,6 +21,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | Query-to-wiki workflow | Started |
 | Lint workflow | Started |
 | Repo-local Skill source | Started |
+| IMA large-file storage | Ready (vendor + wrapper) |
 
 ## Structure
 
@@ -36,6 +39,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `wiki/syntheses/` | Cross-source analyses and higher-level conclusions | LLM-maintained |
 | `schema/` | Workflow, citation, and page template rules | Human/LLM co-maintained |
 | `skills/` | Repo-local Skill source files for agents that need to query or maintain this wiki | Human/LLM co-maintained |
+| `skills/vendor/` | Third-party Skill source files (e.g. `skills/vendor/ima/`) vendored into this repo. Treat as versioned dependencies; do not modify in place. | Vendor-pinned |
 | `AGENTS.md` | Operating contract for future agents | Human/LLM co-maintained |
 
 ## Key Entry Points
