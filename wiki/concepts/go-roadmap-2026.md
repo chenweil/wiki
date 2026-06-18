@@ -267,5 +267,5 @@ Web 开发 (3周)
 
 ## Open Questions
 
-- 原始 PDF 目前位于仓库外路径，后续如需长期维护，应复制到 `raw/sources/` 或补充可追溯 source summary。
+- 原始 PDF 在仓库外路径，以 `kind: external-raw` 引用；这是 schema 定义的合法过渡状态。如需长期维护，可复制到 `raw/sources/` 并改为 `kind: local-raw`，或上传到 IMA 并改为 `kind: ima-media`。
 - 部分生态推荐会随时间变化，后续引用前应核对 Go 官方文档和各项目维护状态。
