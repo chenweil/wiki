@@ -16,8 +16,8 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | Concept pages | Started |
 | Synthesis pages | Started |
 | Ingest workflow | Repo-local Skill started |
-| Query-to-wiki workflow | Planned |
-| Lint workflow | Planned |
+| Query-to-wiki workflow | Started |
+| Lint workflow | Started |
 | Repo-local Skill source | Started |
 
 ## Structure
@@ -223,4 +223,4 @@ If using another agent runtime, use that runtime's own Skill/plugin directory in
 - A local HTTP server is not needed for normal use.
 - Prefer opening this repository in Obsidian or editing it directly as Markdown.
 - The valuable layer is the maintained `wiki/`, not a raw dump of files.
-- The next maturity step is to run query-to-wiki and lint workflows, then decide whether to split `mywiki-query` into dedicated `query` and `lint` Skills.
+- The next maturity step is to continue exercising query-to-wiki and lint workflows, then decide whether to split `mywiki-query` into dedicated `query` and `lint` Skills.

@@ -44,17 +44,18 @@ External Obsidian vault, read-only by default:
 3. Determine whether the source is a single file or a directory.
 4. If it is a directory, run the directory workflow below.
 5. If it is a single file, read the source.
-6. For PDFs, extract text to `raw/extracted/pdf/` when useful.
-7. Create or update one source summary in `wiki/sources/`.
-8. Update existing concept or synthesis pages before creating duplicates.
-9. Create new concept or synthesis pages only when the source adds durable knowledge.
-10. Update `wiki/index.md`.
-11. Append one `ingest` entry to `wiki/log.md`.
-12. Run checks:
+6. **Decide storage location.** If the file is a single binary (PDF, EPUB, large DOCX/PPTX, etc.) larger than 5MB, upload it to IMA Knowledge Base instead of committing the binary to `raw/sources/`. Use `skills/vendor/ima/wrapper/upload.cjs --file <path> [--kb-id <kb>]` and capture the returned `media_id`. Skip binary commit; keep only text artifacts (extracted PDF text in `raw/extracted/pdf/`, summary notes). Reference the upload in the source summary as `kind: ima-media`. The 5MB threshold is a policy choice; callers that need a different threshold should document it explicitly.
+7. For PDFs, extract text to `raw/extracted/pdf/` when useful.
+8. Create or update one source summary in `wiki/sources/`.
+9. Update existing concept or synthesis pages before creating duplicates.
+10. Create new concept or synthesis pages only when the source adds durable knowledge.
+11. Update `wiki/index.md`.
+12. Append one `ingest` entry to `wiki/log.md`.
+13. Run checks:
     - `git diff --check`
     - `rg` for the new page links
     - `git status --short`
-13. Commit and push from `/Users/chenweilong/Documents/mywiki`.
+14. Commit and push from `/Users/chenweilong/Documents/mywiki`.
 
 ## Directory Workflow
 

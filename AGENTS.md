@@ -21,6 +21,7 @@
 | Downloaded sources | `raw/sources/` | Read-only by default |
 | Temporary inbox | `raw/inbox/` | New unprocessed material can be placed here |
 | Extracted PDF text | `raw/extracted/pdf/` | Regeneratable working copy |
+| IMA knowledge base | External (ima.qq.com) | For large files unsuitable for Git; upload via `skills/vendor/ima/wrapper/upload.cjs` and reference by `kind: ima-media` in source frontmatter |
 | Maintained wiki | `wiki/` | LLM may create and update pages |
 | Repo-local skills | `skills/` | Versioned Skill source files for agents |
 
