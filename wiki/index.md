@@ -1,3 +1,13 @@
+---
+type: project
+status: active
+created: 2026-05-31
+updated: 2026-06-18
+sources:
+  - AGENTS.md
+  - schema/workflows.md
+---
+
 # My LLM Wiki Index
 
 This is the main navigation file for the LLM-maintained wiki.
@@ -30,6 +40,7 @@ Source summaries live in `wiki/sources/`.
 | Plugins 插件打包与分发 | [[obsidian-claude-code-plugin-packaging]] | Ingested |
 | Agent Skill 规范、构建与设计模式 | [[obsidian-agent-skill-spec-build-patterns]] | Ingested |
 | 浅谈 AI 编程 | [[ai-programming-deep-dive]] | Ingested |
+| IMA 笔记：佛道儒共通智慧 | [[ima-note-three-traditions]] | Ingested |
 
 ## Knowledge Areas
 
@@ -51,12 +62,20 @@ Source summaries live in `wiki/sources/`.
 | [[skill-development]] | Skill specification, construction loops, and design patterns |
 | [[plugin]] | Packaging and distribution of Claude Code capabilities |
 | [[agent-architecture]] | Single Agent, Skills, Sub-Agents, Handoffs, Router |
+| [[go-roadmap-2026]] | Go 语言学习路线图 2026 版，基于 Go 1.22+ |
+| [[fan-zhe-dao-zhi-dong]] | 反者道之动——事物走向反面是道的运动规律 |
+| [[chu-gou]] | 刍狗思维——万物皆有时，不把任何事看得太重 |
+| [[wo-zhi]] | 我执——佛家核心概念，对"固定自我"的执念 |
+| [[wu-wei]] | 无为——不违反自然规律地做 |
+| [[zhi-ming]] | 知命——明知不可为而为之 |
+| [[yi-shang-nuli-guo-shang-suiyuan]] | 因上努力，果上随缘——三家共通的实践智慧 |
 
 ## Current Syntheses
 
 | Synthesis | Notes |
 | --- | --- |
 | [[claude-code-engineering-map]] | Layered map from project memory to plugins and agent architecture |
+| [[three-traditions-detachment]] | 佛道儒三家对"放下执着"的共通智慧与实践方法论 |
 
 ## Current Ingest Backlog
 

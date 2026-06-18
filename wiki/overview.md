@@ -1,6 +1,20 @@
+---
+type: synthesis
+status: active
+created: 2026-05-31
+updated: 2026-06-18
+sources:
+  - [[index]]
+  - AGENTS.md
+---
+
 # Overview
 
 This wiki is intended to compile the user's collected notes, downloaded materials, PDFs, and durable conversations into an interlinked Markdown knowledge base.
+
+## Summary
+
+MyWiki is a file-based, LLM-maintained Markdown knowledge layer. Raw materials stay in `raw/` or the external Obsidian vault, while durable summaries, concepts, and syntheses live under `wiki/`.
 
 ## Current Shape
 
@@ -34,3 +48,13 @@ The first useful domain appears to be AI engineering, Claude Code, agent workflo
 | Whether to copy Obsidian notes into this repo | No; read from the existing vault path |
 | Whether to install a third-party LLM wiki skill | No; start with local rules and plain Markdown |
 | Whether to add search tooling | Later; use `rg` and `wiki/index.md` first |
+
+## Connections
+
+- Related: [[index]]
+- Related: [[log]]
+- Related: [[claude-code-engineering-map]]
+
+## Open Questions
+
+- 是否需要把 `mywiki-query` 拆分为独立 query/lint Skills，应等更多维护循环稳定后再决定。

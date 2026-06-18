@@ -1,3 +1,13 @@
+---
+type: project
+status: active
+created: 2026-05-31
+updated: 2026-06-18
+sources:
+  - AGENTS.md
+  - schema/workflows.md
+---
+
 # LLM Wiki Log
 
 Append-only chronological record. Use entries like:
@@ -6,7 +16,7 @@ Append-only chronological record. Use entries like:
 ## [YYYY-MM-DD] ingest | Source title
 
 - Source: `path`
-- Output pages: [[concept-page]], [[source-summary]]
+- Output pages: concept-page, source-summary
 - Notes:
 ```
 
@@ -85,3 +95,23 @@ Append-only chronological record. Use entries like:
 - Output pages: [[ai-programming-deep-dive]]
 - Updated pages: [[index]]
 - Notes: 浮之静的深度长文，探讨 AI 编程的范式迁移。核心观点：当代码生成边际成本趋近于零时，软件工程的核心将从"写代码"转向"治理 AI 生产系统"。Key concepts: Goal vs Workflow, 原语地图, 非对称性（生成快、审查慢）, Harness 六层, AI 接管老代码库五阶段方法论, 未来架构文档十类标准。
+
+## [2026-06-06] ingest | IMA 笔记：放下焦虑与执着——道、佛、无为的共通智慧
+
+- Source: IMA 笔记 (note_id: 7465939918418409) + IMA 笔记 (note_id: 7465972512356248)
+- Output pages: [[ima-note-three-traditions]], [[three-traditions-detachment]], [[fan-zhe-dao-zhi-dong]], [[chu-gou]], [[wo-zhi]], [[wu-wei]], [[zhi-ming]], [[yi-shang-nuli-guo-shang-suiyuan]]
+- Updated pages: [[index]]
+- Notes: 从 IMA 知识库导入。与 AI 对话产生的哲学综合笔记，探讨佛家（我执）、道家（无为）、儒家（知命）三家对"放下执着"的共通智慧。拆分为 1 个源摘要 + 1 个综合页 + 6 个概念页。第二篇笔记"读《人类简史》帝国章节的思考"中的"心无挂碍"段落并入综合页。
+
+## [2026-06-06] create | Go 学习路线图 2026
+
+- Source: `/Users/chenweilong/Documents/go.pdf` (roadmap.sh 旧版 Go 路线图)
+- Output pages: [[go-roadmap-2026]]
+- Updated pages: [[index]]
+- Notes: 基于用户提供的旧版 Go 路线图 PDF，生成 2026 版本。更新内容：补充泛型（Go 1.18+）、slog（Go 1.21）、range over integers（Go 1.22）等新特性；移除过时框架（Beego、Revel、Buffalo）；添加 Fiber、sqlx、sqlc 等现代工具；更新微服务框架（go-zero、Kratos）；补充测试工具（testify、gomock）和日志方案（slog、Zap）。路线图分 5 个阶段：基础语法、并发编程、Web 开发、工具链、微服务。
+
+## [2026-06-18] maintenance | Wiki lint and schema normalization
+
+- Source: `schema/page-template.md`
+- Updated pages: [[index]], [[log]], [[overview]], [[ima-note-three-traditions]], [[three-traditions-detachment]], [[go-roadmap-2026]], [[fan-zhe-dao-zhi-dong]], [[chu-gou]], [[wo-zhi]], [[wu-wei]], [[zhi-ming]], [[yi-shang-nuli-guo-shang-suiyuan]]
+- Notes: Ran lightweight wiki lint for missing frontmatter, missing `sources`, index coverage, wikilink targets, planned workflow labels, and whitespace errors. Normalized all current wiki Markdown pages to include frontmatter and source metadata; changed README query/lint workflow status from Planned to Started.
