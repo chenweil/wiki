@@ -44,7 +44,7 @@ External Obsidian vault, read-only by default:
 3. Determine whether the source is a single file or a directory.
 4. If it is a directory, run the directory workflow below.
 5. If it is a single file, read the source.
-6. **Decide storage location.** If the file is a single binary (PDF, EPUB, large DOCX/PPTX, etc.) larger than 5MB, upload it to IMA Knowledge Base instead of committing the binary to `raw/sources/`. Use `skills/vendor/ima/wrapper/upload.cjs --file <path> [--kb-id <kb>]` and capture the returned `media_id`. Skip binary commit; keep only text artifacts (extracted PDF text in `raw/extracted/pdf/`, summary notes). Reference the upload in the source summary as `kind: ima-media`. The 5MB threshold is a policy choice; callers that need a different threshold should document it explicitly.
+6. Decide storage location using the storage policy below.
 7. For PDFs, extract text to `raw/extracted/pdf/` when useful.
 8. Create or update one source summary in `wiki/sources/`.
 9. Update existing concept or synthesis pages before creating duplicates.
@@ -56,6 +56,39 @@ External Obsidian vault, read-only by default:
     - `rg` for the new page links
     - `git status --short`
 14. Commit and push from `/Users/chenweilong/Documents/mywiki`.
+
+## Storage Policy
+
+Choose source storage before committing binaries.
+
+| Source | Default storage |
+| --- | --- |
+| Markdown, text, small structured files | Commit under `raw/sources/` or `raw/inbox/` |
+| Small PDFs that are useful offline | Commit under `raw/sources/` |
+| Large PDFs, EPUBs, books, manuscripts, large DOCX/PPTX | Upload to Tencent IMA Knowledge Base |
+| External Obsidian notes | Keep in the Obsidian vault and cite as `kind: obsidian` |
+| IMA notes | Cite as `kind: ima-note` |
+
+The default large-binary threshold is 5MB. This is a project policy, not a hard technical limit. If the user explicitly asks to commit a larger binary, do so only after noting the Git repository growth tradeoff.
+
+For IMA media upload:
+
+```bash
+node skills/vendor/ima/wrapper/upload.cjs --file <path> --kb-id <kb_id>
+```
+
+Capture the returned JSON fields, especially `kb_id`, `media_id`, `file_name`, and `url` when present. In the source summary, reference the original file as:
+
+```yaml
+sources:
+  - kind: ima-media
+    kb_id: "<knowledge_base_id>"
+    media_id: "<media_id>"
+    file_name: "<original-file-name>"
+    url: "<stable-url-if-available>"
+```
+
+Do not invent IMA IDs. If upload fails or credentials are unavailable, leave the source summary as `needs-review` and report the blocking step.
 
 ## Directory Workflow
 
@@ -108,7 +141,7 @@ For course folders, prefer preserving sequence order when filenames include less
 
 Each source summary should include:
 
-- YAML frontmatter with `type: source`, `status`, dates, and source path.
+- YAML frontmatter with `type: source`, `status`, dates, and structured `sources`.
 - Short summary in Chinese.
 - Key points.
 - Durable takeaways.
@@ -117,9 +150,10 @@ Each source summary should include:
 
 ## Rules
 
-- Preserve original source files.
+- Preserve original source files in their chosen storage location.
 - Do not move files to an archive directory by default.
 - Do not modify the external Obsidian vault unless explicitly instructed.
+- Do not commit large binary source files when IMA storage is the better fit.
 - Do not create a near-duplicate concept page if an existing page can be updated.
 - If new information contradicts existing wiki pages, record the conflict and ask before overwriting the old claim.
 - Use Chinese for maintained wiki content unless the page has a clear reason to preserve another language.

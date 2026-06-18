@@ -28,6 +28,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | Path | Purpose | Edit rule |
 | --- | --- | --- |
 | `raw/sources/` | Downloaded PDFs, Markdown files, clipped articles, and other source documents | User-managed, treated as source of truth |
+| `raw/sources/README.md` | Storage policy for local raw sources vs IMA external sources | Human/LLM co-maintained |
 | `raw/inbox/` | Temporary place for unprocessed material | User-managed |
 | `raw/obsidian/manifest.md` | Registered external Obsidian vault metadata | Update only when the vault setup changes |
 | `raw/extracted/` | Regeneratable text extracted from PDFs and other binary sources | Tool/LLM-managed |
@@ -74,7 +75,8 @@ Add new source files to one of these locations:
 
 | Material | Put it here |
 | --- | --- |
-| PDF | `raw/sources/` |
+| Small PDF | `raw/sources/` |
+| Large PDF, book, manuscript, large DOCX/PPTX | Upload to IMA; keep extracted text and source summary in Git |
 | Markdown article or note export | `raw/sources/` |
 | Course or collection folder | `raw/sources/<course-name>/` or an external Obsidian folder |
 | Web clip | `raw/sources/` |
@@ -103,10 +105,16 @@ Natural language is also fine:
 帮我导入 raw/sources/example.pdf
 ```
 
+For large binary material, ask for IMA-backed ingest:
+
+```text
+/ingest /path/to/large-book.pdf，文件走 IMA，不提交原始 PDF 到 Git。
+```
+
 The agent should then:
 
 1. Read the source.
-2. Preserve the original source.
+2. Decide whether the source belongs in Git or IMA.
 3. Create or update a source summary under `wiki/sources/`.
 4. Update related concept or synthesis pages.
 5. Update `wiki/index.md`.

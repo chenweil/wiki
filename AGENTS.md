@@ -33,7 +33,7 @@ This wiki follows the LLM Wiki pattern:
 2. Wiki pages are synthesized, interlinked Markdown maintained by the LLM.
 3. Schema files define page formats, citation rules, and workflows.
 
-Do not copy large raw documents into `wiki/`. Instead, create concise source summaries and link back to the original source path.
+Do not copy large raw documents into `wiki/`. Instead, create concise source summaries and link back to the original source reference, either a local `raw/` path, an Obsidian path, or an IMA `media_id` / `note_id`.
 
 ## Repo-local Skills
 
@@ -55,13 +55,13 @@ Before answering a knowledge question:
 1. Read `wiki/index.md`.
 2. Search relevant pages in `wiki/`.
 3. Search raw sources only when the wiki is missing context or the answer needs verification.
-4. Cite the source page or raw file path used.
+4. Cite the source page or structured source reference used.
 5. If the answer creates durable knowledge, offer to file it back into `wiki/`.
 
 Before ingesting a source:
 
 1. Identify whether the source is an Obsidian note, Markdown file, PDF, or other asset.
-2. Preserve the original file.
+2. Preserve the original file, either in place, in `raw/`, or externally in IMA for large binaries.
 3. Create or update a source summary under `wiki/sources/`.
 4. Update relevant concept, person, book, project, question, or synthesis pages.
 5. Update `wiki/index.md`.
@@ -69,7 +69,7 @@ Before ingesting a source:
 
 ## Page quality rules
 
-- Every durable claim should point to a source page or raw path when possible.
+- Every durable claim should point to a source page or structured source reference when possible.
 - Prefer short, linked pages over long monolithic documents.
 - When new material contradicts existing pages, record the contradiction instead of silently replacing the older claim.
 - Use `[[wikilinks]]` for internal concepts when useful.
