@@ -1,88 +1,48 @@
-# AGENTS.md
-
 # LLM Wiki Operating Rules
 
-## Language and workflow
+## 基本规则
 
-- Always reply in Chinese.
-- Always give a short plan before doing substantial work.
-- Prefer simple, file-based workflows before adding tools, databases, MCP servers, or custom scripts.
-- Do not modify the user's Obsidian vault unless explicitly asked.
-- Do not modify files under `raw/` unless the task is to organize raw materials or regenerate extracted text.
-- Treat `raw/` and the external Obsidian vault as source material, not as the maintained wiki.
-- Treat `wiki/` as the LLM-maintained knowledge layer.
-- Treat `schema/` and this file as the operating contract for the wiki.
+- 用中文回复
+- 大规模操作前先给出简短计划
+- 优先使用简单文件工作流，避免过度工程化
+- 不修改用户 Obsidian 库（除非明确要求）
+- 不修改 `raw/` 下文件（除非任务是整理原始材料）
 
-## Source locations
+## 目录结构
 
-| Source | Path | Rule |
+| 目录 | 用途 | 权限 |
 | --- | --- | --- |
-| Obsidian notes | `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note` | Read-only by default |
-| Downloaded sources | `raw/sources/` | Read-only by default |
-| Temporary inbox | `raw/inbox/` | New unprocessed material can be placed here |
-| Extracted PDF text | `raw/extracted/pdf/` | Regeneratable working copy |
-| IMA knowledge base | External (ima.qq.com) | For large files unsuitable for Git; upload via `skills/vendor/ima/wrapper/upload.cjs` and reference by `kind: ima-media` in source frontmatter |
-| Maintained wiki | `wiki/` | LLM may create and update pages |
-| Repo-local skills | `skills/` | Versioned Skill source files for agents |
+| `wiki/` | LLM 维护的知识库 | 可读写 |
+| `raw/sources/` | 下载的源文件 | 只读 |
+| `raw/inbox/` | 待处理的临时材料 | 可写入 |
+| `raw/extracted/pdf/` | 提取的 PDF 文本 | 可重新生成 |
+| `skills/` | 本地 Skill 源文件 | 版本控制 |
+| Obsidian | `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note` | 只读 |
+| IMA | ima.qq.com（大文件） | 外部引用 |
 
-## Architecture
+## 核心原则
 
-This wiki follows the LLM Wiki pattern:
+1. **原始材料是真相来源**：`raw/` 和 Obsidian 是原材料，`wiki/` 是 LLM 维护的知识层
+2. **不搬运大文档**：在 `wiki/` 中创建精简摘要，链接回原始来源
+3. **引用优先**：每个论断尽可能指向源文件
 
-1. Raw sources are the source of truth.
-2. Wiki pages are synthesized, interlinked Markdown maintained by the LLM.
-3. Schema files define page formats, citation rules, and workflows.
+## 操作流程
 
-Do not copy large raw documents into `wiki/`. Instead, create concise source summaries and link back to the original source reference, either a local `raw/` path, an Obsidian path, or an IMA `media_id` / `note_id`.
+**回答知识问题**：读 `wiki/index.md` → 搜索 `wiki/` → 必要时查 `raw/` → 引用来源
 
-## Repo-local Skills
+**摄入新来源**：识别类型 → 保留原文件 → 创建 `wiki/sources/` 摘要 → 更新相关页面 → 更新 `index.md` 和 `log.md`
 
-The `skills/` directory stores Skill source files that help other agents query or maintain this wiki from outside the repository.
+## 页面质量
 
-Current Skill:
+- 短页面优于长文档，多用链接
+- 新材料与旧内容冲突时，记录矛盾而非静默替换
+- 使用 `[[wikilinks]]` 链接内部概念
+- 避免伪造数据和虚假引用
 
-| Skill | Purpose |
-| --- | --- |
-| `skills/ingest/SKILL.md` | Compile one explicit source into wiki pages, then update index and log |
-| `skills/mywiki-query/SKILL.md` | Query, ingest, lint, and update MyWiki using the repository's index, log, schema, and raw sources |
+## 维护检查
 
-This directory is versioned source. It is not guaranteed that every agent runtime auto-discovers root-level `skills/`; install, copy, or symlink the Skill into the relevant agent's global/project skill location when needed.
-
-## Required operating flow
-
-Before answering a knowledge question:
-
-1. Read `wiki/index.md`.
-2. Search relevant pages in `wiki/`.
-3. Search raw sources only when the wiki is missing context or the answer needs verification.
-4. Cite the source page or structured source reference used.
-5. If the answer creates durable knowledge, offer to file it back into `wiki/`.
-
-Before ingesting a source:
-
-1. Identify whether the source is an Obsidian note, Markdown file, PDF, or other asset.
-2. Preserve the original file, either in place, in `raw/`, or externally in IMA for large binaries.
-3. Create or update a source summary under `wiki/sources/`.
-4. Update relevant concept, person, book, project, question, or synthesis pages.
-5. Update `wiki/index.md`.
-6. Append one chronological entry to `wiki/log.md`.
-
-## Page quality rules
-
-- Every durable claim should point to a source page or structured source reference when possible.
-- Prefer short, linked pages over long monolithic documents.
-- When new material contradicts existing pages, record the contradiction instead of silently replacing the older claim.
-- Use `[[wikilinks]]` for internal concepts when useful.
-- Keep generated pages readable in plain Markdown and Obsidian.
-- Avoid fake data, invented citations, or unsupported synthesis.
-
-## Maintenance checks
-
-During lint or cleanup, check for:
-
-- Orphan pages missing links from `wiki/index.md`.
-- Concepts mentioned repeatedly but lacking their own page.
-- Claims without source references.
-- Stale summaries contradicted by newer sources.
-- Duplicate pages with overlapping meanings.
-- PDF files that still lack extracted text or a source summary.
+- `wiki/index.md` 中缺失链接的孤儿页面
+- 缺少独立页面的重复概念
+- 无来源引用的论断
+- 被新来源证伪的过时摘要
+- 缺少提取文本或摘要的 PDF
