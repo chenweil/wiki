@@ -5,3 +5,6 @@ tmp/
 
 .atomcode/
 .claude/
+.agents/
+docs/agents/
+skills-lock.json
