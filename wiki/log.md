@@ -136,3 +136,10 @@ Append-only chronological record. Use entries like:
 - Output files: `scripts/lint-raw-large-files.mjs`
 - Updated contracts: `AGENTS.md`, `README.md`, `schema/workflows.md`, `.gitignore`
 - Notes: Added a reusable raw-source large-file check. New or untracked large binaries under `raw/sources/` and `raw/inbox/` fail lint; existing tracked large binaries remain warnings and require an explicit IMA cleanup plan.
+
+## [2026-06-26] maintenance | Vendor clean guard
+
+- Source: `README.md`
+- Output files: `scripts/lint-vendor-clean.mjs`
+- Updated contracts: `AGENTS.md`, `README.md`, `schema/workflows.md`
+- Notes: Added a reusable vendor cleanliness check. `skills/vendor/` is treated as pinned third-party dependency source; project-local changes should live in wrappers or repo scripts instead of modifying vendored skill files in place.

@@ -47,10 +47,12 @@ Run the maintenance checks:
 ```bash
 node scripts/lint-wiki-okf.mjs
 node scripts/lint-raw-large-files.mjs
+node scripts/lint-vendor-clean.mjs
 ```
 
 The OKF check fails only when normal `wiki/` pages are missing YAML frontmatter or the required `type` field. Missing `title`, `description`, and `tags` are warnings for gradual cleanup.
 The raw large-file check fails for new or untracked large binaries under `raw/sources/` and `raw/inbox/`; already tracked large files are warnings.
+The vendor check fails when `skills/vendor/` has staged, unstaged, or untracked changes.
 
 1. Find pages not linked from `wiki/index.md`.
 2. Find repeated concepts without dedicated pages.
@@ -58,4 +60,5 @@ The raw large-file check fails for new or untracked large binaries under `raw/so
 4. Find contradictions and stale claims.
 5. Find local binary sources that should be moved to IMA or documented as intentionally committed.
 6. Find IMA references in `wiki/` that are missing from `raw/ima/sources.yml`.
-7. Write recommended fixes before editing.
+7. Confirm `skills/vendor/` has no local edits.
+8. Write recommended fixes before editing.

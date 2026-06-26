@@ -18,6 +18,7 @@
 | `raw/ima/` | IMA 外部来源台账 | 可读写 |
 | `raw/extracted/pdf/` | 提取的 PDF 文本 | 可重新生成 |
 | `skills/` | 本地 Skill 源文件 | 版本控制 |
+| `skills/vendor/` | 第三方 Skill 依赖 | 只读，项目改动放 wrapper |
 | Obsidian | `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note` | 只读 |
 | IMA | ima.qq.com（大文件） | 外部引用 |
 
@@ -49,3 +50,4 @@
 - 被新来源证伪的过时摘要
 - 缺少提取文本或摘要的 PDF
 - 新增大二进制原始材料：提交前运行 `node scripts/lint-raw-large-files.mjs`
+- `skills/vendor/` 不能有本地改动：提交前运行 `node scripts/lint-vendor-clean.mjs`
