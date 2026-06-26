@@ -56,6 +56,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `schema/workflows.md` | Ingest, query, and lint workflows |
 | `schema/citation-rules.md` | Source and citation conventions |
 | `schema/okf-compat.md` | Local OKF compatibility rules |
+| `scripts/lint-all.mjs` | Runs all repo-local maintenance checks |
 | `scripts/lint-wiki-okf.mjs` | Checks normal wiki pages for OKF minimum metadata |
 | `scripts/lint-raw-large-files.mjs` | Blocks new large raw binaries that should go to IMA |
 | `scripts/lint-vendor-clean.mjs` | Blocks accidental edits under `skills/vendor/` |
@@ -130,6 +131,12 @@ The agent should then:
 ## Wiki Lint
 
 Run the maintenance checks:
+
+```bash
+node scripts/lint-all.mjs
+```
+
+Or run the checks individually:
 
 ```bash
 node scripts/lint-wiki-okf.mjs

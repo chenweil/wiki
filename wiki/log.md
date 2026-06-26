@@ -143,3 +143,10 @@ Append-only chronological record. Use entries like:
 - Output files: `scripts/lint-vendor-clean.mjs`
 - Updated contracts: `AGENTS.md`, `README.md`, `schema/workflows.md`
 - Notes: Added a reusable vendor cleanliness check. `skills/vendor/` is treated as pinned third-party dependency source; project-local changes should live in wrappers or repo scripts instead of modifying vendored skill files in place.
+
+## [2026-06-26] maintenance | Maintenance lint entrypoint
+
+- Source: `scripts/lint-wiki-okf.mjs`, `scripts/lint-raw-large-files.mjs`, `scripts/lint-vendor-clean.mjs`
+- Output files: `scripts/lint-all.mjs`
+- Updated contracts: `README.md`, `schema/workflows.md`
+- Notes: Added a single maintenance check entrypoint that runs the OKF, raw large-file, and vendor clean checks in sequence while preserving each child check's existing behavior.

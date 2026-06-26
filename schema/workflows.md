@@ -45,6 +45,12 @@
 Run the maintenance checks:
 
 ```bash
+node scripts/lint-all.mjs
+```
+
+Or run the checks individually:
+
+```bash
 node scripts/lint-wiki-okf.mjs
 node scripts/lint-raw-large-files.mjs
 node scripts/lint-vendor-clean.mjs
