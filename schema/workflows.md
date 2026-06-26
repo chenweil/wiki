@@ -26,9 +26,10 @@
 1. Treat IMA as an external raw source, not as generated wiki content.
 2. For IMA notes, record `kind: ima-note`, `note_id`, and stable URL when available.
 3. For IMA media, record `kind: ima-media`, `kb_id`, `media_id`, `file_name`, and stable URL when available.
-4. Do not invent IMA identifiers. If an upload or lookup failed, mark the wiki source summary as `needs-review`.
-5. Keep enough extracted text or source summary in Git so the wiki remains useful even when the external binary is not locally present.
-6. Update related concept and synthesis pages just like local raw ingests.
+4. Add or update the corresponding entry in `raw/ima/sources.yml`.
+5. Do not invent IMA identifiers. If an upload or lookup failed, mark the wiki source summary and manifest entry as `needs-review`.
+6. Keep enough extracted text or source summary in Git so the wiki remains useful even when the external binary is not locally present.
+7. Update related concept and synthesis pages just like local raw ingests.
 
 ## Query Wiki
 
@@ -41,9 +42,20 @@
 
 ## Lint Wiki
 
+Run the maintenance checks:
+
+```bash
+node scripts/lint-wiki-okf.mjs
+node scripts/lint-raw-large-files.mjs
+```
+
+The OKF check fails only when normal `wiki/` pages are missing YAML frontmatter or the required `type` field. Missing `title`, `description`, and `tags` are warnings for gradual cleanup.
+The raw large-file check fails for new or untracked large binaries under `raw/sources/` and `raw/inbox/`; already tracked large files are warnings.
+
 1. Find pages not linked from `wiki/index.md`.
 2. Find repeated concepts without dedicated pages.
 3. Find pages without sources.
 4. Find contradictions and stale claims.
 5. Find local binary sources that should be moved to IMA or documented as intentionally committed.
-6. Write recommended fixes before editing.
+6. Find IMA references in `wiki/` that are missing from `raw/ima/sources.yml`.
+7. Write recommended fixes before editing.

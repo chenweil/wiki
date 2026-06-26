@@ -121,3 +121,18 @@ Append-only chronological record. Use entries like:
 - Source: `schema/page-template.md`, `schema/citation-rules.md`
 - Updated pages: [[claude-code-from-beginner-to-master-v2]], [[21-hours-claude-code-mastery]], [[claude-code-engineering-live]], [[claude-skills-code-review]], [[hermes-agent-mastery]], [[vibe-coding-way]], [[agent-harness-survey]], [[ai-programming-deep-dive]], [[obsidian-claude-code-skill-trigger]], [[obsidian-claude-code-multi-agent-guide]], [[obsidian-claude-code-plugin-packaging]], [[obsidian-agent-skill-spec-build-patterns]], [[claude-code]], [[skill]], [[plugin]], [[agent-architecture]], [[skill-development]], [[go-roadmap-2026]], [[three-traditions-detachment]], [[fan-zhe-dao-zhi-dong]], [[chu-gou]], [[wo-zhi]], [[wu-wei]], [[zhi-ming]], [[yi-shang-nuli-guo-shang-suiyuan]], [[claude-code-engineering-map]]
 - Notes: Added `kind: external-raw` for explicit source files outside the repository and `kind: wiki-page` for internal wiki dependencies. Migrated knowledge-page frontmatter from plain paths and `[[wikilinks]]` to structured `sources` objects. Left `wiki/index.md`, `wiki/log.md`, and `wiki/overview.md` as operational-page exceptions for project contract references.
+
+## [2026-06-24] maintenance | 建立 IMA 来源台账
+
+- Source: `wiki/sources/ima-note-three-traditions.md`
+- Output files: `raw/ima/sources.yml`
+- Updated pages: [[index]]
+- Updated contracts: `AGENTS.md`, `schema/workflows.md`, `raw/sources/README.md`
+- Notes: 新增 IMA external source registry，登记当前 wiki 已引用的两个 IMA note，并要求后续 IMA note/media 引用同步进入 `raw/ima/sources.yml`。
+
+## [2026-06-26] maintenance | Raw large-file guard
+
+- Source: `raw/sources/README.md`
+- Output files: `scripts/lint-raw-large-files.mjs`
+- Updated contracts: `AGENTS.md`, `README.md`, `schema/workflows.md`, `.gitignore`
+- Notes: Added a reusable raw-source large-file check. New or untracked large binaries under `raw/sources/` and `raw/inbox/` fail lint; existing tracked large binaries remain warnings and require an explicit IMA cleanup plan.

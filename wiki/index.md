@@ -26,6 +26,7 @@ Source summaries live in `wiki/sources/`.
 | Source | Summary | Status |
 | --- | --- | --- |
 | Obsidian note vault | `raw/obsidian/manifest.md` | Registered, not ingested |
+| IMA external source registry | `raw/ima/sources.yml` | Registered |
 | Downloaded PDFs | `raw/sources/` | Registered, not ingested |
 | Claude Code 从入门到精通 v2.0.0 | [[claude-code-from-beginner-to-master-v2]] | Ingested |
 | 21小时从入门到精通-Claude Code | [[21-hours-claude-code-mastery]] | Ingested |

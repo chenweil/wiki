@@ -57,6 +57,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `schema/citation-rules.md` | Source and citation conventions |
 | `schema/okf-compat.md` | Local OKF compatibility rules |
 | `scripts/lint-wiki-okf.mjs` | Checks normal wiki pages for OKF minimum metadata |
+| `scripts/lint-raw-large-files.mjs` | Blocks new large raw binaries that should go to IMA |
 | `skills/ingest/SKILL.md` | Repo-local Skill for `/ingest` source compilation |
 | `skills/mywiki-query/SKILL.md` | Repo-local Skill for querying and maintaining MyWiki from other agent contexts |
 
@@ -127,13 +128,15 @@ The agent should then:
 
 ## Wiki Lint
 
-Run the OKF compatibility check:
+Run the maintenance checks:
 
 ```bash
 node scripts/lint-wiki-okf.mjs
+node scripts/lint-raw-large-files.mjs
 ```
 
-This check treats `wiki/index.md` and `wiki/log.md` as reserved operational pages. For normal `wiki/` pages, missing YAML frontmatter or missing `type` is an error; missing `title`, `description`, and `tags` is a warning for gradual cleanup.
+The OKF check treats `wiki/index.md` and `wiki/log.md` as reserved operational pages. For normal `wiki/` pages, missing YAML frontmatter or missing `type` is an error; missing `title`, `description`, and `tags` is a warning for gradual cleanup.
+The raw large-file check fails for new or untracked large binaries under `raw/sources/` and `raw/inbox/`; already tracked large files are warnings so they can be migrated through a separate IMA cleanup plan.
 
 ## Obsidian Vault
 

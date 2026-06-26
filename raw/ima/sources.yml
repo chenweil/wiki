@@ -1,0 +1,35 @@
+version: 1
+updated: "2026-06-24"
+policy:
+  purpose: "Track Tencent IMA notes and media used as raw sources for MyWiki."
+  source_of_truth: "IMA stores the external object; this file stores MyWiki's local provenance record."
+  required_for_new_ima_sources: true
+
+sources:
+  - id: ima-note-7465939918418409
+    kind: ima-note
+    title: "放下焦虑与执着——道、佛、无为的共通智慧"
+    note_id: "7465939918418409"
+    url: null
+    status: active
+    metadata_status: partial
+    summary_page: wiki/sources/ima-note-three-traditions.md
+    extracted_text_path: null
+    created_at: null
+    updated_at: null
+    registered_at: "2026-06-24"
+    notes: "IMA note 原文未落到 raw/；后续如需严格复查，应导出文本或补充稳定 URL。"
+
+  - id: ima-note-7465972512356248
+    kind: ima-note
+    title: "读《人类简史》帝国章节的思考"
+    note_id: "7465972512356248"
+    url: null
+    status: active
+    metadata_status: partial
+    summary_page: wiki/sources/ima-note-three-traditions.md
+    extracted_text_path: null
+    created_at: null
+    updated_at: null
+    registered_at: "2026-06-24"
+    notes: "作为相关 IMA note 并入 three-traditions source summary；原文未落到 raw/。"

@@ -15,6 +15,7 @@
 | `wiki/` | LLM 维护的知识库 | 可读写 |
 | `raw/sources/` | 下载的源文件 | 只读 |
 | `raw/inbox/` | 待处理的临时材料 | 可写入 |
+| `raw/ima/` | IMA 外部来源台账 | 可读写 |
 | `raw/extracted/pdf/` | 提取的 PDF 文本 | 可重新生成 |
 | `skills/` | 本地 Skill 源文件 | 版本控制 |
 | Obsidian | `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note` | 只读 |
@@ -25,6 +26,7 @@
 1. **原始材料是真相来源**：`raw/` 和 Obsidian 是原材料，`wiki/` 是 LLM 维护的知识层
 2. **不搬运大文档**：在 `wiki/` 中创建精简摘要，链接回原始来源
 3. **引用优先**：每个论断尽可能指向源文件
+4. **外部来源要登记**：使用 IMA note/media 时，同步记录到 `raw/ima/sources.yml`
 
 ## 操作流程
 
@@ -46,3 +48,4 @@
 - 无来源引用的论断
 - 被新来源证伪的过时摘要
 - 缺少提取文本或摘要的 PDF
+- 新增大二进制原始材料：提交前运行 `node scripts/lint-raw-large-files.mjs`
