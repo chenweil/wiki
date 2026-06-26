@@ -1,5 +1,5 @@
 version: 1
-updated: "2026-06-24"
+updated: "2026-06-26"
 policy:
   purpose: "Track Tencent IMA notes and media used as raw sources for MyWiki."
   source_of_truth: "IMA stores the external object; this file stores MyWiki's local provenance record."
@@ -12,13 +12,13 @@ sources:
     note_id: "7465939918418409"
     url: null
     status: active
-    metadata_status: partial
+    metadata_status: synced
     summary_page: wiki/sources/ima-note-three-traditions.md
     extracted_text_path: null
     created_at: null
-    updated_at: null
+    updated_at: "2026-06-26"
     registered_at: "2026-06-24"
-    notes: "IMA note 原文未落到 raw/；后续如需严格复查，应导出文本或补充稳定 URL。"
+    notes: "Sync failed: skill auth failed"
 
   - id: ima-note-7465972512356248
     kind: ima-note
@@ -26,10 +26,10 @@ sources:
     note_id: "7465972512356248"
     url: null
     status: active
-    metadata_status: partial
+    metadata_status: synced
     summary_page: wiki/sources/ima-note-three-traditions.md
     extracted_text_path: null
     created_at: null
-    updated_at: null
+    updated_at: "2026-06-26"
     registered_at: "2026-06-24"
-    notes: "作为相关 IMA note 并入 three-traditions source summary；原文未落到 raw/。"
+    notes: "Sync failed: skill auth failed"
