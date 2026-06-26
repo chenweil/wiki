@@ -57,6 +57,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `schema/citation-rules.md` | Source and citation conventions |
 | `schema/okf-compat.md` | Local OKF compatibility rules |
 | `scripts/lint-all.mjs` | Runs all repo-local maintenance checks |
+| `scripts/ima-manifest.mjs` | Lints the local IMA source registry against wiki references |
 | `scripts/lint-wiki-okf.mjs` | Checks normal wiki pages for OKF minimum metadata |
 | `scripts/lint-raw-large-files.mjs` | Blocks new large raw binaries that should go to IMA |
 | `scripts/lint-vendor-clean.mjs` | Blocks accidental edits under `skills/vendor/` |
@@ -141,11 +142,13 @@ Or run the checks individually:
 ```bash
 node scripts/lint-wiki-okf.mjs
 node scripts/lint-raw-large-files.mjs
+node scripts/ima-manifest.mjs lint
 node scripts/lint-vendor-clean.mjs
 ```
 
 The OKF check treats `wiki/index.md` and `wiki/log.md` as reserved operational pages. For normal `wiki/` pages, missing YAML frontmatter or missing `type` is an error; missing `title`, `description`, and `tags` is a warning for gradual cleanup.
 The raw large-file check fails for new or untracked large binaries under `raw/sources/` and `raw/inbox/`; already tracked large files are warnings so they can be migrated through a separate IMA cleanup plan.
+The IMA manifest check verifies that `raw/ima/sources.yml` has valid local provenance entries for every `ima-note` and `ima-media` reference in `wiki/`.
 The vendor check fails when `skills/vendor/` has staged, unstaged, or untracked changes; use project-local wrappers instead of editing vendored skills in place.
 
 ## Obsidian Vault

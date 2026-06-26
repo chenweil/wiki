@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 const checks = [
   ["OKF compatibility", ["node", "scripts/lint-wiki-okf.mjs"]],
   ["Raw large files", ["node", "scripts/lint-raw-large-files.mjs"]],
+  ["IMA manifest", ["node", "scripts/ima-manifest.mjs", "lint"]],
   ["Vendor clean", ["node", "scripts/lint-vendor-clean.mjs"]],
 ];
 

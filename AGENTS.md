@@ -50,4 +50,5 @@
 - 被新来源证伪的过时摘要
 - 缺少提取文本或摘要的 PDF
 - 新增大二进制原始材料：提交前运行 `node scripts/lint-raw-large-files.mjs`
+- IMA 来源台账一致性：提交前运行 `node scripts/ima-manifest.mjs lint`
 - `skills/vendor/` 不能有本地改动：提交前运行 `node scripts/lint-vendor-clean.mjs`
