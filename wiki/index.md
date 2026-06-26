@@ -2,7 +2,7 @@
 type: project
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
 sources:
   - AGENTS.md
   - schema/workflows.md
@@ -42,6 +42,7 @@ Source summaries live in `wiki/sources/`.
 | Agent Skill 规范、构建与设计模式 | [[obsidian-agent-skill-spec-build-patterns]] | Ingested |
 | 浅谈 AI 编程 | [[ai-programming-deep-dive]] | Ingested |
 | IMA 笔记：佛道儒共通智慧 | [[ima-note-three-traditions]] | Ingested |
+| The 5 Levels of Loop Design | [[loop-design-five-levels]] | Ingested |
 
 ## Knowledge Areas
 
@@ -63,6 +64,7 @@ Source summaries live in `wiki/sources/`.
 | [[skill-development]] | Skill specification, construction loops, and design patterns |
 | [[plugin]] | Packaging and distribution of Claude Code capabilities |
 | [[agent-architecture]] | Single Agent, Skills, Sub-Agents, Handoffs, Router |
+| [[loop-design]] | 从 prompting 到 autonomous agents 的循环设计阶梯 |
 | [[go-roadmap-2026]] | Go 语言学习路线图 2026 版，基于 Go 1.22+ |
 | [[fan-zhe-dao-zhi-dong]] | 反者道之动——事物走向反面是道的运动规律 |
 | [[chu-gou]] | 刍狗思维——万物皆有时，不把任何事看得太重 |

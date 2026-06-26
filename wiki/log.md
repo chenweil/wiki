@@ -150,3 +150,10 @@ Append-only chronological record. Use entries like:
 - Output files: `scripts/lint-all.mjs`
 - Updated contracts: `README.md`, `schema/workflows.md`
 - Notes: Added a single maintenance check entrypoint that runs the OKF, raw large-file, and vendor clean checks in sequence while preserving each child check's existing behavior.
+
+## [2026-06-26] ingest | The 5 Levels of Loop Design
+
+- Source: `/Users/chenweilong/Library/Mobile Documents/iCloud~md~obsidian/Documents/note/收集/The 5 Levels of Loop Design From Prompting to Autonomous Agents.zh-CN.md`
+- Output pages: [[loop-design-five-levels]], [[loop-design]]
+- Updated pages: [[index]], [[agent-architecture]], [[claude-code-engineering-map]]
+- Notes: Imported an Obsidian clipping about the five levels of loop design: Prompting, Manual Loop, Verified Loop, Self-Running Loop, and Autonomous Agents. Added Loop Design as a reusable concept for reasoning about agent workflow maturity.

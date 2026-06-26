@@ -2,8 +2,10 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
 sources:
+  - kind: wiki-page
+    page: loop-design-five-levels
   - kind: wiki-page
     page: obsidian-claude-code-multi-agent-guide
   - kind: wiki-page
@@ -51,6 +53,20 @@ Agent 架构的核心不是让系统看起来更复杂，而是用合适的结�
 | Sub-Agents | 专业职责隔离、大量信息过滤、并行研究 | 调度和 token 成本高 |
 | Handoffs | 多阶段顺序流程、状态流转 | 阶段设计和退出条件复杂 |
 | Router | 跨领域或多数据源并行查询 | 合成和调试复杂 |
+
+## Loop Design Ladder
+
+基于 [[loop-design-five-levels]]，Agent 架构也可以按 loop 成熟度理解：
+
+| Level | 架构形态 | 关键能力 |
+| --- | --- | --- |
+| 1 | Prompting | 人逐条驱动，Agent 回答 |
+| 2 | Manual Loop | 人手动推动执行、检查、修正 |
+| 3 | Verified Loop | 独立检查者定义完成条件 |
+| 4 | Self-Running Loop | 目标和停止条件驱动多轮自动执行 |
+| 5 | Autonomous Agents | 自启动、并行、经验回写 |
+
+这条阶梯补充了 Pattern Map：Sub-Agents、Handoffs、Router 是结构形态；Loop Design 描述的是工作是否能可靠地跨轮运行、验证和改进。
 
 ## Three Paradigms Comparison
 

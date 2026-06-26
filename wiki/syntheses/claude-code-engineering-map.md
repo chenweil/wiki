@@ -2,8 +2,10 @@
 type: synthesis
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
 sources:
+  - kind: wiki-page
+    page: loop-design-five-levels
   - kind: wiki-page
     page: claude-code-from-beginner-to-master-v2
   - kind: wiki-page
@@ -58,6 +60,7 @@ Claude Code 工程化可以理解为一套从个人效率到团队能力分发�
 | External access | MCP | 需要连接哪些外部系统 | 需要数据库、API、设计稿、监控时 |
 | Packaging | Plugins | 如何把一组能力分享出去 | 团队或跨项目复用时 |
 | Architecture scaling | Sub-Agents / Handoffs / Router | 谁来做、何时切换、如何并行 | 遇到上下文或职责边界后 |
+| Loop design | Verified / self-running loops | 工作如何跨轮执行、检查、停止和改进 | 重复任务需要从人工推动升级为系统运行时 |
 
 ## Four Core Components Comparison
 
@@ -92,6 +95,8 @@ Hermes 提出了一个”学习循环”模型，让 Agent 自己给自己造缰
 
 这些资料共同指向一个工程原则：**先沉淀规则，再增加结构；先局部稳定，再抽象分发。**
 
+Loop Design 资料把这条原则再往前推进了一步：成熟的 agent 工作流不是更长的 prompt，而是有明确停止条件、独立验证者和经验回写的循环系统。对 Claude Code 这类工具来说，关键不是一次会话里让模型多做一点，而是把重复工作逐步升级为 manual loop、verified loop，最终才考虑 self-running loop。
+
 对个人知识库也是同样逻辑。这个 `mywiki` 不应该一开始就安装一堆 Skill、MCP 或导入所有 Obsidian 笔记。更稳的做法是：
 
 1. 先用 `AGENTS.md` 定义维护规则。
@@ -109,7 +114,8 @@ Hermes 提出了一个”学习循环”模型，让 Agent 自己给自己造缰
 3. **善用 SubAgents 隔离噪声**：高噪声任务用子代理，只把结论带回主对话
 4. **用 Hooks 做安全兜底**：系统强制比 AI 判断更可靠
 5. **组合使用而非单打独斗**：Commands + Skills + Hooks + MCP
-6. **从小处着手，逐步扩展**：先一个 Command 解决痛点
+6. **先做 Verified Loop**：把完成条件交给测试、lint、评分器或 reviewer，而不是让执行 agent 自评
+7. **从小处着手，逐步扩展**：先一个 Command 解决痛点
 
 ## Practical Roadmap For This Wiki
 
