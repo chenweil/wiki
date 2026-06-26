@@ -20,6 +20,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | Ingest workflow | Repo-local Skill started |
 | Query-to-wiki workflow | Started |
 | Lint workflow | Started |
+| OKF compatibility check | Ready |
 | Repo-local Skill source | Started |
 | IMA large-file storage | Ready (vendor + wrapper) |
 
@@ -39,6 +40,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `wiki/concepts/` | Reusable concepts and durable knowledge pages | LLM-maintained |
 | `wiki/syntheses/` | Cross-source analyses and higher-level conclusions | LLM-maintained |
 | `schema/` | Workflow, citation, and page template rules | Human/LLM co-maintained |
+| `scripts/` | Small repo-local maintenance checks | Human/LLM co-maintained |
 | `skills/` | Repo-local Skill source files for agents that need to query or maintain this wiki | Human/LLM co-maintained |
 | `skills/vendor/` | Third-party Skill source files (e.g. `skills/vendor/ima/`) vendored into this repo. Treat as versioned dependencies; do not modify in place. | Vendor-pinned |
 | `AGENTS.md` | Operating contract for future agents | Human/LLM co-maintained |
@@ -53,6 +55,8 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `AGENTS.md` | Rules future agents must follow |
 | `schema/workflows.md` | Ingest, query, and lint workflows |
 | `schema/citation-rules.md` | Source and citation conventions |
+| `schema/okf-compat.md` | Local OKF compatibility rules |
+| `scripts/lint-wiki-okf.mjs` | Checks normal wiki pages for OKF minimum metadata |
 | `skills/ingest/SKILL.md` | Repo-local Skill for `/ingest` source compilation |
 | `skills/mywiki-query/SKILL.md` | Repo-local Skill for querying and maintaining MyWiki from other agent contexts |
 
@@ -120,6 +124,16 @@ The agent should then:
 5. Update `wiki/index.md`.
 6. Append an entry to `wiki/log.md`.
 7. Commit and push the changes.
+
+## Wiki Lint
+
+Run the OKF compatibility check:
+
+```bash
+node scripts/lint-wiki-okf.mjs
+```
+
+This check treats `wiki/index.md` and `wiki/log.md` as reserved operational pages. For normal `wiki/` pages, missing YAML frontmatter or missing `type` is an error; missing `title`, `description`, and `tags` is a warning for gradual cleanup.
 
 ## Obsidian Vault
 
