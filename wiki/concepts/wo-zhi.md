@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "我执"
+description: "佛家关于固定自我执念的概念，在放下焦虑与执着的框架中解释痛苦来源。"
+tags:
+  - buddhism
+  - philosophy
+  - detachment
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "无为"
+description: "道家关于顺应规律、减少多余干预而非消极不行动的实践原则。"
+tags:
+  - daoism
+  - philosophy
+  - practice
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

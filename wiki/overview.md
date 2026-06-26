@@ -2,7 +2,13 @@
 type: synthesis
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "MyWiki Overview"
+description: "MyWiki 的总体结构说明，描述 raw、wiki、schema 与外部 Obsidian vault 的分层关系。"
+tags:
+  - mywiki
+  - knowledge-base
+  - llm-wiki
 sources:
   - [[index]]
   - AGENTS.md

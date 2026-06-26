@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Claude Code 工程化实战直播分享版"
+description: "关于从工具使用者转向 Agent 构建者的 Claude Code 工程化 slides 摘要。"
+tags:
+  - claude-code
+  - ai-agents
+  - workflow-design
 sources:
   - kind: local-raw
     path: "raw/sources/Claude+Code+工程化实战直播分享版.pdf"

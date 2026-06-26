@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Skill Development"
+description: "把可重复领域知识、工作流程和输出边界沉淀为可触发、可测试、可迭代 Skill 的方法。"
+tags:
+  - skills
+  - skill-development
+  - ai-agents
 sources:
   - kind: wiki-page
     page: obsidian-agent-skill-spec-build-patterns

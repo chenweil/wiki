@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Agent Skill 规范、构建与设计模式"
+description: "关于 Agent Skill 规范格式、渐进式加载、触发机制和五种设计模式的 Obsidian 笔记摘要。"
+tags:
+  - skills
+  - skill-development
+  - ai-agents
 sources:
   - kind: obsidian
     path: "收集内容/Agent Skill规范、构建与设计模式.md"

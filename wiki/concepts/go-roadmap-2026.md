@@ -2,7 +2,13 @@
 type: concept
 status: needs-review
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Go 学习路线图 2026"
+description: "基于旧版 Go 路线图扩展出的 2026 年 Go 学习路径，覆盖语法、并发、Web、工程化和云原生。"
+tags:
+  - go
+  - learning-roadmap
+  - programming
 sources:
   - kind: external-raw
     path: "/Users/chenweilong/Documents/go.pdf"

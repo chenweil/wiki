@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "SKILL.md 结构与触发机制"
+description: "关于 Skills 的结构、语义触发、渐进式加载和任务型/参考型边界的 Obsidian 笔记摘要。"
+tags:
+  - skills
+  - claude-code
+  - context-engineering
 sources:
   - kind: obsidian
     path: "Claude Code工程化实战-共26讲/09｜触类旁通：SKILL.md结构与触发机制-Claude Code 工程化实战-极客时间.md"

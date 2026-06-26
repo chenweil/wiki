@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Plugin"
+description: "Claude Code 生态中用于打包 commands、agents、skills、hooks 和 MCP 配置的分发单元。"
+tags:
+  - claude-code
+  - plugin
+  - distribution
 sources:
   - kind: wiki-page
     page: obsidian-claude-code-plugin-packaging

@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "21小时从入门到精通-Claude Code"
+description: "从源码层面解析 Claude Code 构建系统、运行时、扩展机制、安全权限和设计哲学的资料摘要。"
+tags:
+  - claude-code
+  - source-summary
+  - agentic-coding
 sources:
   - kind: local-raw
     path: "raw/sources/21小时从入门到精通-Claude Code.pdf"

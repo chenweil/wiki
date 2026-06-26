@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "浅谈 AI 编程"
+description: "关于 AI 编程范式迁移、规格约束与验证体系重要性的深度文章摘要。"
+tags:
+  - ai-programming
+  - software-engineering
+  - harness-engineering
 sources:
   - kind: obsidian
     path: "收集内容/浅谈 AI 编程.md"

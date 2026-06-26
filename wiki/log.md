@@ -157,3 +157,9 @@ Append-only chronological record. Use entries like:
 - Output pages: [[loop-design-five-levels]], [[loop-design]]
 - Updated pages: [[index]], [[agent-architecture]], [[claude-code-engineering-map]]
 - Notes: Imported an Obsidian clipping about the five levels of loop design: Prompting, Manual Loop, Verified Loop, Self-Running Loop, and Autonomous Agents. Added Loop Design as a reusable concept for reasoning about agent workflow maturity.
+
+## [2026-06-26] maintenance | OKF recommended metadata cleanup
+
+- Source: `schema/okf-compat.md`, `scripts/lint-wiki-okf.mjs`
+- Updated pages: [[overview]], [[agent-architecture]], [[chu-gou]], [[claude-code]], [[fan-zhe-dao-zhi-dong]], [[go-roadmap-2026]], [[plugin]], [[skill-development]], [[skill]], [[wo-zhi]], [[wu-wei]], [[yi-shang-nuli-guo-shang-suiyuan]], [[zhi-ming]], [[21-hours-claude-code-mastery]], [[agent-harness-survey]], [[ai-programming-deep-dive]], [[claude-code-engineering-live]], [[claude-code-from-beginner-to-master-v2]], [[claude-skills-code-review]], [[hermes-agent-mastery]], [[ima-note-three-traditions]], [[obsidian-agent-skill-spec-build-patterns]], [[obsidian-claude-code-multi-agent-guide]], [[obsidian-claude-code-plugin-packaging]], [[obsidian-claude-code-skill-trigger]], [[vibe-coding-way]], [[claude-code-engineering-map]], [[three-traditions-detachment]]
+- Notes: Added recommended `title`, `description`, and `tags` frontmatter to existing knowledge pages so `node scripts/lint-all.mjs` now reports zero OKF metadata warnings.

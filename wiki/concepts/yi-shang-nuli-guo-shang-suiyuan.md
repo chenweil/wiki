@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "因上努力，果上随缘"
+description: "把注意力放在当下可控努力上，同时接受结果不完全由自己决定的实践智慧。"
+tags:
+  - philosophy
+  - practice
+  - detachment
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

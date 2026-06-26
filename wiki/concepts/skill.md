@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Skill"
+description: "通过 description 语义触发并按需加载的能力包，用于承载领域知识、步骤和约束。"
+tags:
+  - skills
+  - context-engineering
+  - ai-agents
 sources:
   - kind: wiki-page
     page: obsidian-claude-code-skill-trigger

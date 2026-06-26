@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Vibe Coding 之道"
+description: "关于 Vibe Coding 到 Agentic 模式演进、Context 复利和 AI 协作工作流的小册子摘要。"
+tags:
+  - vibe-coding
+  - agentic-coding
+  - context-engineering
 sources:
   - kind: local-raw
     path: "raw/sources/Vibe Coding之道.md"

@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "从 Sub-Agents 到 Multi-Agent 的工程指南"
+description: "关于何时从单 Agent 升级到 Skills、Sub-Agents、Handoffs 或 Router 的 Obsidian 笔记摘要。"
+tags:
+  - multi-agent
+  - agent-architecture
+  - claude-code
 sources:
   - kind: obsidian
     path: "Claude Code工程化实战-共26讲/04｜量体裁衣：从Sub-Agents到Multi-Agent的工程指南-Claude Code 工程化实战-极客时间.md"

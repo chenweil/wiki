@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "IMA 笔记：放下焦虑与执着"
+description: "来自 IMA 笔记的佛道儒三家关于放下焦虑与执着的综合来源摘要。"
+tags:
+  - ima-note
+  - philosophy
+  - detachment
 sources:
   - kind: ima-note
     note_id: "7465939918418409"

@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Plugins 插件打包与分发"
+description: "关于 Claude Code Plugins 如何打包 commands、agents、skills、hooks 和 MCP 配置的 Obsidian 笔记摘要。"
+tags:
+  - plugin
+  - claude-code
+  - distribution
 sources:
   - kind: obsidian
     path: "Claude Code工程化实战-共26讲/23｜化零为整：Plugins 插件打包与分发-Claude Code 工程化实战-极客时间.md"

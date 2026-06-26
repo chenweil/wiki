@@ -3,6 +3,12 @@ type: synthesis
 status: active
 created: 2026-05-31
 updated: 2026-06-26
+title: "Claude Code Engineering Map"
+description: "整合 Claude Code、Skills、Plugins、Agent 架构和 Loop Design 的工程化知识地图。"
+tags:
+  - claude-code
+  - engineering-map
+  - ai-agents
 sources:
   - kind: wiki-page
     page: loop-design-five-levels

@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Claude Code 从入门到精通 v2.0.0"
+description: "面向工程师和产品经理的 Claude Code 入门到进阶手册摘要。"
+tags:
+  - claude-code
+  - agentic-coding
+  - source-summary
 sources:
   - kind: local-raw
     path: "raw/sources/Claude Code从入门到精通-v2.0.0.pdf"

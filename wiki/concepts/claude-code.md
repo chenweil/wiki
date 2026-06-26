@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Claude Code"
+description: "终端原生 Agent 式编程工作台及其工程循环、扩展系统和项目规则沉淀方式。"
+tags:
+  - claude-code
+  - ai-agents
+  - agentic-coding
 sources:
   - kind: wiki-page
     page: claude-code-from-beginner-to-master-v2

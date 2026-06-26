@@ -2,7 +2,13 @@
 type: synthesis
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "佛道儒三家的共通智慧：放下执着"
+description: "综合佛家、道家、儒家对失控、执着和结果焦虑的共同实践智慧。"
+tags:
+  - philosophy
+  - detachment
+  - synthesis
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

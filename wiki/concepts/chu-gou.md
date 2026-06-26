@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "刍狗思维"
+description: "道家语境中关于万物皆有时、不把阶段性结果看成永恒评价的概念。"
+tags:
+  - daoism
+  - philosophy
+  - detachment
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

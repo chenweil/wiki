@@ -3,6 +3,12 @@ type: concept
 status: active
 created: 2026-05-31
 updated: 2026-06-26
+title: "Agent Architecture"
+description: "关于单 Agent、Skills、Sub-Agents、Handoffs、Router 与 loop design 的 Agent 架构地图。"
+tags:
+  - ai-agents
+  - agent-architecture
+  - harness-engineering
 sources:
   - kind: wiki-page
     page: loop-design-five-levels

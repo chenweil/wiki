@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "知命"
+description: "儒家关于承认结果不可完全控制之后仍然尽到行动责任的概念。"
+tags:
+  - confucianism
+  - philosophy
+  - practice
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

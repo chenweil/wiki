@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "Hermes Agent 从入门到精通"
+description: "关于 Hermes Agent 自改进循环、三层记忆和 24/7 后台运行模式的资料摘要。"
+tags:
+  - hermes-agent
+  - autonomous-agents
+  - harness-engineering
 sources:
   - kind: local-raw
     path: "raw/sources/Hermes-Agent-从入门到精通-v260407.pdf"

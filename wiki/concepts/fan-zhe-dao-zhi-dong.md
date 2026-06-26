@@ -2,7 +2,13 @@
 type: concept
 status: active
 created: 2026-06-06
-updated: 2026-06-18
+updated: 2026-06-26
+title: "反者道之动"
+description: "道家关于事物走向自身反面并回归本源的运动规律，可用于理解过度执着的反效果。"
+tags:
+  - daoism
+  - philosophy
+  - detachment
 sources:
   - kind: wiki-page
     page: ima-note-three-traditions

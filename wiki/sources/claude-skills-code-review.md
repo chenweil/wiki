@@ -2,7 +2,13 @@
 type: source
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-06-26
+title: "使用 Claude Skills 自动化代码审查完整指南"
+description: "关于用 Claude Skills 沉淀代码审查规则并自动化审查流程的实战资料摘要。"
+tags:
+  - claude-skills
+  - code-review
+  - automation
 sources:
   - kind: local-raw
     path: "raw/sources/使用Claude_Skills自动化代码审查完整指南.md.pdf"
