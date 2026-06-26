@@ -70,3 +70,19 @@ The vendor check fails when `skills/vendor/` has staged, unstaged, or untracked 
 6. Find IMA references in `wiki/` that are missing from `raw/ima/sources.yml`.
 7. Confirm `skills/vendor/` has no local edits.
 8. Write recommended fixes before editing.
+
+## Sync IMA Manifest
+
+Use this only when IMA credentials are available and remote metadata verification is needed.
+
+```bash
+node scripts/ima-manifest.mjs sync --dry-run
+node scripts/ima-manifest.mjs sync
+```
+
+Rules:
+
+1. Run `sync --dry-run` first and inspect the proposed changes.
+2. Do not edit `skills/vendor/ima/` to change sync behavior; update project-local scripts instead.
+3. A successful remote check sets `metadata_status: synced`.
+4. A failed remote check sets `metadata_status: needs-review` only when running non-dry-run sync.

@@ -170,3 +170,10 @@ Append-only chronological record. Use entries like:
 - Output files: `scripts/ima-manifest.mjs`
 - Updated contracts: `AGENTS.md`, `README.md`, `schema/workflows.md`, `scripts/lint-all.mjs`
 - Notes: Added local-only IMA manifest linting. The check validates required manifest fields, allowed statuses, summary paths, and that every `ima-note` / `ima-media` reference in `wiki/` has a matching entry in `raw/ima/sources.yml`.
+
+## [2026-06-26] maintenance | IMA manifest sync command
+
+- Source: `raw/ima/sources.yml`, `skills/vendor/ima/ima_api.cjs`
+- Output files: `scripts/ima-manifest.mjs`
+- Updated contracts: `README.md`, `schema/workflows.md`
+- Notes: Added `sync --dry-run` and `sync` subcommands for remote IMA metadata verification. The command calls the vendored IMA API helper without modifying vendor files; dry-run reads remote metadata but does not write `raw/ima/sources.yml`.

@@ -151,6 +151,23 @@ The raw large-file check fails for new or untracked large binaries under `raw/so
 The IMA manifest check verifies that `raw/ima/sources.yml` has valid local provenance entries for every `ima-note` and `ima-media` reference in `wiki/`.
 The vendor check fails when `skills/vendor/` has staged, unstaged, or untracked changes; use project-local wrappers instead of editing vendored skills in place.
 
+## IMA Manifest Sync
+
+Local consistency check:
+
+```bash
+node scripts/ima-manifest.mjs lint
+```
+
+Remote metadata verification requires IMA credentials and network access:
+
+```bash
+node scripts/ima-manifest.mjs sync --dry-run
+node scripts/ima-manifest.mjs sync
+```
+
+Use `--dry-run` first. It reads IMA metadata and prints the proposed manifest changes without modifying `raw/ima/sources.yml`.
+
 ## Obsidian Vault
 
 The registered external Obsidian vault is:
