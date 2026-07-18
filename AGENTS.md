@@ -35,6 +35,8 @@
 
 **摄入新来源**：识别类型 → 保留原文件 → 创建 `wiki/sources/` 摘要 → 更新相关页面 → 更新 `index.md` 和 `log.md`
 
+**维护知识层**：涉及 `wiki/` 的范围、写作偏好或来源边界时，先读 `wiki/INSTRUCTIONS.md` 和 `schema/source-registry.md`
+
 ## 页面质量
 
 - 短页面优于长文档，多用链接

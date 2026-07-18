@@ -16,6 +16,7 @@ This is the main navigation file for the LLM-maintained wiki.
 
 | Page | Purpose |
 | --- | --- |
+| [[INSTRUCTIONS]] | Scope, source policy, and maintenance preferences for the wiki |
 | [[overview]] | High-level map of what this wiki currently knows |
 | [[log]] | Chronological record of ingests, queries, lint passes, and maintenance |
 

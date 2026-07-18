@@ -16,10 +16,14 @@ The user's MyWiki repository is:
 Primary entry points:
 
 - `wiki/index.md`
+- `wiki/INSTRUCTIONS.md`
 - `wiki/log.md`
 - `AGENTS.md`
 - `schema/workflows.md`
 - `schema/citation-rules.md`
+- `schema/source-registry.md`
+
+When working from another directory, use this file as the stable protocol and treat `/Users/chenweilong/Documents/mywiki` as the knowledge repository. Do not infer that the caller's current directory is the wiki root.
 
 External Obsidian vault, read-only by default:
 
@@ -32,12 +36,22 @@ External Obsidian vault, read-only by default:
 Use this when answering questions from the wiki.
 
 1. Read `/Users/chenweilong/Documents/mywiki/wiki/index.md`.
-2. Search `/Users/chenweilong/Documents/mywiki/wiki/` with `rg`.
-3. Read relevant source, concept, and synthesis pages.
-4. Search `raw/`, the external Obsidian vault, or IMA references only when wiki pages are missing context or verification is needed.
-5. Answer in Chinese.
-6. Cite the wiki page or structured source reference used.
-7. If the answer is durable, offer to write it back into `wiki/`.
+2. Read `/Users/chenweilong/Documents/mywiki/wiki/INSTRUCTIONS.md` when maintaining or filing knowledge.
+3. Search `/Users/chenweilong/Documents/mywiki/wiki/` with `rg`.
+4. Read relevant source, concept, and synthesis pages.
+5. Search `raw/`, the external Obsidian vault, or IMA references only when wiki pages are missing context or verification is needed.
+6. Answer in Chinese.
+7. Cite the wiki page or structured source reference used.
+8. If the answer is durable, offer to write it back into `wiki/`.
+
+## Source Instance Workflow
+
+Before ingesting from a folder or external system:
+
+1. Read `schema/source-registry.md`.
+2. Confirm the source instance and its access boundary in `raw/obsidian/manifest.md`, `raw/ima/sources.yml`, or the relevant raw directory.
+3. Treat `registered` or `active` as an access status, not as proof that all contents are synchronized.
+4. Ingest only the explicit file or reviewed batch named by the user.
 
 ## Ingest Workflow
 
@@ -78,3 +92,4 @@ Report findings first, then propose or apply focused fixes.
 - Keep pages readable in plain Markdown and Obsidian.
 - Prefer updating existing pages before creating near-duplicates.
 - Do not start a local HTTP server for normal Markdown wiki work.
+- Do not modify `wiki/INSTRUCTIONS.md` for ordinary content ingest; change it only when the wiki-wide maintenance policy changes.

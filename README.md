@@ -35,6 +35,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `raw/extracted/` | Regeneratable text extracted from PDFs and other binary sources | Tool/LLM-managed |
 | `raw/assets/` | Local images and attachments | User/tool-managed |
 | `wiki/index.md` | Main content index and navigation entry | LLM-maintained |
+| `wiki/INSTRUCTIONS.md` | Scope and maintenance preferences for the knowledge layer | Human/LLM co-maintained |
 | `wiki/log.md` | Chronological append-only maintenance log | LLM-maintained |
 | `wiki/sources/` | One summary page per ingested source | LLM-maintained |
 | `wiki/concepts/` | Reusable concepts and durable knowledge pages | LLM-maintained |
@@ -56,6 +57,7 @@ This repository is in the seed-wiki stage. The file structure and first ingest l
 | `schema/workflows.md` | Ingest, query, and lint workflows |
 | `schema/citation-rules.md` | Source and citation conventions |
 | `schema/okf-compat.md` | Local OKF compatibility rules |
+| `schema/source-registry.md` | Lightweight source-instance model and lifecycle |
 | `scripts/lint-all.mjs` | Runs all repo-local maintenance checks |
 | `scripts/ima-manifest.mjs` | Lints the local IMA source registry against wiki references |
 | `scripts/lint-wiki-okf.mjs` | Checks normal wiki pages for OKF minimum metadata |
@@ -207,6 +209,8 @@ Current Skill:
 | --- | --- |
 | `skills/ingest/SKILL.md` | Turns one explicit source into wiki pages and updates index/log |
 | `skills/mywiki-query/SKILL.md` | Gives other agents a stable protocol for finding, querying, ingesting, linting, and updating this wiki |
+
+When another agent works from a different directory, point it to the absolute path `/Users/chenweilong/Documents/mywiki/skills/mywiki-query/SKILL.md`. The Skill tells it to read `wiki/index.md` first and use `wiki/INSTRUCTIONS.md` and `schema/source-registry.md` when maintaining or ingesting knowledge.
 
 This directory is the source of truth for the Skill content. Different agent runtimes may require installing, copying, or symlinking the Skill into their own global or project-specific skill directory.
 

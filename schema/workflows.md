@@ -34,11 +34,14 @@
 ## Query Wiki
 
 1. Read `wiki/index.md`.
-2. Use `rg` to search `wiki/`.
-3. Read the relevant pages.
-4. If necessary, verify against raw sources: local `raw/`, external Obsidian notes, or IMA references.
-5. Answer in Chinese with source references.
-6. If the answer is durable, suggest filing it into the wiki.
+2. When maintaining or filing knowledge, read `wiki/INSTRUCTIONS.md`.
+3. Use `rg` to search `wiki/`.
+4. Read the relevant pages.
+5. If necessary, verify against raw sources: local `raw/`, external Obsidian notes, or IMA references.
+6. Answer in Chinese with source references.
+7. If the answer is durable, suggest filing it into the wiki.
+
+For sources outside the repository, first check `schema/source-registry.md` and the relevant manifest. A registered source instance is an access boundary, not a claim that all of its contents are synchronized.
 
 ## Lint Wiki
 

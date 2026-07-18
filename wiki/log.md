@@ -177,3 +177,10 @@ Append-only chronological record. Use entries like:
 - Output files: `scripts/ima-manifest.mjs`
 - Updated contracts: `README.md`, `schema/workflows.md`
 - Notes: Added `sync --dry-run` and `sync` subcommands for remote IMA metadata verification. The command calls the vendored IMA API helper without modifying vendor files; dry-run reads remote metadata but does not write `raw/ima/sources.yml`.
+
+## [2026-07-18] maintenance | Source instance and wiki instructions
+
+- Source: `langchain-ai/openwiki` comparison and current MyWiki operating boundaries
+- Output files: `wiki/INSTRUCTIONS.md`, `schema/source-registry.md`, `raw/obsidian/manifest.md`, `skills/mywiki-query/SKILL.md`
+- Updated contracts: `AGENTS.md`, `README.md`, `schema/workflows.md`, `wiki/index.md`
+- Notes: Added a lightweight source-instance registry model and separated wiki knowledge-layer instructions from the root agent contract. Obsidian remains read-only and explicitly scoped; no automatic full-vault synchronization was introduced.
