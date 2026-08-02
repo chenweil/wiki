@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyWiki Knowledge Map</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; background: #0d1117; color: #e6edf3; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 1040px; background: radial-gradient(circle at 55% 15%, #17233a 0, #0d1117 43%); }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .app { min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+    header { padding: 22px 28px 18px; border-bottom: 1px solid #273244; display: flex; justify-content: space-between; gap: 20px; align-items: center; }
+    .eyebrow { color: #8b9ab4; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { margin-top: 5px; font-size: 24px; letter-spacing: -.03em; }
+    h2 { font-size: 17px; }
+    h3 { font-size: 12px; color: #aab6c8; text-transform: uppercase; letter-spacing: .08em; }
+    .header-meta, .stats, .chips, .legend, .row { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .pill, .chip, .stat { border: 1px solid #2c394d; background: #131b29; border-radius: 999px; padding: 6px 10px; color: #aebbd0; font-size: 12px; }
+    .pill strong { color: #e6edf3; }
+    .layout { min-height: 0; padding: 20px; display: grid; grid-template-columns: 270px minmax(460px, 1fr) 330px; gap: 16px; }
+    .panel { border: 1px solid #273244; background: rgba(17, 24, 36, .9); border-radius: 14px; box-shadow: 0 20px 60px rgba(0, 0, 0, .18); }
+    .sidebar, .details { padding: 16px; min-height: 0; overflow: auto; }
+    .sidebar { display: flex; flex-direction: column; gap: 14px; }
+    .search { width: 100%; border: 1px solid #3a4a63; background: #0b111c; border-radius: 9px; padding: 10px 11px; color: #f0f5ff; outline: none; }
+    .search:focus { border-color: #6ea8fe; box-shadow: 0 0 0 3px #6ea8fe22; }
+    .section-title { display: flex; justify-content: space-between; align-items: center; color: #8795aa; }
+    .section-title small { color: #64738b; }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter, .node-row, .relation { border: 1px solid transparent; background: transparent; cursor: pointer; text-align: left; }
+    .filter { border-color: #2b394c; border-radius: 999px; padding: 6px 9px; color: #aab6c8; font-size: 11px; }
+    .filter.active { background: #1b3354; border-color: #487ab9; color: #e8f1ff; }
+    .node-list { display: flex; flex-direction: column; gap: 6px; }
+    .node-row { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: center; width: 100%; padding: 9px; border-radius: 9px; color: #aab6c8; }
+    .node-row:hover, .node-row.selected { background: #182b45; border-color: #315d91; color: #f0f5ff; }
+    .node-row strong { display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .node-row small { display: block; margin-top: 3px; color: #71819a; font-size: 10px; }
+    .node-dot, .legend-dot { width: 9px; height: 9px; display: inline-block; background: var(--color); border-radius: 50%; box-shadow: 0 0 10px var(--color); }
+    .node-count { color: #687991; font-size: 10px; }
+    .map-column { min-width: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; }
+    .map-toolbar { padding: 14px 16px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .map-toolbar p { margin-top: 4px; color: #8492a8; font-size: 12px; }
+    .map-frame { position: relative; min-height: 610px; overflow: hidden; border: 1px solid #273244; border-radius: 14px; background: linear-gradient(145deg, #111a29, #0a0e15 70%); }
+    svg { width: 100%; height: 100%; min-height: 610px; display: block; }
+    .edge { stroke: #6e89ad99; stroke-width: 1.25; }
+    .node { cursor: pointer; outline: none; }
+    .node circle, .node rect, .node path { fill: var(--color); stroke: #e6edf3; stroke-width: 1.2; opacity: .9; }
+    .node:hover circle, .node:hover rect, .node:hover path, .node:focus circle, .node:focus rect, .node:focus path { stroke-width: 3; }
+    .node.selected circle, .node.selected rect, .node.selected path { stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 9px var(--color)); }
+    .node text { fill: #aebbd0; font-size: 10px; text-anchor: middle; pointer-events: none; }
+    .node.selected text { fill: #fff; font-weight: 700; }
+    .map-empty { position: absolute; inset: 0; display: grid; place-items: center; color: #7e8da4; }
+    .legend { color: #75849a; font-size: 11px; padding: 0 6px; }
+    .details { display: flex; flex-direction: column; gap: 16px; }
+    .detail-header { display: flex; justify-content: space-between; gap: 10px; }
+    .type { color: #8ec1ff; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    .details p { color: #aab6c8; line-height: 1.65; font-size: 13px; }
+    .detail-block { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid #273244; }
+    .relation { display: grid; grid-template-columns: 9px 1fr auto; align-items: center; gap: 8px; width: 100%; padding: 8px 0; color: #c5d0e0; }
+    .relation:hover { color: #fff; }
+    .relation-copy { min-width: 0; display: grid; gap: 3px; }
+    .relation small { color: #7890b0; font-size: 10px; }
+    .source-line { color: #77869c !important; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px !important; overflow-wrap: anywhere; }
+    .basis { margin: -3px 0 4px 17px; color: #8898af; font-size: 11px; line-height: 1.4; }
+    .relation .basis { margin: 0; }
+    .open-page { display: inline-flex; justify-content: center; padding: 10px 12px; border-radius: 9px; border: 1px solid #4d82bd; background: #173557; color: #e7f1ff; text-decoration: none; font-size: 12px; }
+    .open-page:hover { background: #214a78; }
+    .error { padding: 24px; color: #ffb4b4; }
+    @media (max-width: 1220px) { body { min-width: 900px; } .layout { grid-template-columns: 235px minmax(420px, 1fr) 290px; padding: 12px; gap: 10px; } }
+  </style>
+</head>
+<body>
+  <div id="app" class="app"><div class="error">正在加载地图快照…</div></div>
+  <script>
+    const state = { snapshot: null, selected: null, query: '', type: 'all' };
+    const typeLabels = { concept: 'CONCEPT', source: 'SOURCE', synthesis: 'SYNTHESIS' };
+    const typeColors = { concept: '#8b7bff', source: '#65b4ff', synthesis: '#65db9c' };
+
+    const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (character) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[character]));
+    const nodeById = (id) => state.snapshot.nodes.find((node) => node.id === id);
+    const relationsFor = (id) => state.snapshot.relations.filter((relation) => relation.from === id || relation.to === id);
+    const filteredNodes = () => state.snapshot.nodes.filter((node) => {
+      const query = state.query.trim().toLowerCase();
+      const matchesType = state.type === 'all' || node.type === state.type;
+      const haystack = [node.title, node.description, node.summary, ...node.tags].join(' ').toLowerCase();
+      return matchesType && (!query || haystack.includes(query));
+    });
+    const colorFor = (node) => typeColors[node.type] || '#9aa7bb';
+    const pageHref = (node) => `page.html?path=${encodeURIComponent(node.pagePath)}&title=${encodeURIComponent(node.title)}`;
+
+    function render() {
+      const visible = filteredNodes();
+      if (!visible.some((node) => node.id === state.selected)) state.selected = visible[0]?.id || null;
+      const selected = nodeById(state.selected);
+      document.querySelector('#app').innerHTML = `
+        <header>
+          <div><div class="eyebrow">MyWiki · local read-only viewer</div><h1>Knowledge Map</h1></div>
+          <div class="header-meta"><span class="pill"><strong>B · List-first Navigator</strong></span><span class="pill">${escapeHtml(state.snapshot.manifest.scope.label)}</span><span class="pill">${escapeHtml(state.snapshot.manifest.mapVersion)}</span></div>
+        </header>
+        <main class="layout">
+          ${sidebar(visible)}
+          ${mapColumn(visible)}
+          ${details(selected)}
+        </main>`;
+      bind();
+    }
+
+    function sidebar(visible) {
+      const types = ['all', 'concept', 'source', 'synthesis'];
+      return `<aside class="panel sidebar">
+        <div class="section-title"><h2>知识节点</h2><small>${visible.length}/${state.snapshot.nodes.length}</small></div>
+        <input id="search" class="search" value="${escapeHtml(state.query)}" placeholder="搜索标题、标签或摘要…" aria-label="搜索知识节点">
+        <div class="filters">${types.map((type) => `<button class="filter ${state.type === type ? 'active' : ''}" data-type="${type}">${type === 'all' ? '全部' : typeLabels[type]}</button>`).join('')}</div>
+        <div class="node-list" aria-label="知识节点列表">${visible.map(nodeRow).join('') || '<p>没有匹配节点。</p>'}</div>
+      </aside>`;
+    }
+
+    function nodeRow(node) {
+      return `<button class="node-row ${state.selected === node.id ? 'selected' : ''}" data-node="${escapeHtml(node.id)}" style="--color:${colorFor(node)}">
+        <span class="node-dot"></span><span><strong>${escapeHtml(node.title)}</strong><small>${escapeHtml(typeLabels[node.type] || node.type)} · ${escapeHtml(node.tags.slice(0, 2).join(' · '))}</small></span><span class="node-count">${relationsFor(node.id).length}</span>
+      </button>`;
+    }
+
+    function mapColumn(visible) {
+      const ids = new Set(visible.map((node) => node.id));
+      const relations = state.snapshot.relations.filter((relation) => ids.has(relation.from) && ids.has(relation.to));
+      return `<section class="map-column">
+        <div class="panel map-toolbar"><div><div class="eyebrow">Bounded topic subgraph · explicit page-link graph</div><p>来源页面之间的显式连接 · ${visible.length} nodes · ${relations.length} relations</p></div><div class="stats"><span class="stat">2D default</span><span class="stat">read-only</span></div></div>
+        <div class="map-frame">${visible.length ? `<svg viewBox="0 0 900 620" role="img" aria-label="知识节点关系地图"><g>${relations.map((relation) => edgeSvg(relation, ids)).join('')}</g><g>${visible.map(nodeSvg).join('')}</g></svg>` : '<div class="map-empty">没有匹配节点</div>'}</div>
+        <div class="legend"><span><i class="legend-dot" style="--color:#6e89ad"></i>显式页面链接</span><span>点击节点或使用列表定位</span></div>
+      </section>`;
+    }
+
+    function position(node) {
+      return { x: 60 + node.position.x * 780, y: 50 + node.position.y * 520 };
+    }
+
+    function edgeSvg(relation, ids) {
+      const from = nodeById(relation.from); const to = nodeById(relation.to);
+      if (!from || !to || !ids.has(from.id) || !ids.has(to.id)) return '';
+      const start = position(from); const end = position(to);
+      return `<line class="edge" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" aria-label="${escapeHtml(from.title)} 到 ${escapeHtml(to.title)}"></line>`;
+    }
+
+    function nodeSvg(node) {
+      const point = position(node); const shape = node.type === 'source'
+        ? `<rect x="-10" y="-10" width="20" height="20" rx="4" transform="rotate(45)"></rect>`
+        : node.type === 'synthesis' ? '<path d="M0 -13 L12 0 L0 13 L-12 0 Z"></path>' : '<circle r="12"></circle>';
+      return `<g class="node ${state.selected === node.id ? 'selected' : ''}" data-node="${escapeHtml(node.id)}" tabindex="0" role="button" aria-label="选择 ${escapeHtml(node.title)}" transform="translate(${point.x} ${point.y})" style="--color:${colorFor(node)}"><g>${shape}</g><text y="31">${escapeHtml(node.title.length > 18 ? `${node.title.slice(0, 17)}…` : node.title)}</text></g>`;
+    }
+
+    function details(node) {
+      if (!node) return '<aside class="panel details"><p>选择一个知识节点查看详情。</p></aside>';
+      const relations = relationsFor(node.id);
+      return `<aside class="panel details">
+        <div class="detail-header"><div><div class="type">${escapeHtml(typeLabels[node.type] || node.type)}</div><h2>${escapeHtml(node.title)}</h2></div><span class="pill">${escapeHtml(node.status)}</span></div>
+        <p>${escapeHtml(node.summary || node.description || '暂无摘要。')}</p>
+        <div class="chips">${node.tags.map((tag) => `<span class="chip">#${escapeHtml(tag)}</span>`).join('')}</div>
+        <div class="detail-block"><h3>来源</h3>${sourceRows(node)}</div>
+        <div class="detail-block"><h3>页面 provenance</h3><p class="source-line">${escapeHtml(node.pagePath)}</p><p class="source-line">sha256:${escapeHtml(node.contentHash)}</p><p>更新时间：${escapeHtml(node.updated || '未记录')}</p></div>
+        <div class="detail-block"><h3>显式关系 · ${relations.length}</h3>${relations.length ? relations.map((relation) => relationRow(relation, node.id)).join('') : '<p>当前节点没有落在此主题子图中的显式关系。</p>'}</div>
+        <div class="detail-block"><h3>地图快照</h3><p class="source-line">${escapeHtml(state.snapshot.manifest.mapVersion)}</p><p>关系层：页面链接图</p></div>
+        <a class="open-page" href="${pageHref(node)}">打开原始 Wiki 页面 ↗</a>
+      </aside>`;
+    }
+
+    function sourceRows(node) {
+      const sources = Array.isArray(node.sources) ? node.sources : [];
+      if (!sources.length) return '<p>暂无结构化来源。</p>';
+      return sources.map((source) => {
+        const kind = source?.kind || 'source';
+        const target = source?.page || source?.path || '未命名来源';
+        return `<p class="source-line">${escapeHtml(kind)} · ${escapeHtml(target)}</p>`;
+      }).join('');
+    }
+
+    function relationRow(relation, selectedId) {
+      const target = nodeById(relation.from === selectedId ? relation.to : relation.from);
+      if (!target) return '';
+      const provenance = relation.provenance || {};
+      const declarations = Array.isArray(provenance.declarations) ? provenance.declarations : [];
+      const declaration = declarations.map((item) => item.kind === 'source' ? 'sources' : 'wikilink').join(' + ') || '未记录';
+      const fields = [...new Set(declarations.map((item) => item.field).filter(Boolean))].join(' + ') || '未记录';
+      const sourcePagePath = provenance.sourcePagePath || '未记录';
+      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${colorFor(target)}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>显式 · ${escapeHtml(declaration)}</small><span class="basis">声明页：${escapeHtml(sourcePagePath)} · 字段：${escapeHtml(fields)}</span></span></button>`;
+    }
+
+    function bind() {
+      document.querySelector('#search')?.addEventListener('input', (event) => { state.query = event.target.value; render(); document.querySelector('#search')?.focus(); });
+      document.querySelectorAll('[data-type]').forEach((button) => button.addEventListener('click', () => { state.type = button.dataset.type; render(); }));
+      document.querySelectorAll('[data-node]').forEach((element) => {
+        const select = () => { state.selected = element.dataset.node; render(); };
+        element.addEventListener('click', select);
+        element.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } });
+      });
+    }
+
+    fetch('./map.json').then((response) => { if (!response.ok) throw new Error(`map.json ${response.status}`); return response.json(); })
+      .then((snapshot) => { state.snapshot = snapshot; state.selected = snapshot.manifest.scope.nodeIds.includes('claude-code-engineering-map') ? 'claude-code-engineering-map' : snapshot.nodes[0]?.id; render(); })
+      .catch((error) => { document.querySelector('#app').innerHTML = `<div class="error">无法加载地图快照：${escapeHtml(error.message)}。请先运行生成命令并通过 HTTP 服务打开 dist/index.html。</div>`; });
+  </script>
+</body>
+</html>

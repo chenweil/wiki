@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyWiki source page</title>
+  <style>
+    :root { color-scheme: dark; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #0d1117; color: #dbe7f6; }
+    body { margin: 0; }
+    .bar { padding: 18px 24px; border-bottom: 1px solid #273244; display: flex; justify-content: space-between; gap: 12px; align-items: center; font-family: system-ui, sans-serif; }
+    h1 { font-size: 18px; margin: 4px 0 0; }
+    .eyebrow { color: #8291a8; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    a { color: #8ec1ff; text-decoration: none; }
+    pre { max-width: 1100px; margin: 0 auto; padding: 30px 24px 80px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; font-size: 13px; }
+    .error { padding: 24px; color: #ffb4b4; }
+  </style>
+</head>
+<body>
+  <div class="bar"><div><div class="eyebrow">MyWiki · maintained Wiki source</div><h1 id="title">正在加载…</h1></div><a href="index.html">← 返回地图</a></div>
+  <pre id="content">正在加载页面…</pre>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const pagePath = params.get('path') || '';
+    const title = params.get('title') || pagePath;
+    document.querySelector('#title').textContent = title;
+    const safePath = pagePath.startsWith('wiki/') && !pagePath.includes('..') ? pagePath : null;
+    if (!safePath) document.querySelector('#content').outerHTML = '<div class="error">无效的 Wiki 页面路径。</div>';
+    else fetch(`../../${safePath}`).then((response) => { if (!response.ok) throw new Error(`source ${response.status}`); return response.text(); }).then((text) => { document.querySelector('#content').textContent = text; }).catch((error) => { document.querySelector('#content').outerHTML = `<div class="error">无法加载 Wiki 页面：${error.message}</div>`; });
+  </script>
+</body>
+</html>

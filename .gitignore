@@ -3,6 +3,9 @@
 tmp/
 *.log
 
+# Rebuildable knowledge-map artifacts.
+knowledge-map/dist/
+
 # Local holding areas for files that should be reviewed before Git tracking.
 raw/sources/_large/
 raw/sources/_ima-upload/
