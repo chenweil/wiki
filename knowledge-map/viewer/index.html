@@ -47,6 +47,11 @@
     .map-column { min-width: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; }
     .map-toolbar { padding: 14px 16px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
     .map-toolbar p { margin-top: 4px; color: #8492a8; font-size: 12px; }
+    .query-meta { margin-top: 8px; color: #9aaac0; font-size: 11px; line-height: 1.5; }
+    .query-meta strong { color: #e6edf3; }
+    .expand-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .expand-action { border: 1px solid #466887; border-radius: 8px; padding: 7px 9px; background: #14283d; color: #dbeaff; cursor: pointer; font-size: 11px; }
+    .expand-action:hover { border-color: #78a9d3; background: #1c3b5c; }
     .map-frame { position: relative; min-height: 610px; overflow: hidden; border: 1px solid #273244; border-radius: 14px; background: linear-gradient(145deg, #111a29, #0a0e15 70%); }
     svg { width: 100%; height: 100%; min-height: 610px; display: block; }
     .edge { stroke: #6e89ad99; stroke-width: 1.25; }
@@ -80,8 +85,10 @@
 </head>
 <body>
   <div id="app" class="app"><div class="error">正在加载地图快照…</div></div>
-  <script>
-    const state = { snapshot: null, selected: null, query: '', type: 'all', layers: { 'page-link': true, 'semantic-exploration': true } };
+  <script type="module">
+    import { querySubgraph } from './graph-query.mjs';
+
+    const state = { snapshot: null, queryResult: null, selected: null, query: '', type: 'all', layers: { 'page-link': true, 'semantic-exploration': true }, depth: 1, relationBudget: 3 };
     const typeLabels = { concept: 'CONCEPT', source: 'SOURCE', synthesis: 'SYNTHESIS' };
     const typeColors = { concept: '#8b7bff', source: '#65b4ff', synthesis: '#65db9c' };
     const layerLabels = { 'page-link': '显式页面链接', 'semantic-exploration': '语义探索' };
@@ -91,8 +98,9 @@
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[character]));
     const nodeById = (id) => state.snapshot.nodes.find((node) => node.id === id);
+    const queryNodeById = (id) => state.queryResult?.nodes.find((node) => node.id === id);
     const relationIsVisible = (relation) => state.layers[relation.layer] !== false;
-    const relationsFor = (id) => state.snapshot.relations.filter((relation) => relationIsVisible(relation) && (relation.from === id || relation.to === id));
+    const relationsFor = (id) => (state.queryResult?.relations || []).filter((relation) => relationIsVisible(relation) && (relation.from === id || relation.to === id));
     const relationCount = (layer) => state.snapshot.relations.filter((relation) => relation.layer === layer).length;
     const filteredNodes = () => state.snapshot.nodes.filter((node) => {
       const query = state.query.trim().toLowerCase();
@@ -103,6 +111,27 @@
     const colorFor = (node) => typeColors[node.type] || '#9aa7bb';
     const pageHref = (node) => `page.html?path=${encodeURIComponent(node.pagePath)}&title=${encodeURIComponent(node.title)}`;
     const statusLabel = (node) => node.status === 'unlocated' ? 'UNLOCATED' : 'LOCATED';
+
+    function queryFilters() {
+      return {
+        ...(state.type === 'all' ? {} : { types: [state.type] }),
+        ...(state.query.trim() ? { text: state.query.trim() } : {}),
+      };
+    }
+
+    function executeQuery() {
+      if (!state.snapshot || !state.selected) {
+        state.queryResult = null;
+        return;
+      }
+      state.queryResult = querySubgraph(state.snapshot, {
+        seedNodeId: state.selected,
+        layers: ['page-link', 'semantic-exploration'].filter((layer) => state.layers[layer]),
+        depth: state.depth,
+        relationBudget: state.relationBudget,
+        filters: queryFilters(),
+      });
+    }
 
     function render() {
       const visible = filteredNodes();
@@ -115,7 +144,7 @@
         </header>
         <main class="layout">
           ${sidebar(visible)}
-          ${mapColumn(visible)}
+          ${mapColumn()}
           ${details(selected)}
         </main>`;
       bind();
@@ -133,7 +162,7 @@
     }
 
     function layerButton(layer) {
-      return `<button class="layer-filter ${state.layers[layer] ? 'active' : ''}" data-layer="${layer}" style="--layer-color:${layerColors[layer]}"><span>${layerLabels[layer]}</span><small>${relationCount(layer)}</small></button>`;
+      return `<button class="layer-filter ${state.layers[layer] ? 'active' : ''}" data-layer="${layer}" aria-pressed="${state.layers[layer]}" style="--layer-color:${layerColors[layer]}"><span>${layerLabels[layer]}</span><small>${relationCount(layer)}</small></button>`;
     }
 
     function nodeRow(node) {
@@ -142,20 +171,35 @@
       </button>`;
     }
 
-    function mapColumn(visible) {
+    function mapColumn() {
+      const result = state.queryResult;
+      const visible = result?.nodes || [];
       const ids = new Set(visible.map((node) => node.id));
-      const relations = state.snapshot.relations.filter((relation) => relationIsVisible(relation)
+      const relations = (result?.relations || []).filter((relation) => relationIsVisible(relation)
         && ids.has(relation.from)
         && ids.has(relation.to)
-        && nodeById(relation.from)?.position
-        && nodeById(relation.to)?.position);
+        && queryNodeById(relation.from)?.position
+        && queryNodeById(relation.to)?.position);
       const located = visible.filter((node) => node.position);
       const unlocatedCount = visible.length - located.length;
+      const querySummary = result?.failure
+        ? `查询失败：${result.failure.message}`
+        : `snapshot ${result?.snapshotVersion || '未记录'} · depth ${result?.query.depth ?? '—'} · budget ${result?.query.relationBudget ?? '—'} · ${result?.status || '未查询'}`;
       return `<section class="map-column">
-        <div class="panel map-toolbar"><div><div class="eyebrow">Bounded topic subgraph · semantic exploration</div><p>语义位置叠加页面关系 · ${located.length}/${visible.length} located · ${relations.length} visible relations${unlocatedCount ? ` · ${unlocatedCount} unlocated` : ''}</p></div><div class="stats"><span class="stat">2D default</span><span class="stat">read-only</span></div></div>
-        <div class="map-frame">${located.length ? `<svg viewBox="0 0 900 620" role="img" aria-label="知识节点关系地图"><g>${relations.map((relation) => edgeSvg(relation, ids)).join('')}</g><g>${located.map(nodeSvg).join('')}</g></svg>` : '<div class="map-empty">当前筛选节点都未获得语义位置</div>'}</div>
+        <div class="panel map-toolbar"><div><div class="eyebrow">Bounded topic subgraph · semantic exploration</div><p>语义位置叠加页面关系 · ${located.length}/${visible.length} located · ${relations.length} visible relations${unlocatedCount ? ` · ${unlocatedCount} unlocated` : ''}</p><div class="query-meta"><strong>查询上下文：</strong>${escapeHtml(querySummary)}${result && !result.complete ? ` · omitted ${result.omitted.nodes} nodes / ${result.omitted.relations} relations` : ''}</div></div><div class="expand-actions">${expandActions(result)}</div></div>
+        <div class="map-frame">${result?.failure ? `<div class="map-empty">${escapeHtml(result.failure.message)}</div>` : located.length ? `<svg viewBox="0 0 900 620" role="img" aria-label="知识节点关系地图"><g>${relations.map((relation) => edgeSvg(relation, ids)).join('')}</g><g>${located.map(nodeSvg).join('')}</g></svg>` : '<div class="map-empty">当前子图没有获得语义位置</div>'}</div>
         <div class="legend"><span><i class="legend-dot" style="--color:#6e89ad"></i>显式页面链接</span><span><i class="legend-dot" style="--color:#b28cff"></i>语义探索</span><span>点击节点或使用列表定位</span></div>
       </section>`;
+    }
+
+    function expandActions(result) {
+      if (!result?.continuation?.actions?.length) return '';
+      return result.continuation.actions.map((action) => {
+        const label = action.kind === 'expand-depth'
+          ? `展开到 ${action.query.depth} 层`
+          : `增加关系预算到 ${action.query.relationBudget}`;
+        return `<button class="expand-action" data-expand="${escapeHtml(action.kind)}">${escapeHtml(label)}</button>`;
+      }).join('');
     }
 
     function position(node) {
@@ -232,18 +276,47 @@
     }
 
     function bind() {
-      document.querySelector('#search')?.addEventListener('input', (event) => { state.query = event.target.value; render(); document.querySelector('#search')?.focus(); });
-      document.querySelectorAll('[data-type]').forEach((button) => button.addEventListener('click', () => { state.type = button.dataset.type; render(); }));
-      document.querySelectorAll('[data-layer]').forEach((button) => button.addEventListener('click', () => { const layer = button.dataset.layer; state.layers[layer] = !state.layers[layer]; render(); }));
+      document.querySelector('#search')?.addEventListener('input', (event) => {
+        state.query = event.target.value;
+        ensureSelectedMatch();
+        executeQuery();
+        render();
+        document.querySelector('#search')?.focus();
+      });
+      document.querySelectorAll('[data-type]').forEach((button) => button.addEventListener('click', () => {
+        state.type = button.dataset.type;
+        ensureSelectedMatch();
+        executeQuery();
+        render();
+      }));
+      document.querySelectorAll('[data-layer]').forEach((button) => button.addEventListener('click', () => {
+        const layer = button.dataset.layer;
+        state.layers[layer] = !state.layers[layer];
+        executeQuery();
+        render();
+      }));
+      document.querySelectorAll('[data-expand]').forEach((button) => button.addEventListener('click', () => {
+        const action = state.queryResult?.continuation?.actions?.find((candidate) => candidate.kind === button.dataset.expand);
+        if (!action) return;
+        state.depth = action.query.depth;
+        state.relationBudget = action.query.relationBudget;
+        executeQuery();
+        render();
+      }));
       document.querySelectorAll('[data-node]').forEach((element) => {
-        const select = () => { state.selected = element.dataset.node; render(); };
+        const select = () => { state.selected = element.dataset.node; executeQuery(); render(); };
         element.addEventListener('click', select);
         element.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } });
       });
     }
 
+    function ensureSelectedMatch() {
+      const visible = filteredNodes();
+      if (!visible.some((node) => node.id === state.selected)) state.selected = visible[0]?.id || null;
+    }
+
     fetch('./map.json').then((response) => { if (!response.ok) throw new Error(`map.json ${response.status}`); return response.json(); })
-      .then((snapshot) => { state.snapshot = snapshot; state.selected = snapshot.manifest.scope.nodeIds.includes('claude-code-engineering-map') ? 'claude-code-engineering-map' : snapshot.nodes[0]?.id; render(); })
+      .then((snapshot) => { state.snapshot = snapshot; state.selected = snapshot.manifest.scope.nodeIds.includes('claude-code-engineering-map') ? 'claude-code-engineering-map' : snapshot.nodes[0]?.id; executeQuery(); render(); })
       .catch((error) => { document.querySelector('#app').innerHTML = `<div class="error">无法加载地图快照：${escapeHtml(error.message)}。请先运行生成命令并通过 HTTP 服务打开 dist/index.html。</div>`; });
   </script>
 </body>

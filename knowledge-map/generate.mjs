@@ -27,6 +27,7 @@ const snapshot = generateMapSnapshot({ wikiRoot, scope: DEFAULT_SCOPE });
 await writeMapSnapshot(snapshot, path.join(outputDirectory, 'map.json'));
 await copyFile(path.join(knowledgeMapRoot, 'viewer', 'index.html'), path.join(outputDirectory, 'index.html'));
 await copyFile(path.join(knowledgeMapRoot, 'viewer', 'page.html'), path.join(outputDirectory, 'page.html'));
+await copyFile(path.join(knowledgeMapRoot, 'lib', 'graph-query.mjs'), path.join(outputDirectory, 'graph-query.mjs'));
 
 console.log(JSON.stringify({
   ok: true,
