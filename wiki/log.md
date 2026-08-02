@@ -2,7 +2,7 @@
 type: project
 status: active
 created: 2026-05-31
-updated: 2026-06-18
+updated: 2026-08-02
 sources:
   - AGENTS.md
   - schema/workflows.md
@@ -19,6 +19,32 @@ Append-only chronological record. Use entries like:
 - Output pages: concept-page, source-summary
 - Notes:
 ```
+
+## [2026-08-02] design | MyWiki Knowledge Map
+
+- Source: User-confirmed grilling session and live observation of Hermes Studio's learning-trajectory interaction.
+- Output files: `CONTEXT.md`, `docs/adr/0001-knowledge-map-as-rebuildable-projection.md`, `docs/knowledge-map-design.md`
+- Updated pages: [[index]]
+- Notes: Confirmed the knowledge map as a read-only, rebuildable projection for navigation and discovery. The first release targets an AI-engineering topic subgraph, uses Wiki pages as nodes, separates explicit and inferred relationships, defaults to 2D with optional 3D exploration, and remains independent of Hermes Studio.
+
+## [2026-08-02] prototype | MyWiki Knowledge Map UI
+
+- Source: `docs/knowledge-map-design.md`
+- Output files: `prototype/knowledge-map/index.html`, `prototype/knowledge-map/page.html`, `prototype/knowledge-map/README.md`
+- Notes: Built a throwaway local UI prototype with three structurally different variants: map-first atlas, list-first navigator, and topic clusters. The browser check covered variant switching, node selection, inferred-relation basis, search synchronization, and readable navigation back to a Wiki source page. The prototype uses a small real-page fixture and intentionally does not generate embeddings or integrate Hermes Studio.
+
+## [2026-08-02] decision | MyWiki Knowledge Map POC layout
+
+- Source: User comparison of the three throwaway UI variants.
+- Decision: Select `B · List-first Navigator` as the preferred interaction structure.
+- Notes: Keep A and C as comparison variants for now; future production implementation must be rewritten from the accepted design rather than promoting the throwaway prototype directly.
+
+## [2026-08-02] architecture | MyWiki Knowledge Map subgraphs and provenance
+
+- Source: User-approved comparison with WeKnora's graph interaction, subgraph loading, and citation/provenance patterns.
+- Output files: `CONTEXT.md`, `docs/adr/0002-queryable-subgraphs-and-structured-provenance.md`, `docs/knowledge-map-design.md`
+- Decision: Keep MyWiki's `wiki/` source boundary and rebuildable projection, while adding immutable map snapshots, bounded graph queries, separate page-link and semantic-exploration layers, structured provenance, and incremental B-viewer expansion.
+- Notes: WeKnora remains an external reference only; no WeKnora runtime, graph database, RAG, Agent, or Hermes Studio integration is added.
 
 ## [2026-05-31] setup | Initial wiki scaffold
 

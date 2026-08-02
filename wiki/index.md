@@ -20,6 +20,12 @@ This is the main navigation file for the LLM-maintained wiki.
 | [[overview]] | High-level map of what this wiki currently knows |
 | [[log]] | Chronological record of ingests, queries, lint passes, and maintenance |
 
+## Active Project Design
+
+| Document | Purpose |
+| --- | --- |
+| [MyWiki Knowledge Map Design](../docs/knowledge-map-design.md) | 已确认的知识地图领域边界、交互模型和第一版验收标准 |
+
 ## Source Summaries
 
 Source summaries live in `wiki/sources/`.
