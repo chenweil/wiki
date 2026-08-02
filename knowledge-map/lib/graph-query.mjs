@@ -8,18 +8,18 @@ export function querySubgraph(snapshot, inputQuery = {}) {
   try {
     query = normalizeQuery(inputQuery);
   } catch (error) {
-    return failureResult(snapshotVersion, fallbackQuery(inputQuery), 'invalid-query', error.message);
+    return failureResult(snapshotVersion, fallbackQuery(inputQuery), 'invalid-query', error.message, snapshot?.manifest?.scope);
   }
 
   if (!snapshotVersion || !Array.isArray(snapshot.nodes) || !Array.isArray(snapshot.relations)) {
-    return failureResult(snapshotVersion, query, 'invalid-snapshot', 'MapSnapshot is missing nodes, relations, or version');
+    return failureResult(snapshotVersion, query, 'invalid-snapshot', 'MapSnapshot is missing nodes, relations, or version', snapshot?.manifest?.scope);
   }
 
   const nodesById = new Map(snapshot.nodes.map((node) => [node.id, node]));
   const seed = nodesById.get(query.seedNodeId);
-  if (!seed) return failureResult(snapshotVersion, query, 'unknown-seed', `Unknown seed node: ${query.seedNodeId}`);
+  if (!seed) return failureResult(snapshotVersion, query, 'unknown-seed', `Unknown seed node: ${query.seedNodeId}`, snapshot.manifest.scope);
   if (!matchesFilter(seed, query.filters)) {
-    return failureResult(snapshotVersion, query, 'seed-filtered', `Seed node does not match the query filters: ${query.seedNodeId}`);
+    return failureResult(snapshotVersion, query, 'seed-filtered', `Seed node does not match the query filters: ${query.seedNodeId}`, snapshot.manifest.scope);
   }
 
   const adjacency = createAdjacency(snapshot.nodes, snapshot.relations);
@@ -75,23 +75,30 @@ export function querySubgraph(snapshot, inputQuery = {}) {
     .map(clone);
   const omitted = { nodes: omittedNodeIds.size, relations: omittedRelationIds.size };
   const complete = omitted.nodes === 0 && omitted.relations === 0;
+  const continuation = complete ? null : createContinuation(query, omitted);
+  const status = complete ? 'complete' : 'partial';
 
   return {
     schemaVersion: QUERY_SCHEMA_VERSION,
-    status: complete ? 'complete' : 'partial',
+    status,
     snapshotVersion,
     query,
     nodes: resultNodes,
     relations: resultRelations,
     omitted,
     complete,
-    continuation: complete ? null : createContinuation(query, omitted),
+    continuation,
     failure: null,
-    provenance: {
-      kind: 'subgraph-query',
+    provenance: createResultProvenance({
       snapshotVersion,
-      query: clone(query),
-    },
+      scope: snapshot.manifest.scope,
+      query,
+      status,
+      complete,
+      omitted,
+      continuation,
+      failure: null,
+    }),
   };
 }
 
@@ -137,7 +144,9 @@ function fallbackQuery(inputQuery) {
   };
 }
 
-function failureResult(snapshotVersion, query, code, message) {
+function failureResult(snapshotVersion, query, code, message, scope = null) {
+  const failure = { code, message };
+  const omitted = { nodes: 0, relations: 0 };
   return {
     schemaVersion: QUERY_SCHEMA_VERSION,
     status: 'failed',
@@ -145,14 +154,36 @@ function failureResult(snapshotVersion, query, code, message) {
     query,
     nodes: [],
     relations: [],
-    omitted: { nodes: 0, relations: 0 },
+    omitted,
     complete: false,
     continuation: null,
-    failure: { code, message },
-    provenance: {
-      kind: 'subgraph-query',
+    failure,
+    provenance: createResultProvenance({
       snapshotVersion,
-      query: clone(query),
+      scope,
+      query,
+      status: 'failed',
+      complete: false,
+      omitted,
+      continuation: null,
+      failure,
+    }),
+  };
+}
+
+function createResultProvenance({ snapshotVersion, scope, query, status, complete, omitted, continuation, failure }) {
+  return {
+    kind: 'subgraph-query',
+    schemaVersion: QUERY_SCHEMA_VERSION,
+    snapshotVersion,
+    scope: clone(scope),
+    query: clone(query),
+    result: {
+      status,
+      complete,
+      omitted: clone(omitted),
+      continuation: clone(continuation),
+      failure: clone(failure),
     },
   };
 }
@@ -211,5 +242,6 @@ function compareRelations(left, right) {
 }
 
 function clone(value) {
+  if (value === null || value === undefined) return value;
   return JSON.parse(JSON.stringify(value));
 }

@@ -52,6 +52,44 @@ test('preserves explicit page-link relations and their declaring evidence', () =
     .every((relation) => relation.provenance.sourcePagePath.startsWith('wiki/')));
 });
 
+test('attaches structured provenance to nodes and both relation layers', () => {
+  const snapshot = generateMapSnapshot({ wikiRoot, generatedAt: '2026-08-02T00:00:00.000Z' });
+  const node = snapshot.nodes.find((candidate) => candidate.id === 'claude-code');
+  const explicit = snapshot.relations.find(
+    (relation) => relation.from === 'claude-code' && relation.to === 'skill',
+  );
+  const inferred = snapshot.relations.find((relation) => relation.layer === 'semantic-exploration');
+
+  assert.equal(snapshot.manifest.provenance.schemaVersion, 1);
+  assert.equal(snapshot.manifest.provenance.generation.mapVersion, snapshot.manifest.mapVersion);
+  assert.equal(node.provenance.kind, 'wiki-page');
+  assert.deepEqual(node.provenance.page, {
+    id: 'claude-code',
+    path: 'wiki/concepts/claude-code.md',
+    contentHash: node.contentHash,
+  });
+  assert.equal(node.provenance.generation.scopeId, snapshot.manifest.scope.id);
+  assert.equal(node.provenance.generation.mapVersion, snapshot.manifest.mapVersion);
+
+  assert.equal(explicit.provenance.kind, 'explicit-page-link');
+  assert.deepEqual(explicit.provenance.sourcePage, {
+    id: 'claude-code',
+    path: 'wiki/concepts/claude-code.md',
+    contentHash: node.contentHash,
+  });
+  assert.equal(explicit.provenance.targetPage.id, 'skill');
+  assert.match(explicit.provenance.targetPage.path, /^wiki\//);
+  assert.ok(explicit.provenance.declarations.every((declaration) => declaration.field));
+  assert.equal(explicit.provenance.generation.mapVersion, snapshot.manifest.mapVersion);
+
+  assert.equal(inferred.provenance.kind, 'inferred-semantic');
+  assert.equal(inferred.provenance.embedding.configuration.backend, 'deterministic-token-hash');
+  assert.equal(inferred.provenance.embedding.inputHashes[inferred.from].length, 64);
+  assert.equal(inferred.provenance.projection.algorithm, 'seeded-random-projection-v1');
+  assert.equal(inferred.provenance.relationPolicy.similarityThreshold, 0.18);
+  assert.equal(inferred.provenance.generation.mapVersion, snapshot.manifest.mapVersion);
+});
+
 test('rebuilds the same snapshot identity for the same input and generation time', () => {
   const options = { wikiRoot, generatedAt: '2026-08-02T00:00:00.000Z' };
   const first = generateMapSnapshot(options);

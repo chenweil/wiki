@@ -29,6 +29,7 @@
     .section-title { display: flex; justify-content: space-between; align-items: center; color: #8795aa; }
     .section-title small { color: #64738b; }
     .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+    .visibility-modes { display: flex; gap: 6px; }
     .filter, .node-row, .relation { border: 1px solid transparent; background: transparent; cursor: pointer; text-align: left; }
     .filter { border-color: #2b394c; border-radius: 999px; padding: 6px 9px; color: #aab6c8; font-size: 11px; }
     .filter.active { background: #1b3354; border-color: #487ab9; color: #e8f1ff; }
@@ -56,7 +57,9 @@
     svg { width: 100%; height: 100%; min-height: 610px; display: block; }
     .edge { stroke: #6e89ad99; stroke-width: 1.25; }
     .edge.semantic { stroke: #b28cff99; stroke-dasharray: 5 5; }
+    .edge.dimmed { opacity: .18; }
     .node { cursor: pointer; outline: none; }
+    .node.dimmed { opacity: .3; }
     .node circle, .node rect, .node path { fill: var(--color); stroke: #e6edf3; stroke-width: 1.2; opacity: .9; }
     .node:hover circle, .node:hover rect, .node:hover path, .node:focus circle, .node:focus rect, .node:focus path { stroke-width: 3; }
     .node.selected circle, .node.selected rect, .node.selected path { stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 9px var(--color)); }
@@ -88,7 +91,7 @@
   <script type="module">
     import { querySubgraph } from './graph-query.mjs';
 
-    const state = { snapshot: null, queryResult: null, selected: null, query: '', type: 'all', layers: { 'page-link': true, 'semantic-exploration': true }, depth: 1, relationBudget: 3 };
+    const state = { snapshot: null, queryResult: null, selected: null, query: '', type: 'all', visibilityMode: 'focus', layers: { 'page-link': true, 'semantic-exploration': true }, depth: 1, relationBudget: 3 };
     const typeLabels = { concept: 'CONCEPT', source: 'SOURCE', synthesis: 'SYNTHESIS' };
     const typeColors = { concept: '#8b7bff', source: '#65b4ff', synthesis: '#65db9c' };
     const layerLabels = { 'page-link': '显式页面链接', 'semantic-exploration': '语义探索' };
@@ -102,21 +105,23 @@
     const relationIsVisible = (relation) => state.layers[relation.layer] !== false;
     const relationsFor = (id) => (state.queryResult?.relations || []).filter((relation) => relationIsVisible(relation) && (relation.from === id || relation.to === id));
     const relationCount = (layer) => state.snapshot.relations.filter((relation) => relation.layer === layer).length;
-    const filteredNodes = () => state.snapshot.nodes.filter((node) => {
+    const activeFilters = () => ({
+      ...(state.type === 'all' ? {} : { types: [state.type] }),
+      ...(state.query.trim() ? { text: state.query.trim() } : {}),
+    });
+    const nodeMatchesFilter = (node) => {
       const query = state.query.trim().toLowerCase();
       const matchesType = state.type === 'all' || node.type === state.type;
       const haystack = [node.title, node.description, node.summary, ...(node.tags || [])].join(' ').toLowerCase();
       return matchesType && (!query || haystack.includes(query));
-    });
+    };
+    const filteredNodes = () => state.snapshot.nodes.filter(nodeMatchesFilter);
     const colorFor = (node) => typeColors[node.type] || '#9aa7bb';
     const pageHref = (node) => `page.html?path=${encodeURIComponent(node.pagePath)}&title=${encodeURIComponent(node.title)}`;
     const statusLabel = (node) => node.status === 'unlocated' ? 'UNLOCATED' : 'LOCATED';
 
     function queryFilters() {
-      return {
-        ...(state.type === 'all' ? {} : { types: [state.type] }),
-        ...(state.query.trim() ? { text: state.query.trim() } : {}),
-      };
+      return state.visibilityMode === 'strict' ? activeFilters() : {};
     }
 
     function executeQuery() {
@@ -156,9 +161,15 @@
         <div class="section-title"><h2>知识节点</h2><small>${visible.length}/${state.snapshot.nodes.length}</small></div>
         <input id="search" class="search" value="${escapeHtml(state.query)}" placeholder="搜索标题、标签或摘要…" aria-label="搜索知识节点">
         <div class="filters">${types.map((type) => `<button class="filter ${state.type === type ? 'active' : ''}" data-type="${type}">${type === 'all' ? '全部' : typeLabels[type]}</button>`).join('')}</div>
+        <div class="visibility-modes" aria-label="节点显示模式">${['focus', 'strict'].map(visibilityButton).join('')}</div>
         <div class="layer-filters" aria-label="关系层筛选">${['page-link', 'semantic-exploration'].map(layerButton).join('')}</div>
         <div class="node-list" aria-label="知识节点列表">${visible.map(nodeRow).join('') || '<p>没有匹配节点。</p>'}</div>
       </aside>`;
+    }
+
+    function visibilityButton(mode) {
+      const label = mode === 'focus' ? '聚焦模式' : '严格隐藏';
+      return `<button class="filter ${state.visibilityMode === mode ? 'active' : ''}" data-visibility-mode="${mode}" aria-pressed="${state.visibilityMode === mode}">${label}</button>`;
     }
 
     function layerButton(layer) {
@@ -166,7 +177,7 @@
     }
 
     function nodeRow(node) {
-      return `<button class="node-row ${state.selected === node.id ? 'selected' : ''} ${node.status === 'unlocated' ? 'unlocated' : ''}" data-node="${escapeHtml(node.id)}" style="--color:${colorFor(node)}">
+      return `<button class="node-row ${state.selected === node.id ? 'selected' : ''} ${node.status === 'unlocated' ? 'unlocated' : ''}" data-node="${escapeHtml(node.id)}" aria-current="${state.selected === node.id}" style="--color:${colorFor(node)}">
         <span class="node-dot"></span><span><strong>${escapeHtml(node.title)}</strong><small>${escapeHtml(typeLabels[node.type] || node.type)} · ${escapeHtml(statusLabel(node))} · ${escapeHtml((node.tags || []).slice(0, 2).join(' · '))}</small></span><span class="node-count">${relationsFor(node.id).length}</span>
       </button>`;
     }
@@ -184,12 +195,21 @@
       const unlocatedCount = visible.length - located.length;
       const querySummary = result?.failure
         ? `查询失败：${result.failure.message}`
-        : `snapshot ${result?.snapshotVersion || '未记录'} · depth ${result?.query.depth ?? '—'} · budget ${result?.query.relationBudget ?? '—'} · ${result?.status || '未查询'}`;
+        : `范围 ${result?.provenance?.scope?.label || state.snapshot.manifest.scope.label} · seed ${result?.query.seedNodeId || '—'} · layers ${result?.query.layers?.join(' + ') || '无'} · depth ${result?.query.depth ?? '—'} · budget ${result?.query.relationBudget ?? '—'} · filters ${queryFilterSummary(result)} · ${state.visibilityMode} · snapshot ${result?.snapshotVersion || '未记录'} · ${result?.status || '未查询'}`;
       return `<section class="map-column">
         <div class="panel map-toolbar"><div><div class="eyebrow">Bounded topic subgraph · semantic exploration</div><p>语义位置叠加页面关系 · ${located.length}/${visible.length} located · ${relations.length} visible relations${unlocatedCount ? ` · ${unlocatedCount} unlocated` : ''}</p><div class="query-meta"><strong>查询上下文：</strong>${escapeHtml(querySummary)}${result && !result.complete ? ` · omitted ${result.omitted.nodes} nodes / ${result.omitted.relations} relations` : ''}</div></div><div class="expand-actions">${expandActions(result)}</div></div>
         <div class="map-frame">${result?.failure ? `<div class="map-empty">${escapeHtml(result.failure.message)}</div>` : located.length ? `<svg viewBox="0 0 900 620" role="img" aria-label="知识节点关系地图"><g>${relations.map((relation) => edgeSvg(relation, ids)).join('')}</g><g>${located.map(nodeSvg).join('')}</g></svg>` : '<div class="map-empty">当前子图没有获得语义位置</div>'}</div>
-        <div class="legend"><span><i class="legend-dot" style="--color:#6e89ad"></i>显式页面链接</span><span><i class="legend-dot" style="--color:#b28cff"></i>语义探索</span><span>点击节点或使用列表定位</span></div>
+        <div class="legend"><span><i class="legend-dot" style="--color:#6e89ad"></i>显式页面链接</span><span><i class="legend-dot" style="--color:#b28cff"></i>语义探索</span><span>${state.visibilityMode === 'focus' ? '聚焦模式：不匹配节点降权' : '严格隐藏：只显示匹配节点'}</span></div>
       </section>`;
+    }
+
+    function queryFilterSummary(result) {
+      const filters = result?.query?.filters || {};
+      return [
+        ...(filters.types || []).map((type) => `type:${type}`),
+        ...(filters.statuses || []).map((status) => `status:${status}`),
+        ...(filters.text ? [`text:${filters.text}`] : []),
+      ].join(', ') || '无';
     }
 
     function expandActions(result) {
@@ -214,7 +234,8 @@
       const basis = relation.layer === 'semantic-exploration'
         ? relation.provenance?.basis?.label || '语义相似度'
         : '页面已声明链接';
-      return `<line class="edge ${edgeClass}" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" aria-label="${escapeHtml(from.title)} 到 ${escapeHtml(to.title)}：${escapeHtml(basis)}"><title>${escapeHtml(basis)}</title></line>`;
+      const dimmed = state.visibilityMode === 'focus' && (!nodeMatchesFilter(from) || !nodeMatchesFilter(to)) ? ' dimmed' : '';
+      return `<line class="edge ${edgeClass}${dimmed}" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" aria-label="${escapeHtml(from.title)} 到 ${escapeHtml(to.title)}：${escapeHtml(basis)}"><title>${escapeHtml(basis)}</title></line>`;
     }
 
     function nodeSvg(node) {
@@ -222,20 +243,24 @@
       const point = position(node); const shape = node.type === 'source'
         ? `<rect x="-10" y="-10" width="20" height="20" rx="4" transform="rotate(45)"></rect>`
         : node.type === 'synthesis' ? '<path d="M0 -13 L12 0 L0 13 L-12 0 Z"></path>' : '<circle r="12"></circle>';
-      return `<g class="node ${state.selected === node.id ? 'selected' : ''}" data-node="${escapeHtml(node.id)}" tabindex="0" role="button" aria-label="选择 ${escapeHtml(node.title)}" transform="translate(${point.x} ${point.y})" style="--color:${colorFor(node)}"><g>${shape}</g><text y="31">${escapeHtml(node.title.length > 18 ? `${node.title.slice(0, 17)}…` : node.title)}</text></g>`;
+      const dimmed = state.visibilityMode === 'focus' && !nodeMatchesFilter(node) ? 'dimmed' : '';
+      return `<g class="node ${state.selected === node.id ? 'selected' : ''} ${dimmed}" data-node="${escapeHtml(node.id)}" tabindex="0" role="button" aria-pressed="${state.selected === node.id}" aria-label="选择 ${escapeHtml(node.title)}" transform="translate(${point.x} ${point.y})" style="--color:${colorFor(node)}"><g>${shape}</g><text y="31">${escapeHtml(node.title.length > 18 ? `${node.title.slice(0, 17)}…` : node.title)}</text></g>`;
     }
 
     function details(node) {
       if (!node) return '<aside class="panel details"><p>选择一个知识节点查看详情。</p></aside>';
       const relations = relationsFor(node.id);
+      const page = node.provenance?.page || { id: node.id, path: node.pagePath, contentHash: node.contentHash };
+      const generation = node.provenance?.generation || { mapVersion: state.snapshot.manifest.mapVersion };
       return `<aside class="panel details">
         <div class="detail-header"><div><div class="type">${escapeHtml(typeLabels[node.type] || node.type)}</div><h2>${escapeHtml(node.title)}</h2></div><span class="pill">${escapeHtml(statusLabel(node))}</span></div>
         <p>${escapeHtml(node.summary || node.description || '暂无摘要。')}</p>
         <div class="chips">${(node.tags || []).map((tag) => `<span class="chip">#${escapeHtml(tag)}</span>`).join('')}</div>
         ${node.status === 'unlocated' ? `<p class="location-error">语义位置生成失败：${escapeHtml(node.locationError || '未记录原因')}。节点仍保留在列表和详情中，未伪造坐标。</p>` : ''}
         <div class="detail-block"><h3>来源</h3>${sourceRows(node)}</div>
-        <div class="detail-block"><h3>页面 provenance</h3><p class="source-line">${escapeHtml(node.pagePath)}</p><p class="source-line">sha256:${escapeHtml(node.contentHash)}</p><p>更新时间：${escapeHtml(node.updated || '未记录')}</p></div>
+        <div class="detail-block"><h3>页面 provenance</h3><p class="source-line">页面身份：${escapeHtml(page.id)}</p><p class="source-line">Wiki 页面：${escapeHtml(page.path)}</p><p class="source-line">sha256:${escapeHtml(page.contentHash)}</p><p class="source-line">生成引用：${escapeHtml(generation.mapVersion || state.snapshot.manifest.mapVersion)}</p><p>更新时间：${escapeHtml(node.updated || '未记录')}</p></div>
         <div class="detail-block"><h3>可见关系 · ${relations.length}</h3>${relations.length ? relations.map((relation) => relationRow(relation, node.id)).join('') : '<p>当前筛选关系层中没有可见关系。</p>'}</div>
+        <div class="detail-block"><h3>子图查询 provenance</h3>${queryProvenanceRows(state.queryResult)}</div>
         <div class="detail-block"><h3>地图快照</h3><p class="source-line">${escapeHtml(state.snapshot.manifest.mapVersion)}</p><p>关系层：${escapeHtml(activeLayerSummary())}</p><p>语义后端：${escapeHtml(state.snapshot.manifest.generation.embedding?.backend || '未记录')}</p></div>
         <a class="open-page" href="${pageHref(node)}">打开原始 Wiki 页面 ↗</a>
       </aside>`;
@@ -243,6 +268,19 @@
 
     function activeLayerSummary() {
       return ['page-link', 'semantic-exploration'].filter((layer) => state.layers[layer]).map((layer) => layerLabels[layer]).join(' + ') || '无';
+    }
+
+    function queryProvenanceRows(result) {
+      if (!result) return '<p>暂无子图查询结果。</p>';
+      const scope = result.provenance?.scope || state.snapshot.manifest.scope || { id: 'unknown', label: '未记录' };
+      const query = result.query || {};
+      const resultState = result.provenance?.result || {};
+      const continuation = result.continuation?.actions?.map((action) => action.kind === 'expand-depth'
+        ? `展开到 ${action.query.depth} 层`
+        : `增加关系预算到 ${action.query.relationBudget}`).join(' / ') || '无';
+      const failure = result.failure?.message || resultState.failure?.message;
+      const completeness = result.status === 'failed' ? 'failed' : result.complete ? 'complete' : 'partial';
+      return `<p class="source-line">范围：${escapeHtml(scope.id)} · ${escapeHtml(scope.label || '未命名')}</p><p class="source-line">seed：${escapeHtml(query.seedNodeId || '未记录')} · layers：${escapeHtml((query.layers || []).join(' + ') || '无')}</p><p>展开深度：${escapeHtml(query.depth ?? '—')} · 关系预算：${escapeHtml(query.relationBudget ?? '—')} · filters：${escapeHtml(queryFilterSummary(result))}</p><p>快照：${escapeHtml(result.snapshotVersion || '未记录')} · 状态：${escapeHtml(resultState.status || result.status || '未记录')} · ${completeness}</p><p>省略：${escapeHtml(result.omitted.nodes)} nodes / ${escapeHtml(result.omitted.relations)} relations · continuation：${escapeHtml(continuation)}</p>${failure ? `<p class="location-error">失败：${escapeHtml(failure)}</p>` : ''}`;
     }
 
     function sourceRows(node) {
@@ -263,16 +301,22 @@
       const declarations = Array.isArray(provenance.declarations) ? provenance.declarations : [];
       const declaration = declarations.map((item) => item.kind === 'source' ? 'sources' : 'wikilink').join(' + ') || '未记录';
       const fields = [...new Set(declarations.map((item) => item.field).filter(Boolean))].join(' + ') || '未记录';
-      const sourcePagePath = provenance.sourcePagePath || '未记录';
-      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${colorFor(target)}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>显式 · ${escapeHtml(declaration)}</small><span class="basis">声明页：${escapeHtml(sourcePagePath)} · 字段：${escapeHtml(fields)}</span></span></button>`;
+      const sourcePage = provenance.sourcePage || {};
+      const sourcePagePath = sourcePage.path || provenance.sourcePagePath || '未记录';
+      const sourcePageId = sourcePage.id || provenance.sourceNodeId || '未记录';
+      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${colorFor(target)}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>显式 · ${escapeHtml(declaration)}</small><span class="basis">声明页：${escapeHtml(sourcePageId)} · ${escapeHtml(sourcePagePath)} · 字段：${escapeHtml(fields)}</span></span></button>`;
     }
 
     function semanticRelationRow(relation, target) {
       const basis = relation.provenance?.basis || {};
       const embedding = relation.provenance?.embedding || {};
+      const configuration = embedding.configuration || {};
+      const projection = relation.provenance?.projection || {};
+      const relationPolicy = relation.provenance?.relationPolicy || {};
       const score = Number.isFinite(basis.score) ? ` · 相似度 ${basis.score.toFixed(3)}` : '';
       const backend = [embedding.backend, embedding.model, embedding.version].filter(Boolean).join(' · ') || '未记录';
-      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${layerColors['semantic-exploration']}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>推断 · 语义探索</small><span class="basis">依据：${escapeHtml(basis.label || '语义相似度')}${escapeHtml(score)}</span><span class="basis">生成：${escapeHtml(backend)}</span></span></button>`;
+      const configLabel = [configuration.dimensions ? `${configuration.dimensions}d` : '', configuration.seed ? `seed:${configuration.seed}` : '', projection.algorithm || '', Number.isFinite(relationPolicy.similarityThreshold) ? `threshold:${relationPolicy.similarityThreshold}` : ''].filter(Boolean).join(' · ') || '未记录';
+      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${layerColors['semantic-exploration']}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>推断 · 语义探索</small><span class="basis">依据：${escapeHtml(basis.label || '语义相似度')}${escapeHtml(score)}</span><span class="basis">生成：${escapeHtml(backend)}</span><span class="basis">配置：${escapeHtml(configLabel)}</span></span></button>`;
     }
 
     function bind() {
@@ -285,6 +329,12 @@
       });
       document.querySelectorAll('[data-type]').forEach((button) => button.addEventListener('click', () => {
         state.type = button.dataset.type;
+        ensureSelectedMatch();
+        executeQuery();
+        render();
+      }));
+      document.querySelectorAll('[data-visibility-mode]').forEach((button) => button.addEventListener('click', () => {
+        state.visibilityMode = button.dataset.visibilityMode;
         ensureSelectedMatch();
         executeQuery();
         render();
@@ -308,6 +358,23 @@
         element.addEventListener('click', select);
         element.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } });
       });
+      document.querySelectorAll('.node-row').forEach((element) => element.addEventListener('keydown', (event) => {
+        const rows = [...document.querySelectorAll('.node-row')];
+        const currentIndex = rows.indexOf(element);
+        const offset = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : event.key === 'Home' ? -currentIndex : event.key === 'End' ? rows.length - currentIndex - 1 : 0;
+        if (!offset) return;
+        event.preventDefault();
+        const target = rows[currentIndex + offset];
+        if (!target) return;
+        state.selected = target.dataset.node;
+        executeQuery();
+        render();
+        focusNodeElement(target.dataset.node);
+      }));
+    }
+
+    function focusNodeElement(nodeId) {
+      [...document.querySelectorAll('[data-node]')].find((element) => element.dataset.node === nodeId)?.focus();
     }
 
     function ensureSelectedMatch() {

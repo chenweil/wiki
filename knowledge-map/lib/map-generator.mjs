@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 export const MAP_SCHEMA_VERSION = 1;
+export const PROVENANCE_SCHEMA_VERSION = 1;
 
 export const DEFAULT_SEMANTIC_OPTIONS = Object.freeze({
   relationBudget: 3,
@@ -105,6 +106,9 @@ export function generateMapSnapshot({
     similarityThreshold: normalizedSemanticOptions.similarityThreshold,
   };
   const mapVersion = `map-v${MAP_SCHEMA_VERSION}-${hash(identity).slice(0, 16)}`;
+  const generation = { mapVersion, generatedAt, scopeId: scope.id };
+  for (const node of nodes) node.provenance.generation = generation;
+  for (const relation of relations) relation.provenance.generation = generation;
 
   return {
     schemaVersion: MAP_SCHEMA_VERSION,
@@ -128,6 +132,11 @@ export function generateMapSnapshot({
           similarityThreshold: normalizedSemanticOptions.similarityThreshold,
         },
         layers: ['page-link', 'semantic-exploration'],
+      },
+      provenance: {
+        schemaVersion: PROVENANCE_SCHEMA_VERSION,
+        sourceBoundary: 'wiki',
+        generation,
       },
     },
     nodes,
@@ -278,6 +287,14 @@ function createNode(record) {
     pagePath: record.pagePath,
     contentHash: record.contentHash,
     position: null,
+    provenance: {
+      kind: 'wiki-page',
+      page: {
+        id: record.slug,
+        path: record.pagePath,
+        contentHash: record.contentHash,
+      },
+    },
   };
 }
 
@@ -311,6 +328,7 @@ function createSemanticLayer({
     vectors,
     explicitRelations,
     embeddingConfig,
+    projection: semanticOptions.projection,
     relationBudget: semanticOptions.relationBudget,
     similarityThreshold: semanticOptions.similarityThreshold,
   });
@@ -358,6 +376,7 @@ function createSemanticRelations({
   vectors,
   explicitRelations,
   embeddingConfig,
+  projection,
   relationBudget,
   similarityThreshold,
 }) {
@@ -390,8 +409,11 @@ function createSemanticRelations({
       layer: 'semantic-exploration',
       score,
       provenance: {
+        kind: 'inferred-semantic',
         sourceNodeId: candidate.from,
         targetNodeId: candidate.to,
+        sourcePage: pageIdentity(nodesById.get(candidate.from)),
+        targetPage: pageIdentity(nodesById.get(candidate.to)),
         basis: {
           kind: 'semantic-similarity',
           label: 'cosine similarity in the local deterministic embedding space',
@@ -405,7 +427,10 @@ function createSemanticRelations({
             [candidate.from]: nodesById.get(candidate.from).contentHash,
             [candidate.to]: nodesById.get(candidate.to).contentHash,
           },
+          configuration: { ...embeddingConfig },
         },
+        projection: { ...projection, dimensions: 2 },
+        relationPolicy: { relationBudget, similarityThreshold },
       },
     }];
   });
@@ -436,9 +461,12 @@ function createExplicitRelations(records, nodesBySlug) {
         kind: 'explicit',
         layer: 'page-link',
         provenance: {
+          kind: 'explicit-page-link',
           sourceNodeId: record.slug,
           sourcePagePath: nodesBySlug.get(record.slug).pagePath,
+          sourcePage: pageIdentity(nodesBySlug.get(record.slug)),
           targetNodeId: declaration.target,
+          targetPage: pageIdentity(nodesBySlug.get(declaration.target)),
           declarations: [],
         },
       };
@@ -539,6 +567,14 @@ function firstHeading(body) {
 function hash(value) {
   const input = typeof value === 'string' ? value : JSON.stringify(value);
   return createHash('sha256').update(input).digest('hex');
+}
+
+function pageIdentity(node) {
+  return {
+    id: node.id,
+    path: node.pagePath,
+    contentHash: node.contentHash,
+  };
 }
 
 function toPosix(value) {

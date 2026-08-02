@@ -33,6 +33,25 @@ test('returns a versioned bounded initial subgraph with continuation metadata', 
   assert.ok(result.relations.every((relation) => result.nodes.some((node) => node.id === relation.to)));
 });
 
+test('records query scope and bounded result state in structured provenance', () => {
+  const snapshot = generateMapSnapshot({ wikiRoot, generatedAt: '2026-08-02T00:00:00.000Z' });
+  const result = querySubgraph(snapshot, {
+    seedNodeId: 'claude-code-engineering-map',
+    layers: ['page-link'],
+    depth: 0,
+    relationBudget: 1,
+  });
+
+  assert.deepEqual(result.provenance.scope, snapshot.manifest.scope);
+  assert.equal(result.provenance.snapshotVersion, snapshot.manifest.mapVersion);
+  assert.deepEqual(result.provenance.query, result.query);
+  assert.equal(result.provenance.result.status, result.status);
+  assert.equal(result.provenance.result.complete, result.complete);
+  assert.deepEqual(result.provenance.result.omitted, result.omitted);
+  assert.deepEqual(result.provenance.result.continuation, result.continuation);
+  assert.equal(result.provenance.result.failure, null);
+});
+
 test('repeats the same query stably without mutating the immutable snapshot', () => {
   const snapshot = generateMapSnapshot({ wikiRoot, generatedAt: '2026-08-02T00:00:00.000Z' });
   const before = JSON.stringify(snapshot);
@@ -69,6 +88,8 @@ test('returns explicit failure provenance for invalid or filtered queries', () =
   assert.equal(invalidLayer.failure.code, 'invalid-query');
   assert.equal(filteredSeed.failure.code, 'seed-filtered');
   assert.equal(filteredSeed.nodes.length, 0);
+  assert.equal(filteredSeed.provenance.result.failure.code, 'seed-filtered');
+  assert.deepEqual(filteredSeed.provenance.scope, snapshot.manifest.scope);
 });
 
 test('expanding the same seed preserves the current subgraph and adds bounded neighbors', () => {
