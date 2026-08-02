@@ -18,14 +18,22 @@ python3 -m http.server 8787
 
 浏览器地址：`http://127.0.0.1:8787/knowledge-map/dist/`
 
+不要直接用 `file://` 打开 `knowledge-map/viewer/index.html`。它是生成模板，依赖生成后的 `dist/map.json` 和 `dist/graph-query.mjs`；直接打开会被浏览器的 `file:` 安全策略阻止。根目录的 `favicon.ico` 会由正式 HTTP 入口加载。
+
 测试：
 
 ```bash
 node --test knowledge-map/tests/*.test.mjs
 ```
 
+首屏地图布局的真实浏览器检查（需要 `PLAYWRIGHT_CLI` 指向 Playwright CLI wrapper）：
+
+```bash
+PLAYWRIGHT_CLI=/path/to/playwright_cli.sh bash knowledge-map/tests/viewer-layout-check.sh
+```
+
 地图是只读的。生成过程不扫描 `raw/`、Obsidian 或 IMA，也不接入 Hermes Studio。显式页面链接和语义探索可以在查看器左侧独立切换，详情会显示语义关系的 basis、backend 和版本信息。
 
-T03 的初始查询默认从 `claude-code-engineering-map` 展开 1 层，用户可以使用“展开到下一层”或“增加关系预算”。查询结果显示 `snapshotVersion`、depth、budget、omitted counts 和 partial/complete 状态；展开使用内存中的快照，不重新加载整张地图。
+T03 的初始查询默认从 `claude-code-engineering-map` 展开 1 层，用户可以使用“展开到下一层”“收起到上一层”或“增加关系预算”；“重置查询”会把 depth 和 budget 恢复为默认值。查询结果显示 `snapshotVersion`、depth、budget、omitted counts 和 partial/complete 状态；所有查询都使用内存中的快照，不重新加载整张地图。
 
 T04 为节点、显式关系、语义关系、manifest 和子图结果补充结构化 provenance：详情可以回溯 Wiki 页面身份、内容 hash、声明字段、embedding/projection 配置、查询范围和生成快照。B Navigator 默认使用“聚焦模式”保留 bounded subgraph 上下文，也可以切换“严格隐藏”；搜索、列表、地图、详情、关系层筛选和键盘方向键共享同一选择状态。整个 viewer 仍然只读，不写入 Wiki、`raw/`、来源台账、Obsidian 或 IMA。

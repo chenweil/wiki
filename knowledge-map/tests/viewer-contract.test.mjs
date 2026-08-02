@@ -19,4 +19,8 @@ test('exposes the synchronized B Navigator acceptance controls', async () => {
   assert.match(viewer, /ArrowUp/);
   assert.match(viewer, /node\.provenance/);
   assert.match(viewer, /result\.provenance/);
+  assert.match(viewer, /data-query-control="decrease-depth"/);
+  assert.match(viewer, /data-query-control="reset-query"/);
+  assert.match(viewer, /收起到/);
+  assert.match(viewer, /重置查询/);
 });
