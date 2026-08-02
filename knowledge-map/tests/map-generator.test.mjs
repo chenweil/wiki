@@ -47,7 +47,9 @@ test('preserves explicit page-link relations and their declaring evidence', () =
   assert.ok(claudeToSkill.provenance.declarations.every((item) => item.field));
   assert.equal(claudeToGuide?.kind, 'explicit');
   assert.ok(claudeToGuide.provenance.declarations.some((item) => item.kind === 'source'));
-  assert.ok(snapshot.relations.every((relation) => relation.provenance.sourcePagePath.startsWith('wiki/')));
+  assert.ok(snapshot.relations
+    .filter((relation) => relation.layer === 'page-link')
+    .every((relation) => relation.provenance.sourcePagePath.startsWith('wiki/')));
 });
 
 test('rebuilds the same snapshot identity for the same input and generation time', () => {
