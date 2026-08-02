@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyWiki Knowledge Atlas — Prototype</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b0f18; --panel:#151c2a; --panel2:#101621; --line:#273247; --text:#edf2ff; --muted:#91a0b8; --accent:#9c8cff; --teal:#62dec3; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--text); background:radial-gradient(circle at 75% 15%,#22324b 0,transparent 28rem),radial-gradient(circle at 10% 85%,#211b42 0,transparent 30rem),var(--bg); font:14px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button,input { font:inherit; }
+    button { color:inherit; cursor:pointer; }
+    .app { max-width:1500px; margin:auto; padding:24px 28px 82px; }
+    .top { display:flex; justify-content:space-between; align-items:center; gap:20px; margin-bottom:18px; }
+    .brand { display:flex; align-items:center; gap:11px; }
+    .mark { width:32px; height:32px; border-radius:11px; background:linear-gradient(135deg,var(--accent),var(--teal)); box-shadow:0 0 30px #8479ff66; }
+    .eyebrow { color:var(--teal); font-size:11px; letter-spacing:.15em; text-transform:uppercase; }
+    h1,h2,h3,p { margin:0; }
+    h1 { font-size:20px; letter-spacing:-.03em; }
+    .pill,.stat,.chip { border:1px solid var(--line); border-radius:999px; color:var(--muted); background:#ffffff08; padding:7px 10px; font-size:12px; }
+    .pill strong,.stat strong { color:var(--text); }
+    .shell { display:grid; grid-template-columns:220px minmax(0,1fr); gap:16px; }
+    .panel { background:linear-gradient(145deg,#1b2435ee,#101621ee); border:1px solid var(--line); border-radius:20px; box-shadow:0 22px 70px #0006; }
+    .side { padding:17px; }
+    .side h2 { margin:18px 0 8px; color:var(--muted); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+    .side h2:first-child { margin-top:0; }
+    .filter { display:flex; align-items:center; gap:8px; width:100%; padding:9px 8px; border:1px solid transparent; border-radius:10px; background:transparent; text-align:left; color:var(--muted); }
+    .filter:hover,.filter.active { color:var(--text); background:#9c8cff18; border-color:#9c8cff5c; }
+    .filter em { margin-left:auto; color:var(--muted); font-size:11px; font-style:normal; }
+    .dot { width:8px; height:8px; flex:0 0 auto; border-radius:50%; background:var(--dot,#9c8cff); }
+    .main { min-width:0; display:flex; flex-direction:column; gap:15px; }
+    .intro { display:flex; justify-content:space-between; align-items:end; gap:20px; }
+    .intro p { max-width:690px; margin-top:7px; color:var(--muted); font-size:13px; }
+    .toolbar { padding:15px; }
+    .row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .search { min-width:230px; flex:1; border:1px solid var(--line); border-radius:11px; background:#080c14aa; color:var(--text); padding:11px 13px; outline:none; }
+    .search:focus { border-color:var(--accent); box-shadow:0 0 0 3px #9c8cff22; }
+    .action { border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:#ffffff08; }
+    .action:hover { background:#9c8cff20; border-color:#9c8cff88; }
+    .stats { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .stat strong { margin-right:4px; font-size:15px; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:15px; min-height:620px; }
+    .map { position:relative; overflow:hidden; min-height:620px; border-radius:16px; border:1px solid #31405b; background:radial-gradient(circle at 50% 45%,#293950aa,transparent 62%),#090d15; }
+    svg { display:block; width:100%; min-height:620px; }
+    .map-title { position:absolute; top:14px; left:16px; color:var(--muted); font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+    .map-foot { position:absolute; left:16px; bottom:14px; display:flex; gap:7px; flex-wrap:wrap; }
+    .map-foot span { color:var(--muted); background:#080c14bb; border:1px solid var(--line); border-radius:8px; padding:5px 8px; font-size:11px; }
+    .edge { stroke:#6d7f9c66; stroke-width:1.4; }
+    .edge.inferred { stroke:#bd91ff99; stroke-dasharray:5 5; }
+    .node { cursor:pointer; }
+    .node circle,.node rect,.node path { fill:var(--node); stroke:#ffffff55; stroke-width:1.5; }
+    .node:hover circle,.node:hover rect,.node:hover path,.node.selected circle,.node.selected rect,.node.selected path { stroke:#fff; stroke-width:3; filter:drop-shadow(0 0 8px var(--node)); }
+    .node.selected::before { content:""; }
+    .node text { fill:#cbd5e8; font-size:11px; text-anchor:middle; pointer-events:none; }
+    .cluster-label { fill:#71819b; font-size:11px; letter-spacing:.16em; text-anchor:middle; }
+    .detail { padding:20px; min-width:0; }
+    .detail.empty { display:grid; place-items:center; color:var(--muted); }
+    .detail h2 { margin:8px 0 10px; font-size:23px; line-height:1.12; }
+    .detail p { color:#b8c4d9; font-size:13px; line-height:1.65; }
+    .detail .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+    .detail-section { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+    .detail-section h3 { margin-bottom:8px; color:var(--muted); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+    .relation { display:flex; align-items:center; gap:7px; width:100%; padding:7px 0; border:0; background:transparent; text-align:left; font-size:12px; }
+    .relation:hover { color:#fff; }
+    .relation small { margin-left:auto; color:var(--muted); }
+    .basis { margin:0 0 6px 15px; color:#c4a8ff; font-size:10px; }
+    .open { display:inline-block; margin-top:18px; padding:10px 12px; border-radius:10px; color:#0b0f18; background:linear-gradient(135deg,#afa4ff,#72e6ce); font-size:12px; font-weight:700; text-decoration:none; }
+    .list-first { display:grid; grid-template-columns:300px minmax(0,1fr); gap:15px; min-height:620px; }
+    .map-side { display:grid; grid-template-columns:minmax(0,1fr) 290px; gap:15px; min-width:0; }
+    .list { padding:13px; overflow:auto; max-height:620px; }
+    .node-row { display:flex; align-items:center; gap:9px; width:100%; padding:10px 8px; border:1px solid transparent; border-radius:11px; background:transparent; text-align:left; }
+    .node-row:hover,.node-row.active { background:#9c8cff18; border-color:#9c8cff55; }
+    .node-row strong { display:block; font-size:12px; line-height:1.3; }
+    .node-row small { display:block; margin-top:3px; color:var(--muted); font-size:10px; }
+    .glyph { display:grid; place-items:center; width:23px; height:23px; flex:0 0 auto; color:var(--node); border:1px solid var(--node); background:#ffffff08; }
+    .glyph.concept { border-radius:50%; }
+    .glyph.source { border-radius:6px; transform:rotate(45deg); }
+    .glyph.source span { transform:rotate(-45deg); }
+    .glyph.synthesis { border-radius:6px; }
+    .clusters { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:15px; }
+    .cluster { min-height:260px; padding:13px; border:1px solid var(--line); border-radius:14px; background:#080c1477; }
+    .cluster h3 { display:flex; justify-content:space-between; margin-bottom:10px; font-size:12px; }
+    .cluster h3 span { color:var(--muted); font-size:10px; font-weight:400; }
+    .cluster .node-row { margin-bottom:6px; }
+    .note { color:var(--muted); font-size:11px; line-height:1.55; }
+    .legend { display:flex; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:11px; }
+    .legend i { display:inline-block; width:20px; margin-right:5px; border-top:2px solid var(--teal); vertical-align:middle; }
+    .legend i.dash { border-top-style:dashed; border-color:#bd91ff; }
+    .switcher { position:fixed; z-index:5; left:50%; bottom:17px; display:flex; align-items:center; gap:10px; transform:translateX(-50%); padding:8px 11px; border:1px solid #ffffff2e; border-radius:999px; background:#0d121df2; box-shadow:0 15px 45px #0008; }
+    .switcher button { width:24px; height:24px; border:0; border-radius:50%; background:transparent; color:var(--muted); }
+    .switcher button:hover { color:#fff; background:#ffffff18; }
+    .switcher strong { min-width:170px; text-align:center; font-size:11px; }
+    @media (max-width:900px) { .map-side{grid-template-columns:1fr}.map-side .detail{min-height:0} }
+    @media (max-width:1050px) { .shell{grid-template-columns:1fr}.side{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.side h2{grid-column:1/-1}.workspace,.list-first{grid-template-columns:1fr}.detail{min-height:0} }
+    @media (max-width:700px) { .app{padding:14px 12px 82px}.top,.intro{align-items:flex-start;flex-direction:column}.side{display:block}.clusters{grid-template-columns:1fr}.map,svg{min-height:500px}.switcher strong{min-width:130px} }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const nodes = [
+      {id:'claude-code',title:'Claude Code',type:'concept',theme:'claude-code',color:'#6ea8fe',summary:'终端原生的 Agent 式编程工作台，强调理解、修改、执行、验证和 Git 管理的工程循环。',tags:['claude-code','agentic-coding'],page:'../../wiki/concepts/claude-code.md'},
+      {id:'skill',title:'Skill',type:'concept',theme:'skills',color:'#61d59a',summary:'让 Agent 按需加载领域知识和工作流程的结构化能力。',tags:['skills','context-engineering'],page:'../../wiki/concepts/skill.md'},
+      {id:'skill-development',title:'Skill Development',type:'concept',theme:'skills',color:'#61d59a',summary:'把重复的领域知识、流程和工具边界沉淀为可复用、可测试的 Skill。',tags:['skills','workflow-design'],page:'../../wiki/concepts/skill-development.md'},
+      {id:'plugin',title:'Plugin',type:'concept',theme:'skills',color:'#61d59a',summary:'把 Skills、Hooks、MCP 和其他能力组合后打包分发的机制。',tags:['skills','packaging'],page:'../../wiki/concepts/plugin.md'},
+      {id:'agent-architecture',title:'Agent Architecture',type:'concept',theme:'agents',color:'#a98bff',summary:'单 Agent、Skills、Sub-Agents、Handoffs、Router 与 Loop Design 的架构地图。',tags:['agents','harness-engineering'],page:'../../wiki/concepts/agent-architecture.md'},
+      {id:'loop-design',title:'Loop Design',type:'concept',theme:'workflow',color:'#f5c75d',summary:'把 AI 工作从单轮 prompt 升级为可验证、可自运行、可自改进循环的设计方法。',tags:['workflow','ai-agents'],page:'../../wiki/concepts/loop-design.md'},
+      {id:'engineering-map',title:'Claude Code Engineering Map',type:'synthesis',theme:'claude-code',color:'#6ea8fe',summary:'整合 Claude Code、Skills、Plugins、Agent 架构和 Loop Design 的工程化知识地图。',tags:['synthesis','claude-code'],page:'../../wiki/syntheses/claude-code-engineering-map.md'},
+      {id:'agent-harness',title:'Agent Harness 综述',type:'source',theme:'harness',color:'#f28b82',summary:'用 ETCLOVG 七层框架描述 Agent 的执行、工具、上下文、生命周期、可观测性、验证和治理。',tags:['harness','verification'],page:'../../wiki/sources/agent-harness-survey.md'},
+      {id:'ai-programming',title:'浅谈 AI 编程',type:'source',theme:'workflow',color:'#f5c75d',summary:'讨论 AI 编程范式迁移、Harness 层次和 AI 接管老代码库的方法。',tags:['workflow','harness'],page:'../../wiki/sources/ai-programming-deep-dive.md'},
+      {id:'skill-trigger',title:'SKILL.md 结构与触发机制',type:'source',theme:'skills',color:'#61d59a',summary:'关于 Skill 描述、渐进式加载和语义触发机制的来源摘要。',tags:['skills','context-engineering'],page:'../../wiki/sources/obsidian-claude-code-skill-trigger.md'},
+      {id:'multi-agent',title:'Sub-Agents 到 Multi-Agent',type:'source',theme:'agents',color:'#a98bff',summary:'讨论子 Agent、上下文隔离、多 Agent 协作和并行研究的工程指南。',tags:['agents','multi-agent'],page:'../../wiki/sources/obsidian-claude-code-multi-agent-guide.md'},
+      {id:'skill-patterns',title:'Agent Skill 规范与设计模式',type:'source',theme:'skills',color:'#61d59a',summary:'总结 Skill 规范、构建循环和 Pipeline、Reviewer 等设计模式。',tags:['skills','design-patterns'],page:'../../wiki/sources/obsidian-agent-skill-spec-build-patterns.md'},
+      {id:'loop-levels',title:'The 5 Levels of Loop Design',type:'source',theme:'workflow',color:'#f5c75d',summary:'从 Prompting、Manual Loop 到 Verified Loop、Self-Running Loop 和 Autonomous Agents 的阶梯。',tags:['workflow','ai-agents'],page:'../../wiki/sources/loop-design-five-levels.md'},
+      {id:'claude-guide',title:'Claude Code 从入门到精通',type:'source',theme:'claude-code',color:'#6ea8fe',summary:'Claude Code 的工程循环、扩展机制、项目规则和多实例协作入门资料。',tags:['claude-code','agentic-coding'],page:'../../wiki/sources/claude-code-from-beginner-to-master-v2.md'},
+      {id:'hermes',title:'Hermes Agent 从入门到精通',type:'source',theme:'agents',color:'#a98bff',summary:'关于 Hermes Agent 学习循环、三层记忆、自改进 Skill 和多 Agent 编排的资料。',tags:['agents','memory'],page:'../../wiki/sources/hermes-agent-mastery.md'}
+    ];
+    const edges = [
+      ['claude-code','skill','explicit'],['claude-code','agent-architecture','explicit'],['claude-code','engineering-map','explicit'],['claude-code','claude-guide','explicit'],
+      ['skill','skill-development','explicit'],['skill','plugin','explicit'],['skill','skill-trigger','explicit'],['skill','skill-patterns','explicit'],['skill','agent-architecture','explicit'],
+      ['agent-architecture','multi-agent','explicit'],['agent-architecture','agent-harness','explicit'],['agent-architecture','loop-design','explicit'],['agent-architecture','hermes','explicit'],
+      ['loop-design','loop-levels','explicit'],['loop-design','engineering-map','explicit'],['agent-harness','ai-programming','explicit'],['engineering-map','skill-development','explicit'],['engineering-map','plugin','explicit'],
+      ['skill','agent-harness','inferred','共享 context / tooling 语义'],['loop-design','ai-programming','inferred','共享 workflow / harness 语义'],['plugin','multi-agent','inferred','共享能力组合语义'],['hermes','loop-design','inferred','共享自运行 / 自改进语义'],['skill-patterns','skill-development','inferred','共享 Skill 设计模式语义']
+    ].map(([from,to,kind,basis])=>({from,to,kind,basis}));
+    const themes = [...new Set(nodes.map(n=>n.theme))];
+    const variants = {A:'A · Map-first Atlas',B:'B · List-first Navigator',C:'C · Topic Clusters'};
+    const state = {variant:new URLSearchParams(location.search).get('variant')||'B',selected:'engineering-map',query:'',theme:'all',type:'all'};
+    if (!variants[state.variant]) state.variant='A';
+    const byId = id => nodes.find(n=>n.id===id);
+    const visible = () => nodes.filter(n=>{const text=[n.title,n.summary,n.theme,...n.tags].join(' ').toLowerCase();return (!state.query||text.includes(state.query.toLowerCase()))&&(state.theme==='all'||n.theme===state.theme)&&(state.type==='all'||n.type===state.type);});
+    const rels = id => edges.filter(e=>e.from===id||e.to===id).map(e=>({e,node:byId(e.from===id?e.to:e.from)}));
+    const label = t => ({concept:'CONCEPT',source:'SOURCE',synthesis:'SYNTHESIS'}[t]||t);
+    const glyph = n => `<span class="glyph ${n.type}" style="--node:${n.color}"><span>${n.type==='source'?'◆':n.type==='synthesis'?'✦':'●'}</span></span>`;
+    const row = n => `<button class="node-row ${state.selected===n.id?'active':''}" data-node="${n.id}" style="--node:${n.color}">${glyph(n)}<span><strong>${n.title}</strong><small>${label(n.type)} · ${rels(n.id).length} relations</small></span></button>`;
+    function detail(){const n=byId(state.selected);if(!n)return `<aside class="panel detail empty">选择一个知识节点查看详情。</aside>`;const viewer=`page.html?path=${encodeURIComponent(n.page)}&title=${encodeURIComponent(n.title)}`;return `<aside class="panel detail"><div class="eyebrow">${label(n.type)} · ${n.theme}</div><h2>${n.title}</h2><p>${n.summary}</p><div class="chips">${n.tags.map(t=>`<span class="chip">#${t}</span>`).join('')}</div><div class="detail-section"><h3>Relations · ${rels(n.id).length}</h3>${rels(n.id).map(({e,node:o})=>`<button class="relation" data-node="${o.id}"><span class="dot" style="--dot:${o.color}"></span><span>${o.title}</span><small>${e.kind}</small></button>${e.kind==='inferred'?`<div class="basis">依据：${e.basis}</div>`:''}`).join('')}</div><div class="detail-section"><h3>Page</h3><p>wiki/${n.type==='source'?'sources':n.type==='concept'?'concepts':'syntheses'}/${n.id}.md</p></div><a class="open" href="${viewer}">打开 Wiki 页面 ↗</a></aside>`;}
+    function positions(list){if(state.variant==='B')return Object.fromEntries(list.map((n,i)=>{const a=i/list.length*Math.PI*2-Math.PI/2;const r=i%3===0?145:i%3===1?230:300;return[n.id,{x:440+Math.cos(a)*r,y:315+Math.sin(a)*r*.58}]}));const columns={ 'claude-code':130,skills:310,agents:490,workflow:670,harness:830 };return Object.fromEntries(list.map((n,i)=>{if(state.variant==='C'){const same=list.filter(x=>x.theme===n.theme);const local=same.findIndex(x=>x.id===n.id);return[n.id,{x:columns[n.theme]||440,y:115+local*92}]}const a=i/list.length*Math.PI*4.8,r=75+(i%5)*48;return[n.id,{x:440+Math.cos(a)*r*1.25,y:315+Math.sin(a)*r*.7}]}));}
+    function map(){const list=visible(),ids=new Set(list.map(n=>n.id)),pos=positions(list);const lines=edges.filter(e=>ids.has(e.from)&&ids.has(e.to)).map(e=>{const a=pos[e.from],b=pos[e.to];return `<line class="edge ${e.kind}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>`}).join('');const shapes=list.map(n=>{const p=pos[n.id],s=n.type==='source'?`<rect x="-9" y="-9" width="18" height="18" rx="4" transform="rotate(45)"></rect>`:n.type==='synthesis'?`<path d="M0 -12 L10 0 L0 12 L-10 0 Z"></path>`:`<circle r="11"></circle>`;return `<g class="node ${state.selected===n.id?'selected':''}" data-node="${n.id}" transform="translate(${p.x} ${p.y})" style="--node:${n.color}"><g>${s}</g><text y="28">${n.title.length>18?n.title.slice(0,17)+'…':n.title}</text></g>`}).join('');const heads=state.variant==='C'?['claude-code','skills','agents','workflow','harness'].map((x,i)=>`<text class="cluster-label" x="${[130,310,490,670,830][i]}" y="43">${x.toUpperCase()}</text>`).join(''):'';return `<div class="map"><div class="map-title">${state.variant==='A'?'Semantic Atlas':state.variant==='B'?'Navigate by context':'Topic clusters'} · 2D default</div><svg viewBox="0 0 900 620" role="img" aria-label="知识节点关系地图">${heads}<g>${lines}</g><g>${shapes}</g></svg><div class="map-foot"><span>${list.length} visible nodes</span><span>${edges.filter(e=>ids.has(e.from)&&ids.has(e.to)).length} relations</span><span>POC fixture</span></div></div>`;}
+    function side(){const counts=Object.fromEntries(themes.map(t=>[t,nodes.filter(n=>n.theme===t).length]));return `<aside class="panel side"><h2>Scope</h2><button class="filter ${state.theme==='all'?'active':''}" data-theme="all"><i class="dot"></i>All AI engineering<em>${nodes.length}</em></button>${themes.map(t=>`<button class="filter ${state.theme===t?'active':''}" data-theme="${t}"><i class="dot" style="--dot:${byId(nodes.find(n=>n.theme===t).id).color}"></i>${t}<em>${counts[t]}</em></button>`).join('')}<h2>Node type</h2>${['all','concept','source','synthesis'].map(t=>`<button class="filter ${state.type===t?'active':''}" data-type="${t}"><i class="dot" style="--dot:${t==='source'?'#f28b82':t==='synthesis'?'#6ea8fe':'#a98bff'}"></i>${t==='all'?'All types':label(t)}<em>${t==='all'?nodes.length:nodes.filter(n=>n.type===t).length}</em></button>`).join('')}<h2>Prototype question</h2><p class="note">从一个已知页面发现未知相关页面，查看依据，并回到 Wiki。</p></aside>`;}
+    function clusters(){return `<div class="panel clusters">${themes.map(t=>`<section class="cluster"><h3><b style="color:${byId(nodes.find(n=>n.theme===t).id).color}">${t}</b><span>${visible().filter(n=>n.theme===t).length} nodes</span></h3>${visible().filter(n=>n.theme===t).map(row).join('')}<p class="note">先按主题聚焦，再进入页面级导航。</p></section>`).join('')}</div>`;}
+    function render(){const list=visible();if(!list.some(n=>n.id===state.selected))state.selected=list[0]?.id||null;document.querySelector('#app').innerHTML=`<header class="top"><div class="brand"><div class="mark"></div><div><div class="eyebrow">MyWiki · throwaway UI prototype</div><h1>Knowledge Atlas</h1></div></div><div class="row"><span class="pill"><strong>AI engineering</strong> topic subgraph</span><span class="pill">read-only</span></div></header><div class="shell">${side()}<main class="main"><div class="intro"><div><div class="eyebrow">${variants[state.variant]}</div><h1>从一个页面，找到下一页</h1><p>探索语义邻近、显式链接和来源依赖。推断关系只作为线索，详情面板会说明它为什么出现。</p></div><div class="row"><span class="pill">2D default</span><span class="pill">3D optional · deferred</span></div></div><section class="panel toolbar"><div class="row"><input class="search" id="search" value="${state.query.replaceAll('"','&quot;')}" placeholder="搜索标题、标签或摘要…" aria-label="搜索知识节点"><button class="action" data-reset>Reset</button></div><div class="stats"><span class="stat"><strong>${list.length}</strong>nodes</span><span class="stat"><strong>${edges.filter(e=>list.some(n=>n.id===e.from)&&list.some(n=>n.id===e.to)).length}</strong>relations</span><span class="stat"><strong>${nodes.filter(n=>n.type==='concept').length}</strong>concepts</span><span class="stat"><strong>${nodes.filter(n=>n.type==='source').length}</strong>sources</span></div></section>${state.variant==='B'?`<section class="list-first"><section class="panel list">${list.map(row).join('')}</section><section class="map-side">${map()}${detail()}</section></section>`:state.variant==='C'?`${clusters()}<section class="workspace">${map()}${detail()}</section>`:`<section class="workspace">${map()}${detail()}</section>`}<div class="legend"><span><i></i>显式关系</span><span><i class="dash"></i>推断关系 · 查看依据</span><span>点击节点查看详情</span></div></main></div><nav class="switcher"><button data-cycle="-1" aria-label="上一版本">←</button><strong>${variants[state.variant]}</strong><button data-cycle="1" aria-label="下一版本">→</button></nav>`;bind();}
+    function bind(){document.querySelectorAll('[data-node]').forEach(e=>e.onclick=()=>{state.selected=e.dataset.node;render()});document.querySelectorAll('[data-theme]').forEach(e=>e.onclick=()=>{state.theme=e.dataset.theme;render()});document.querySelectorAll('[data-type]').forEach(e=>e.onclick=()=>{state.type=e.dataset.type;render()});document.querySelectorAll('[data-cycle]').forEach(e=>e.onclick=()=>cycle(Number(e.dataset.cycle)));const input=document.querySelector('#search');if(input){input.oninput=e=>{state.query=e.target.value;render();const next=document.querySelector('#search');next.focus();next.setSelectionRange(next.value.length,next.value.length)}}const reset=document.querySelector('[data-reset]');if(reset)reset.onclick=()=>{state.query='';state.theme='all';state.type='all';state.selected='engineering-map';render()};}
+    function cycle(step){const keys=Object.keys(variants),i=keys.indexOf(state.variant);state.variant=keys[(i+step+keys.length)%keys.length];const q=new URLSearchParams(location.search);q.set('variant',state.variant);history.replaceState(null,'','?'+q);render();}
+    document.addEventListener('keydown',e=>{if(['input','textarea'].includes(document.activeElement?.tagName?.toLowerCase()))return;if(e.key==='ArrowLeft')cycle(-1);if(e.key==='ArrowRight')cycle(1)});
+    render();
+  </script>
+</body>
+</html>

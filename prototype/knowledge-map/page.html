@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyWiki source page</title>
+  <style>
+    :root { color-scheme:dark; --bg:#0b0f18; --panel:#151c2a; --line:#29354b; --text:#edf2ff; --muted:#91a0b8; --accent:#9c8cff; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--text); background:radial-gradient(circle at 80% 10%,#27344b,transparent 28rem),var(--bg); font:14px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1000px; margin:auto; padding:32px 24px 70px; }
+    .eyebrow { color:#62dec3; font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { margin:8px 0 18px; font-size:25px; letter-spacing:-.03em; }
+    .bar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+    a { color:#b9aeff; }
+    .panel { padding:20px; border:1px solid var(--line); border-radius:18px; background:#151c2aee; box-shadow:0 22px 70px #0006; }
+    .path { color:var(--muted); font-size:12px; margin-bottom:15px; word-break:break-all; }
+    pre { margin:0; overflow:auto; white-space:pre-wrap; color:#d6deef; font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .error { color:#ff9aa9; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="bar"><div><div class="eyebrow">MyWiki · source viewer</div><h1 id="title">Loading…</h1></div><a href="index.html?variant=B">← 返回地图</a></div>
+    <section class="panel"><div class="path" id="path"></div><pre id="content">正在读取 Wiki 页面…</pre></section>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const path = params.get('path');
+    document.querySelector('#title').textContent = params.get('title') || 'Wiki page';
+    document.querySelector('#path').textContent = path || 'missing path';
+    if (!path) document.querySelector('#content').textContent = '缺少 Wiki 页面路径。';
+    else fetch(path).then(response => { if (!response.ok) throw new Error(`${response.status} ${response.statusText}`); return response.text(); }).then(text => { document.querySelector('#content').textContent = text; }).catch(error => { const el = document.querySelector('#content'); el.textContent = `无法读取 Wiki 页面：${error.message}`; el.className = 'error'; });
+  </script>
+</body>
+</html>
