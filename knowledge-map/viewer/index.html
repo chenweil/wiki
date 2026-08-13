@@ -2,90 +2,181 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>MyWiki Knowledge Map</title>
   <link rel="icon" href="../../favicon.ico" sizes="any">
-  <style>
-    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; background: #0d1117; color: #e6edf3; }
+  <style>    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      --bg: #0d1117;
+      --bg-glow: #17233a;
+      --surface: #131b29;
+      --surface-2: #182b45;
+      --accent-dim: #1b3354;
+      --accent-button: #173557;
+      --accent-button-hover: #214a78;
+      --border: #273244;
+      --border-strong: #3a4a63;
+      --accent-border: #487ab9;
+      --text: #e6edf3;
+      --text-strong: #f0f5ff;
+      --text-secondary: #aab6c8;
+      --text-muted: #8795aa;
+      --text-faint: #8b9ab4;
+      --accent: #6ea8fe;
+      --accent-strong: #8ec1ff;
+      --danger: #ffb4b4;
+      --code-bg: #0b111c;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; min-width: 1040px; background: radial-gradient(circle at 55% 15%, #17233a 0, #0d1117 43%); }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: radial-gradient(circle at 55% 15%, var(--bg-glow) 0, var(--bg) 43%); }
     button, input { font: inherit; }
     button { color: inherit; }
     .app { height: 100vh; min-height: 0; display: grid; grid-template-rows: auto 1fr; }
-    header { padding: 22px 28px 18px; border-bottom: 1px solid #273244; display: flex; justify-content: space-between; gap: 20px; align-items: center; }
-    .eyebrow { color: #8b9ab4; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
+    @supports (height: 100dvh) { .app { height: 100dvh; } }
+    header { padding: 22px 28px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 20px; align-items: center; }
+    .eyebrow { color: var(--text-faint); font-size: 12px; letter-spacing: .13em; text-transform: uppercase; }
     h1, h2, h3, p { margin: 0; }
     h1 { margin-top: 5px; font-size: 24px; letter-spacing: -.03em; }
     h2 { font-size: 17px; }
-    h3 { font-size: 12px; color: #aab6c8; text-transform: uppercase; letter-spacing: .08em; }
+    h3 { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .08em; }
     .header-meta, .stats, .chips, .legend, .row { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-    .pill, .chip, .stat { border: 1px solid #2c394d; background: #131b29; border-radius: 999px; padding: 6px 10px; color: #aebbd0; font-size: 12px; }
-    .pill strong { color: #e6edf3; }
-    .layout { min-height: 0; padding: 20px; display: grid; grid-template-columns: 270px minmax(460px, 1fr) 330px; gap: 16px; }
-    .panel { border: 1px solid #273244; background: rgba(17, 24, 36, .9); border-radius: 14px; box-shadow: 0 20px 60px rgba(0, 0, 0, .18); }
-    .sidebar, .details { padding: 16px; min-height: 0; overflow: auto; }
+    .pill, .chip, .stat { border: 1px solid var(--border-strong); background: var(--surface); border-radius: 999px; padding: 6px 10px; color: var(--text-secondary); font-size: 12px; }
+    .pill strong { color: var(--text); }
+    .layout { min-height: 0; padding: 20px; display: grid; grid-template-columns: 270px minmax(460px, 1fr) 330px; grid-template-rows: minmax(0, 1fr); gap: 16px; }
+    .panel { border: 1px solid var(--border); background: rgba(17, 24, 36, .9); border-radius: 14px; box-shadow: 0 20px 60px rgba(0, 0, 0, .18); }
+    .sidebar, .details { padding: 16px; min-height: 0; min-width: 0; overflow: auto; }
     .sidebar { display: flex; flex-direction: column; gap: 14px; }
-    .search { width: 100%; border: 1px solid #3a4a63; background: #0b111c; border-radius: 9px; padding: 10px 11px; color: #f0f5ff; outline: none; }
-    .search:focus { border-color: #6ea8fe; box-shadow: 0 0 0 3px #6ea8fe22; }
-    .section-title { display: flex; justify-content: space-between; align-items: center; color: #8795aa; }
-    .section-title small { color: #64738b; }
+    .search { width: 100%; border: 1px solid var(--border-strong); background: var(--code-bg); border-radius: 9px; padding: 10px 11px; color: var(--text-strong); outline: none; }
+    .search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #6ea8fe22; }
+    .section-title { display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); }
+    .section-title small { color: var(--text-muted); }
     .filters { display: flex; gap: 6px; flex-wrap: wrap; }
     .visibility-modes { display: flex; gap: 6px; }
     .filter, .node-row, .relation { border: 1px solid transparent; background: transparent; cursor: pointer; text-align: left; }
-    .filter { border-color: #2b394c; border-radius: 999px; padding: 6px 9px; color: #aab6c8; font-size: 11px; }
-    .filter.active { background: #1b3354; border-color: #487ab9; color: #e8f1ff; }
+    .filter { border-color: var(--border-strong); border-radius: 999px; padding: 6px 9px; color: var(--text-secondary); font-size: 14px; }
+    .filter.active { background: var(--accent-dim); border-color: var(--accent-border); color: var(--text-strong); }
     .layer-filters { display: grid; gap: 6px; }
-    .layer-filter { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; border: 1px solid #2b394c; border-radius: 8px; padding: 7px 9px; color: #aab6c8; font-size: 11px; }
-    .layer-filter.active { border-color: var(--layer-color); background: color-mix(in srgb, var(--layer-color) 14%, transparent); color: #eef5ff; }
-    .layer-filter small { color: #71819a; }
+    .layer-filter { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; border: 1px solid var(--border-strong); border-radius: 8px; padding: 7px 9px; color: var(--text-secondary); font-size: 14px; }
+    .layer-filter.active { border-color: var(--layer-color); background: color-mix(in srgb, var(--layer-color) 14%, transparent); color: var(--text-strong); }
+    .layer-filter small { color: var(--text-muted); font-size: 12px; }
     .node-list { display: flex; flex-direction: column; gap: 6px; }
-    .node-row { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: center; width: 100%; padding: 9px; border-radius: 9px; color: #aab6c8; }
-    .node-row:hover, .node-row.selected { background: #182b45; border-color: #315d91; color: #f0f5ff; }
+    .node-row { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: center; width: 100%; padding: 9px; border-radius: 9px; color: var(--text-secondary); }
+    .node-row:hover, .node-row.selected { background: var(--surface-2); border-color: var(--accent-border); color: var(--text-strong); }
     .node-row.unlocated { border-style: dashed; }
-    .node-row strong { display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .node-row small { display: block; margin-top: 3px; color: #71819a; font-size: 10px; }
-    .node-dot, .legend-dot { width: 9px; height: 9px; display: inline-block; background: var(--color); border-radius: 50%; box-shadow: 0 0 10px var(--color); }
-    .node-count { color: #687991; font-size: 10px; }
-    .map-column { min-width: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; }
+    .node-row strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .node-row small { display: block; margin-top: 3px; color: var(--text-muted); font-size: 12px; }
+    .node-dot, .legend-dot { width: 9px; height: 9px; display: inline-block; background: var(--color); border-radius: 50%; }
+    .node-count { color: var(--text-muted); font-size: 12px; }
+    .map-column { min-width: 0; min-height: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; }
     .map-toolbar { padding: 14px 16px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
-    .map-toolbar p { margin-top: 4px; color: #8492a8; font-size: 12px; }
-    .query-meta { margin-top: 8px; color: #9aaac0; font-size: 11px; line-height: 1.5; }
-    .query-meta strong { color: #e6edf3; }
+    .map-toolbar p { margin-top: 4px; color: var(--text-muted); font-size: 14px; }
+    .query-meta { margin-top: 8px; color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+    .query-meta strong { color: var(--text); }
     .expand-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .expand-action { border: 1px solid #466887; border-radius: 8px; padding: 7px 9px; background: #14283d; color: #dbeaff; cursor: pointer; font-size: 11px; }
+    .expand-action { border: 1px solid var(--accent-border); border-radius: 8px; padding: 7px 9px; background: #14283d; color: var(--text-strong); cursor: pointer; font-size: 14px; }
     .expand-action:hover { border-color: #78a9d3; background: #1c3b5c; }
-    .map-frame { position: relative; min-height: 610px; overflow: hidden; border: 1px solid #273244; border-radius: 14px; background: linear-gradient(145deg, #111a29, #0a0e15 70%); }
-    svg { width: 100%; height: 100%; min-height: 610px; display: block; }
+    .map-frame { position: relative; min-height: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 14px; background: linear-gradient(145deg, #111a29, #0a0e15 70%); }
+    svg { width: 100%; height: 100%; min-height: 0; display: block; }
     .edge { stroke: #6e89ad99; stroke-width: 1.25; }
     .edge.semantic { stroke: #b28cff99; stroke-dasharray: 5 5; }
     .edge.dimmed { opacity: .18; }
     .node { cursor: pointer; outline: none; }
     .node.dimmed { opacity: .3; }
-    .node circle, .node rect, .node path { fill: var(--color); stroke: #e6edf3; stroke-width: 1.2; opacity: .9; }
+    .node circle, .node rect, .node path { fill: var(--color); stroke: var(--text); stroke-width: 1.2; opacity: .9; }
     .node:hover circle, .node:hover rect, .node:hover path, .node:focus circle, .node:focus rect, .node:focus path { stroke-width: 3; }
     .node.selected circle, .node.selected rect, .node.selected path { stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 9px var(--color)); }
-    .node text { fill: #aebbd0; font-size: 10px; text-anchor: middle; pointer-events: none; }
+    .node text { fill: var(--text-secondary); font-size: 12px; text-anchor: middle; pointer-events: none; }
     .node.selected text { fill: #fff; font-weight: 700; }
-    .map-empty { position: absolute; inset: 0; display: grid; place-items: center; color: #7e8da4; }
-    .legend { color: #75849a; font-size: 11px; padding: 0 6px; }
+    .map-empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text-muted); }
+    .legend { color: var(--text-muted); font-size: 12px; padding: 0 6px; }
+    .legend-item, .legend-group { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-group { gap: 10px; }
+    .legend-sep { width: 1px; height: 12px; background: var(--border); }
+    .legend-icon { color: var(--text-secondary); }
+    .legend-note { color: var(--text-muted); }
+    .theme-chip { display: inline-flex; align-items: center; gap: 6px; }
     .details { display: flex; flex-direction: column; gap: 16px; }
     .detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .type { color: #8ec1ff; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
-    .details p { color: #aab6c8; line-height: 1.65; font-size: 13px; }
-    .detail-block { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid #273244; }
-    .relation { display: grid; grid-template-columns: 9px 1fr auto; align-items: center; gap: 8px; width: 100%; padding: 8px 0; color: #c5d0e0; }
+    .detail-header > div:first-child { min-width: 0; }
+    .detail-header h2 { overflow-wrap: anywhere; }
+    .type { color: var(--accent-strong); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .details p { color: var(--text-secondary); line-height: 1.65; font-size: 14px; }
+    .detail-block { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .updated { color: var(--text-muted); font-size: 12px; }
+    .evidence summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 7px; color: var(--text-muted); font-size: 12px; padding: 2px 0 6px; }
+    .evidence summary::-webkit-details-marker { display: none; }
+    .evidence summary::before { content: ""; width: 0; height: 0; border-left: 5px solid var(--text-muted); border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+    .evidence[open] summary::before { transform: rotate(90deg); }
+    .evidence .detail-block:first-of-type { border-top: none; padding-top: 8px; }
+    .relation { display: grid; grid-template-columns: 9px 1fr auto; align-items: center; gap: 8px; width: 100%; padding: 8px 0; color: var(--text-secondary); }
     .relation:hover { color: #fff; }
-    .relation-copy { min-width: 0; display: grid; gap: 3px; }
-    .relation small { color: #7890b0; font-size: 10px; }
-    .source-line { color: #77869c !important; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px !important; overflow-wrap: anywhere; }
-    .basis { margin: -3px 0 4px 17px; color: #8898af; font-size: 11px; line-height: 1.4; }
+    .relation-copy { min-width: 0; display: grid; gap: 3px; overflow-wrap: anywhere; }
+    .relation small { color: var(--text-muted); font-size: 12px; }
+    .source-line { color: var(--text-muted) !important; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px !important; overflow-wrap: anywhere; }
+    .basis { margin: -3px 0 4px 17px; color: var(--text-muted); font-size: 12px; line-height: 1.4; }
     .relation .basis { margin: 0; }
-    .location-error { padding: 9px 10px; border: 1px dashed #9d6a6a; border-radius: 8px; color: #ffb4b4 !important; font-size: 11px !important; }
-    .open-page { display: inline-flex; justify-content: center; padding: 10px 12px; border-radius: 9px; border: 1px solid #4d82bd; background: #173557; color: #e7f1ff; text-decoration: none; font-size: 12px; }
-    .open-page:hover { background: #214a78; }
-    .error { padding: 24px; color: #ffb4b4; }
-    @media (max-width: 1220px) { body { min-width: 900px; } .layout { grid-template-columns: 235px minmax(420px, 1fr) 290px; padding: 12px; gap: 10px; } }
-  </style>
+    .location-error { padding: 9px 10px; border: 1px dashed #9d6a6a; border-radius: 8px; color: var(--danger) !important; font-size: 12px !important; }
+    .open-page { display: inline-flex; justify-content: center; padding: 10px 12px; border-radius: 9px; border: 1px solid #4d82bd; background: var(--accent-button); color: var(--text-strong); text-decoration: none; font-size: 14px; }
+    .open-page:hover { background: var(--accent-button-hover); }
+    .error { padding: 24px; color: var(--danger); }
+    .detail-header-actions { display: flex; align-items: center; gap: 8px; }
+    .sheet-close { display: none; }
+    .mobile-nav { display: none; }
+    .sheet-backdrop { display: none; }
+    ::selection { background: var(--accent-dim); color: var(--text-strong); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .node:focus-visible { outline: none; }
+    .search:focus-visible { outline: none; }
+    .sidebar, .details { scrollbar-width: thin; scrollbar-color: #33445f transparent; }
+    .sidebar::-webkit-scrollbar, .details::-webkit-scrollbar { width: 10px; }
+    .sidebar::-webkit-scrollbar-thumb, .details::-webkit-scrollbar-thumb { background: #33445f; border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+    .sidebar::-webkit-scrollbar-track, .details::-webkit-scrollbar-track { background: transparent; }
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .layout { grid-template-columns: 250px minmax(0, 1fr); grid-template-rows: minmax(0, 3fr) minmax(0, 2fr); grid-template-areas: "sidebar map" "sidebar details"; padding: 14px; gap: 12px; }
+      .sidebar { grid-area: sidebar; }
+      .map-column { grid-area: map; min-height: 0; }
+      .details { grid-area: details; }
+      .map-frame, svg { min-height: 0; }
+    }
+    @media (max-width: 767px) {
+      header { padding: 14px 16px 12px; gap: 10px; }
+      h1 { font-size: 20px; }
+      .mobile-nav { display: flex; gap: 8px; padding: 10px 14px 12px; border-bottom: 1px solid var(--border); }
+      .mobile-nav button { flex: 1; min-height: 44px; border: 1px solid var(--border-strong); background: var(--surface); border-radius: 10px; color: var(--text-secondary); font-size: 14px; cursor: pointer; }
+      .mobile-nav button.active { background: var(--accent-dim); border-color: var(--accent-border); color: var(--text-strong); }
+      .layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); padding: 12px; gap: 12px; }
+      .layout[data-mobile-view="map"] .sidebar { display: none; }
+      .layout[data-mobile-view="list"] .map-column { display: none; }
+      .map-frame { min-height: 0; }
+      svg { min-height: 0; }
+      .map-toolbar { flex-direction: column; align-items: flex-start; }
+      .expand-actions { justify-content: flex-start; }
+      .details { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; max-height: 86vh; border-radius: 18px 18px 0 0; transform: translateY(105%); box-shadow: 0 -12px 40px rgba(0, 0, 0, .4); padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+      .details.open { transform: translateY(0); animation: sheet-in .34s cubic-bezier(.22, 1, .36, 1); }
+      .sheet-close { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--border-strong); background: var(--surface); border-radius: 10px; color: var(--text-secondary); cursor: pointer; flex-shrink: 0; }
+      .sheet-backdrop { display: block; position: fixed; inset: 0; z-index: 30; background: rgba(5, 9, 16, .6); opacity: 0; pointer-events: none; }
+      .sheet-backdrop.open { opacity: 1; pointer-events: auto; animation: fade-in .34s ease; }
+    }
+    @keyframes sheet-in { from { transform: translateY(105%); } to { transform: translateY(0); } }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @media (pointer: coarse) {
+      .search { min-height: 44px; }
+      .filter { min-height: 44px; padding: 12px 14px; }
+      .layer-filter { min-height: 44px; padding: 12px 10px; }
+      .node-row { min-height: 44px; padding: 12px 10px; }
+      .expand-action { min-height: 44px; padding: 12px 12px; }
+      .relation { min-height: 44px; padding: 10px 0; }
+      .open-page { min-height: 44px; padding: 12px 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .details, .sheet-backdrop { animation: none; transition: none; }
+      .node:hover circle, .node:hover rect, .node:hover path { stroke-width: 1.2; }
+    }
+</style>
 </head>
 <body>
   <div id="app" class="app"><div class="error">正在加载地图快照…</div></div>
@@ -93,9 +184,21 @@
     import { querySubgraph } from './graph-query.mjs';
 
     const DEFAULT_QUERY = Object.freeze({ depth: 1, relationBudget: 3 });
-    const state = { snapshot: null, queryResult: null, selected: null, query: '', type: 'all', visibilityMode: 'focus', layers: { 'page-link': true, 'semantic-exploration': true }, depth: DEFAULT_QUERY.depth, relationBudget: DEFAULT_QUERY.relationBudget };
+    const state = { snapshot: null, queryResult: null, selected: null, query: '', type: 'all', visibilityMode: 'focus', layers: { 'page-link': true, 'semantic-exploration': true }, depth: DEFAULT_QUERY.depth, relationBudget: DEFAULT_QUERY.relationBudget, mobileView: 'list', sheetOpen: false };
+    let lastRenderedSelected = null;
     const typeLabels = { concept: 'CONCEPT', source: 'SOURCE', synthesis: 'SYNTHESIS' };
-    const typeColors = { concept: '#8b7bff', source: '#65b4ff', synthesis: '#65db9c' };
+    const themes = {
+      'claude-code': { label: 'Claude Code', color: '#f2a25c' },
+      'agent-harness': { label: 'Agent & Harness', color: '#4fd1d5' },
+      'skills': { label: 'Skills & Extensions', color: '#63d89a' },
+      'loop-autonomy': { label: 'Loop & Autonomy', color: '#6ea8fe' },
+    };
+    const themeTags = {
+      'claude-code': 'claude-code', 'agentic-coding': 'claude-code',
+      'ai-agents': 'agent-harness', 'agent-architecture': 'agent-harness', 'agent-harness': 'agent-harness', 'harness-engineering': 'agent-harness', 'multi-agent': 'agent-harness', 'hermes-agent': 'agent-harness', 'ai-programming': 'agent-harness', 'software-engineering': 'agent-harness',
+      'skills': 'skills', 'skill-development': 'skills', 'plugin': 'skills', 'distribution': 'skills',
+      'loop-design': 'loop-autonomy', 'context-engineering': 'loop-autonomy', 'workflow-design': 'loop-autonomy', 'autonomous-agents': 'loop-autonomy',
+    };
     const layerLabels = { 'page-link': '显式页面链接', 'semantic-exploration': '语义探索' };
     const layerColors = { 'page-link': '#6e89ad', 'semantic-exploration': '#b28cff' };
 
@@ -118,7 +221,20 @@
       return matchesType && (!query || haystack.includes(query));
     };
     const filteredNodes = () => state.snapshot.nodes.filter(nodeMatchesFilter);
-    const colorFor = (node) => typeColors[node.type] || '#9aa7bb';
+    const themeOf = (node) => {
+      const votes = {};
+      for (const tag of (node.tags || [])) {
+        const themeId = themeTags[tag];
+        if (themeId) votes[themeId] = (votes[themeId] || 0) + 1;
+      }
+      let bestId = null;
+      let bestCount = -1;
+      for (const [id, count] of Object.entries(votes)) {
+        if (count > bestCount) { bestId = id; bestCount = count; }
+      }
+      return themes[bestId || 'claude-code'];
+    };
+    const colorFor = (node) => themeOf(node).color;
     const pageHref = (node) => `page.html?path=${encodeURIComponent(node.pagePath)}&title=${encodeURIComponent(node.title)}`;
     const statusLabel = (node) => node.status === 'unlocated' ? 'UNLOCATED' : 'LOCATED';
 
@@ -144,17 +260,48 @@
       const visible = filteredNodes();
       if (!visible.some((node) => node.id === state.selected)) state.selected = visible[0]?.id || null;
       const selected = nodeById(state.selected);
+      if (!selected) state.sheetOpen = false;
+      const selectedChanged = state.selected !== lastRenderedSelected;
+
+      const sidebarEl = document.querySelector('.sidebar');
+      const detailsEl = document.querySelector('.details');
+      const scroll = {
+        sidebar: sidebarEl ? sidebarEl.scrollTop : 0,
+        details: !selectedChanged && detailsEl ? detailsEl.scrollTop : 0,
+      };
+      const searchEl = document.querySelector('#search');
+      const selection = searchEl && document.activeElement === searchEl
+        ? { focused: true, start: searchEl.selectionStart, end: searchEl.selectionEnd }
+        : { focused: false };
+
       document.querySelector('#app').innerHTML = `
-        <header>
-          <div><div class="eyebrow">MyWiki · local read-only viewer</div><h1>Knowledge Map</h1></div>
-          <div class="header-meta"><span class="pill">${escapeHtml(state.snapshot.manifest.scope.label)}</span><span class="pill">${escapeHtml(state.snapshot.manifest.mapVersion)}</span></div>
-        </header>
-        <main class="layout">
+        <div class="topbar">
+          <header>
+            <div><div class="eyebrow">MyWiki · local read-only viewer</div><h1>Knowledge Map</h1></div>
+            <div class="header-meta"><span class="pill">${escapeHtml(state.snapshot.manifest.scope.label)}</span><span class="pill">${escapeHtml(state.snapshot.manifest.mapVersion)}</span></div>
+          </header>
+          <nav class="mobile-nav" aria-label="视图切换">${['list', 'map'].map(mobileNavButton).join('')}</nav>
+        </div>
+        <main class="layout" data-mobile-view="${state.mobileView}">
           ${sidebar(visible)}
           ${mapColumn()}
           ${details(selected)}
-        </main>`;
+        </main>
+        <div class="sheet-backdrop ${state.sheetOpen ? 'open' : ''}" data-close-sheet></div>`;
       bind();
+
+      const nextSidebar = document.querySelector('.sidebar');
+      if (nextSidebar) nextSidebar.scrollTop = scroll.sidebar;
+      const nextDetails = document.querySelector('.details');
+      if (nextDetails) nextDetails.scrollTop = scroll.details;
+      if (selection.focused) {
+        const nextSearch = document.querySelector('#search');
+        if (nextSearch) {
+          nextSearch.focus();
+          nextSearch.setSelectionRange(selection.start, selection.end);
+        }
+      }
+      lastRenderedSelected = state.selected;
     }
 
     function sidebar(visible) {
@@ -167,6 +314,11 @@
         <div class="layer-filters" aria-label="关系层筛选">${['page-link', 'semantic-exploration'].map(layerButton).join('')}</div>
         <div class="node-list" aria-label="知识节点列表">${visible.map(nodeRow).join('') || '<p>没有匹配节点。</p>'}</div>
       </aside>`;
+    }
+
+    function mobileNavButton(view) {
+      const label = view === 'list' ? '节点' : '地图';
+      return `<button class="${state.mobileView === view ? 'active' : ''}" data-mobile-view="${view}" aria-pressed="${state.mobileView === view}">${label}</button>`;
     }
 
     function visibilityButton(mode) {
@@ -184,6 +336,18 @@
       </button>`;
     }
 
+    function legend() {
+      const shapeIcon = {
+        concept: '<svg class="legend-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+        source: '<svg class="legend-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+        synthesis: '<svg class="legend-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="3.8" y="3.8" width="4.4" height="4.4" transform="rotate(45 6 6)" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+      };
+      const themeItems = Object.values(themes).map((theme) => `<span class="legend-item"><i class="legend-dot" style="--color:${theme.color}"></i>${theme.label}</span>`).join('');
+      const shapeItems = ['concept', 'source', 'synthesis'].map((type) => `<span class="legend-item">${shapeIcon[type]}${typeLabels[type]}</span>`).join('');
+      const relationItems = `<span class="legend-item"><svg class="legend-icon" width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><line x1="1" y1="6" x2="17" y2="6" stroke="#6e89ad" stroke-width="1.5"/></svg>显式页面链接</span><span class="legend-item"><svg class="legend-icon" width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><line x1="1" y1="6" x2="17" y2="6" stroke="#b28cff" stroke-width="1.5" stroke-dasharray="3 3"/></svg>语义探索</span>`;
+      return `<span class="legend-group" aria-label="主题颜色">${themeItems}</span><span class="legend-sep"></span><span class="legend-group" aria-label="页面类型形状">${shapeItems}</span><span class="legend-sep"></span><span class="legend-group" aria-label="关系类型">${relationItems}</span><span class="legend-sep"></span><span class="legend-note">${state.visibilityMode === 'focus' ? '聚焦：不匹配节点降权' : '严格隐藏：只显示匹配节点'}</span>`;
+    }
+
     function mapColumn() {
       const result = state.queryResult;
       const visible = result?.nodes || [];
@@ -197,11 +361,11 @@
       const unlocatedCount = visible.length - located.length;
       const querySummary = result?.failure
         ? `查询失败：${result.failure.message}`
-        : `范围 ${result?.provenance?.scope?.label || state.snapshot.manifest.scope.label} · seed ${result?.query.seedNodeId || '—'} · layers ${result?.query.layers?.join(' + ') || '无'} · depth ${result?.query.depth ?? '—'} · budget ${result?.query.relationBudget ?? '—'} · filters ${queryFilterSummary(result)} · ${state.visibilityMode} · snapshot ${result?.snapshotVersion || '未记录'} · ${result?.status || '未查询'}`;
+        : `depth ${result?.query.depth ?? '—'} · budget ${result?.query.relationBudget ?? '—'}`;
       return `<section class="map-column">
-        <div class="panel map-toolbar"><div><div class="eyebrow">Bounded topic subgraph · semantic exploration</div><p>语义位置叠加页面关系 · ${located.length}/${visible.length} located · ${relations.length} visible relations${unlocatedCount ? ` · ${unlocatedCount} unlocated` : ''}</p><div class="query-meta"><strong>查询上下文：</strong>${escapeHtml(querySummary)}${result && !result.complete ? ` · omitted ${result.omitted.nodes} nodes / ${result.omitted.relations} relations` : ''}</div></div><div class="expand-actions">${expandActions(result)}</div></div>
+        <div class="panel map-toolbar"><div><p>当前子图 · ${located.length}/${visible.length} 已定位 · ${relations.length} 条可见关系${unlocatedCount ? ` · ${unlocatedCount} 未定位` : ''}</p><div class="query-meta">${escapeHtml(querySummary)}${result && !result.complete ? ` · 省略 ${result.omitted.nodes} 节点 / ${result.omitted.relations} 关系` : ''}</div></div><div class="expand-actions">${expandActions(result)}</div></div>
         <div class="map-frame">${result?.failure ? `<div class="map-empty">${escapeHtml(result.failure.message)}</div>` : located.length ? `<svg viewBox="0 0 900 620" role="img" aria-label="知识节点关系地图"><g>${relations.map((relation) => edgeSvg(relation, ids)).join('')}</g><g>${located.map(nodeSvg).join('')}</g></svg>` : '<div class="map-empty">当前子图没有获得语义位置</div>'}</div>
-        <div class="legend"><span><i class="legend-dot" style="--color:#6e89ad"></i>显式页面链接</span><span><i class="legend-dot" style="--color:#b28cff"></i>语义探索</span><span>${state.visibilityMode === 'focus' ? '聚焦模式：不匹配节点降权' : '严格隐藏：只显示匹配节点'}</span></div>
+        <div class="legend">${legend()}</div>
       </section>`;
     }
 
@@ -255,8 +419,8 @@
     function nodeSvg(node) {
       if (!node.position) return '';
       const point = position(node); const shape = node.type === 'source'
-        ? `<rect x="-10" y="-10" width="20" height="20" rx="4" transform="rotate(45)"></rect>`
-        : node.type === 'synthesis' ? '<path d="M0 -13 L12 0 L0 13 L-12 0 Z"></path>' : '<circle r="12"></circle>';
+        ? `<rect x="-11" y="-11" width="22" height="22" rx="5"></rect>`
+        : node.type === 'synthesis' ? `<rect x="-11" y="-11" width="22" height="22" rx="4" transform="rotate(45)"></rect>` : '<circle r="13"></circle>';
       const dimmed = state.visibilityMode === 'focus' && !nodeMatchesFilter(node) ? 'dimmed' : '';
       return `<g class="node ${state.selected === node.id ? 'selected' : ''} ${dimmed}" data-node="${escapeHtml(node.id)}" tabindex="0" role="button" aria-pressed="${state.selected === node.id}" aria-label="选择 ${escapeHtml(node.title)}" transform="translate(${point.x} ${point.y})" style="--color:${colorFor(node)}"><g>${shape}</g><text y="31">${escapeHtml(node.title.length > 18 ? `${node.title.slice(0, 17)}…` : node.title)}</text></g>`;
     }
@@ -266,17 +430,16 @@
       const relations = relationsFor(node.id);
       const page = node.provenance?.page || { id: node.id, path: node.pagePath, contentHash: node.contentHash };
       const generation = node.provenance?.generation || { mapVersion: state.snapshot.manifest.mapVersion };
-      return `<aside class="panel details">
-        <div class="detail-header"><div><div class="type">${escapeHtml(typeLabels[node.type] || node.type)}</div><h2>${escapeHtml(node.title)}</h2></div><span class="pill">${escapeHtml(statusLabel(node))}</span></div>
+      return `<aside class="panel details${state.sheetOpen ? ' open' : ''}">
+        <div class="detail-header"><div><div class="type">${escapeHtml(typeLabels[node.type] || node.type)}</div><h2>${escapeHtml(node.title)}</h2></div><div class="detail-header-actions"><span class="pill">${escapeHtml(statusLabel(node))}</span><button class="sheet-close" data-close-sheet aria-label="关闭详情"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div></div>
+        <a class="open-page" href="${pageHref(node)}" target="_blank" rel="noopener noreferrer">打开原始 Wiki 页面 ↗</a>
         <p>${escapeHtml(node.summary || node.description || '暂无摘要。')}</p>
-        <div class="chips">${(node.tags || []).map((tag) => `<span class="chip">#${escapeHtml(tag)}</span>`).join('')}</div>
+        <div class="chips"><span class="chip theme-chip" style="--color:${colorFor(node)}"><i class="node-dot"></i>${escapeHtml(themeOf(node).label)}</span>${(node.tags || []).map((tag) => `<span class="chip">#${escapeHtml(tag)}</span>`).join('')}</div>
+        <p class="updated">更新时间：${escapeHtml(node.updated || '未记录')}</p>
         ${node.status === 'unlocated' ? `<p class="location-error">语义位置生成失败：${escapeHtml(node.locationError || '未记录原因')}。节点仍保留在列表和详情中，未伪造坐标。</p>` : ''}
         <div class="detail-block"><h3>来源</h3>${sourceRows(node)}</div>
-        <div class="detail-block"><h3>页面 provenance</h3><p class="source-line">页面身份：${escapeHtml(page.id)}</p><p class="source-line">Wiki 页面：${escapeHtml(page.path)}</p><p class="source-line">sha256:${escapeHtml(page.contentHash)}</p><p class="source-line">生成引用：${escapeHtml(generation.mapVersion || state.snapshot.manifest.mapVersion)}</p><p>更新时间：${escapeHtml(node.updated || '未记录')}</p></div>
         <div class="detail-block"><h3>可见关系 · ${relations.length}</h3>${relations.length ? relations.map((relation) => relationRow(relation, node.id)).join('') : '<p>当前筛选关系层中没有可见关系。</p>'}</div>
-        <div class="detail-block"><h3>子图查询 provenance</h3>${queryProvenanceRows(state.queryResult)}</div>
-        <div class="detail-block"><h3>地图快照</h3><p class="source-line">${escapeHtml(state.snapshot.manifest.mapVersion)}</p><p>关系层：${escapeHtml(activeLayerSummary())}</p><p>语义后端：${escapeHtml(state.snapshot.manifest.generation.embedding?.backend || '未记录')}</p></div>
-        <a class="open-page" href="${pageHref(node)}">打开原始 Wiki 页面 ↗</a>
+        <details class="evidence"><summary>生成与查询证据</summary><div class="detail-block"><h3>页面 provenance</h3><p class="source-line">页面身份：${escapeHtml(page.id)}</p><p class="source-line">Wiki 页面：${escapeHtml(page.path)}</p><p class="source-line">sha256:${escapeHtml(page.contentHash)}</p><p class="source-line">生成引用：${escapeHtml(generation.mapVersion || state.snapshot.manifest.mapVersion)}</p></div><div class="detail-block"><h3>子图查询 provenance</h3>${queryProvenanceRows(state.queryResult)}</div><div class="detail-block"><h3>地图快照</h3><p class="source-line">${escapeHtml(state.snapshot.manifest.mapVersion)}</p><p>关系层：${escapeHtml(activeLayerSummary())}</p><p>语义后端：${escapeHtml(state.snapshot.manifest.generation.embedding?.backend || '未记录')}</p></div></details>
       </aside>`;
     }
 
@@ -330,16 +493,19 @@
       const score = Number.isFinite(basis.score) ? ` · 相似度 ${basis.score.toFixed(3)}` : '';
       const backend = [embedding.backend, embedding.model, embedding.version].filter(Boolean).join(' · ') || '未记录';
       const configLabel = [configuration.dimensions ? `${configuration.dimensions}d` : '', configuration.seed ? `seed:${configuration.seed}` : '', projection.algorithm || '', Number.isFinite(relationPolicy.similarityThreshold) ? `threshold:${relationPolicy.similarityThreshold}` : ''].filter(Boolean).join(' · ') || '未记录';
-      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${layerColors['semantic-exploration']}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>推断 · 语义探索</small><span class="basis">依据：${escapeHtml(basis.label || '语义相似度')}${escapeHtml(score)}</span><span class="basis">生成：${escapeHtml(backend)}</span><span class="basis">配置：${escapeHtml(configLabel)}</span></span></button>`;
+      return `<button class="relation" data-node="${escapeHtml(target.id)}"><span class="node-dot" style="--color:${colorFor(target)}"></span><span class="relation-copy"><span>${escapeHtml(target.title)}</span><small>推断 · 语义探索</small><span class="basis">依据：${escapeHtml(basis.label || '语义相似度')}${escapeHtml(score)}</span><span class="basis">生成：${escapeHtml(backend)}</span><span class="basis">配置：${escapeHtml(configLabel)}</span></span></button>`;
     }
 
     function bind() {
+      let searchDebounce;
       document.querySelector('#search')?.addEventListener('input', (event) => {
         state.query = event.target.value;
-        ensureSelectedMatch();
-        executeQuery();
-        render();
-        document.querySelector('#search')?.focus();
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => {
+          ensureSelectedMatch();
+          executeQuery();
+          render();
+        }, 150);
       });
       document.querySelectorAll('[data-type]').forEach((button) => button.addEventListener('click', () => {
         state.type = button.dataset.type;
@@ -357,6 +523,14 @@
         const layer = button.dataset.layer;
         state.layers[layer] = !state.layers[layer];
         executeQuery();
+        render();
+      }));
+      document.querySelectorAll('[data-mobile-view]').forEach((button) => button.addEventListener('click', () => {
+        state.mobileView = button.dataset.mobileView;
+        render();
+      }));
+      document.querySelectorAll('[data-close-sheet]').forEach((element) => element.addEventListener('click', () => {
+        state.sheetOpen = false;
         render();
       }));
       document.querySelectorAll('[data-query-control]').forEach((button) => button.addEventListener('click', () => {
@@ -378,7 +552,7 @@
         render();
       }));
       document.querySelectorAll('[data-node]').forEach((element) => {
-        const select = () => { state.selected = element.dataset.node; executeQuery(); render(); };
+        const select = () => { state.selected = element.dataset.node; state.sheetOpen = true; executeQuery(); render(); };
         element.addEventListener('click', select);
         element.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } });
       });
@@ -391,6 +565,7 @@
         const target = rows[currentIndex + offset];
         if (!target) return;
         state.selected = target.dataset.node;
+        state.sheetOpen = true;
         executeQuery();
         render();
         focusNodeElement(target.dataset.node);
